@@ -1,4 +1,5 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
+using System.Data;
 using System.Text.RegularExpressions;
 
 namespace WinFormsApp1
@@ -10,6 +11,7 @@ namespace WinFormsApp1
         private List<Aluno> listaAlunos = new List<Aluno>();
         private string nomeAntigo = "";
         private string turmaAntiga = "";
+        private object comando;
 
         public Form1()
         {
@@ -19,6 +21,55 @@ namespace WinFormsApp1
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
             dgvAlunos.UserDeletingRow += dgvAlunos_UserDeletingRow;
             button1.Click += btnApagarAluno_Click;
+            dgvAlunos.CellFormatting += dgvAlunos_CellFormatting;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+
+            txtTurma.Text = "<- Clique em \"Ver Turmas\"";
+
+            CarregarHistoricoDaBaseDeDados();
+        }
+
+        private void CarregarHistoricoDaBaseDeDados()
+        {
+
+            if (listaAlunos == null) listaAlunos = new List<Aluno>();
+            listaAlunos.Clear();
+
+            string querySelect = "SELECT NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO FROM ALUNOS";
+            using (FbConnection conexao = new FbConnection(stringConexao))
+            {
+                try
+                {
+                    conexao.Open();
+                    using (FbCommand comando = new FbCommand(querySelect, conexao))
+                    {
+                        using (FbDataReader leitor = comando.ExecuteReader())
+                        {
+                            while (leitor.Read())
+                            {
+                                string nome = leitor["Nome"].ToString();
+                                string turma = leitor["Turma"].ToString();
+                                double notaTeste = Convert.ToDouble(leitor["NOTA_TESTE"]);
+                                double notaTrabalho = Convert.ToDouble(leitor["NOTA_TRABALHO"]);
+                                double notaParticipacao = Convert.ToDouble(leitor["NOTA_PARTICIPACAO"]);
+
+                                Aluno aluno = new Aluno(nome, turma, notaTeste, notaTrabalho, notaParticipacao);
+                                listaAlunos.Add(aluno);
+                            }
+                        }
+                    }
+
+                    dgvAlunos.DataSource = null;
+                    dgvAlunos.DataSource = listaAlunos;
+
+                    CalcularEstatisticas();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao carregar o histórico da Base de Dados: {ex.Message}", "Erro ao iniciar");
+                }
+            }
         }
 
         private void dgvAlunos_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -81,6 +132,15 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            if (string.IsNullOrWhiteSpace(txtTurma.Text) ||
+                txtTurma.Text == "<- Clique em \"Ver Turmas\"" ||
+                txtTurma.Text.Trim() == "")
+            {
+                MessageBox.Show("Por favor, clique primeiro no botão 'Ver Turmas' para selecionar uma turma válida antes de adicionar o aluno!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string nomeInserido = txtNome.Text.Trim();
             string turmaInserida = txtTurma.Text.Trim();
 
@@ -159,12 +219,16 @@ namespace WinFormsApp1
 
             CalcularEstatisticas();
 
-            txtTurma.Clear();
             txtNome.Clear();
             txtNotaTeste.Clear();
             txtNotaTrabalho.Clear();
             txtNotaParticipacao.Clear();
+
+            txtTurma.Text = "<- Clique em \"Ver Turmas\"";
+
             txtNome.Focus();
+
+
         }
 
         private void SalvarAlunoNoFirebird(string nome, string turma, double teste, double trabalho, double participacao)
@@ -284,9 +348,9 @@ namespace WinFormsApp1
         {
             if (listaAlunos.Count == 0)
             {
-                lblMediaTurma.Text = "Média da Turma: -";
-                lblMelhorAluno.Text = "Melhor Aluno: -";
-                lblTotalAprovados.Text = "Aprovados: 0";
+                lblMediaTurma.Text = "Média da Escola: 0";
+                lblMelhorAluno.Text = "Melhor Aluno: Nenhum";
+                lblTotalAprovados.Text = "Aprovados: 0 (Total de alunos: 0)";
                 lblTotalRetidos.Text = "Recuperação/Reprovados: 0";
                 return;
             }
@@ -313,9 +377,9 @@ namespace WinFormsApp1
             string nomeMelhorAluno = string.Join(", ", melhoresNotas);
             double mediaGeralTurma = Math.Round(somaDasMedias / listaAlunos.Count, 2);
 
-            lblMediaTurma.Text = $"Média da Turma: {mediaGeralTurma}";
+            lblMediaTurma.Text = $"Média da Escola: {mediaGeralTurma}";
             lblMelhorAluno.Text = $"Melhor Aluno: {nomeMelhorAluno} ({maiorMedia})";
-            lblTotalAprovados.Text = $"Aprovados: {aprovados}";
+            lblTotalAprovados.Text = $"Aprovados: {aprovados} (Total de alunos: {listaAlunos.Count})";
             lblTotalRetidos.Text = $"Recuperação/Reprovados: {retidos}";
         }
 
@@ -324,10 +388,30 @@ namespace WinFormsApp1
             DialogResult resultado = MessageBox.Show("Desejas limpar TODO o histórico?", "Limpar histórico", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (resultado == DialogResult.Yes)
             {
+                using (FbConnection conexao = new FbConnection(stringConexao))
+                {
+                    try
+                    {
+                        conexao.Open();
+                        string queryTruncate = "DELETE FROM ALUNOS";
+                        using (FbCommand command = new FbCommand(queryTruncate, conexao))
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Erro ao limpar a Bae de Dados: {ex.Message}", "Erro");
+                        return;
+                    }
+                }
+
                 listaAlunos.Clear();
                 dgvAlunos.DataSource = null;
                 dgvAlunos.DataSource = listaAlunos;
                 CalcularEstatisticas();
+
+                MessageBox.Show("Todo o histórico foi eliminado com sucesso!", "Sucesso");
             }
         }
 
@@ -349,7 +433,121 @@ namespace WinFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
+            Form2 janelaTurmas = new Form2(dgvAlunos);
+            janelaTurmas.ShowDialog();
 
+            if (!string.IsNullOrEmpty(janelaTurmas.TurmaSelecionada))
+            {
+                txtTurma.Text = janelaTurmas.TurmaSelecionada;
+                txtNome.Focus();
+            }
+        }
+
+        private void dgvAlunos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvAlunos.Columns[e.ColumnIndex].Name == "MediaFinal" && e.Value != null)
+            {
+                if (double.TryParse(e.Value.ToString(), out double media))
+                {
+
+                    if (media < 10)
+                    {
+                        e.CellStyle.ForeColor = Color.Red;
+                        e.CellStyle.SelectionForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        e.CellStyle.ForeColor = Color.DarkGreen;
+                        e.CellStyle.SelectionForeColor = Color.DarkGreen;
+                    }
+                }
+            }
+        }
+
+        private void txtNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                txtTurma.Focus();
+            }
+        }
+
+        private void txtTurma_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                txtNotaTeste.Focus();
+            }
+        }
+
+        private void txtNotaTeste_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                txtNotaTrabalho.Focus();
+            }
+        }
+
+        private void txtNotaTrabalho_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                txtNotaParticipacao.Focus();
+            }
+        }
+
+        private void txtNotaParticipacao_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                btnAdicionar.Focus();
+            }
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listaAlunos == null || listaAlunos.Count == 0) return;
+
+            dgvAlunos.DataSource = null;
+
+            int posicao = comboBox1.SelectedIndex;
+
+            if (posicao == 0)
+            {
+                dgvAlunos.DataSource = listaAlunos;
+            }
+            else if (posicao == 1)
+            {
+                var filtrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("aprov")).ToList();
+                dgvAlunos.DataSource = filtrados;
+            }
+            else if (posicao == 2)
+            {
+                var filtrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("repro")).ToList();
+                dgvAlunos.DataSource = filtrados;
+            }
+            else if (posicao == 3)
+            {
+                var filtrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("recup")).ToList();
+                dgvAlunos.DataSource = filtrados;
+            }
+
+            dgvAlunos.Refresh();
         }
     }
 }

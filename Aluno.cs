@@ -18,6 +18,7 @@ namespace WinFormsApp1
         public double NotaParticipacao { get; set; }
         public double MediaFinal { get; set; }
         public string Situacao { get; set; }
+        public int Faltas { get; set; }
 
         public Aluno(string nome, string turma, double teste, double trabalho, double participacao)
         {

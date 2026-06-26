@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             btnAdicionar = new Button();
             txtNotaTrabalho = new TextBox();
             txtNome = new TextBox();
@@ -37,7 +39,9 @@
             label2 = new Label();
             dgvAlunos = new DataGridView();
             groupBox1 = new GroupBox();
+            label6 = new Label();
             lblTotalRetidos = new Label();
+            comboBox1 = new ComboBox();
             lblTotalAprovados = new Label();
             lblMelhorAluno = new Label();
             lblMediaTurma = new Label();
@@ -71,6 +75,7 @@
             txtNotaTrabalho.Size = new Size(225, 23);
             txtNotaTrabalho.TabIndex = 2;
             txtNotaTrabalho.TextChanged += textBox1_TextChanged;
+            txtNotaTrabalho.KeyDown += txtNotaTrabalho_KeyDown;
             // 
             // txtNome
             // 
@@ -78,6 +83,7 @@
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(225, 23);
             txtNome.TabIndex = 4;
+            txtNome.KeyDown += txtNome_KeyDown;
             // 
             // txtNotaTeste
             // 
@@ -85,6 +91,7 @@
             txtNotaTeste.Name = "txtNotaTeste";
             txtNotaTeste.Size = new Size(225, 23);
             txtNotaTeste.TabIndex = 5;
+            txtNotaTeste.KeyDown += txtNotaTeste_KeyDown;
             // 
             // txtNotaParticipacao
             // 
@@ -92,6 +99,7 @@
             txtNotaParticipacao.Name = "txtNotaParticipacao";
             txtNotaParticipacao.Size = new Size(225, 23);
             txtNotaParticipacao.TabIndex = 6;
+            txtNotaParticipacao.KeyDown += txtNotaParticipacao_KeyDown;
             // 
             // label1
             // 
@@ -115,18 +123,31 @@
             // 
             // dgvAlunos
             // 
-            dgvAlunos.BackgroundColor = SystemColors.ActiveBorder;
+            dataGridViewCellStyle1.BackColor = Color.LightGray;
+            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle2;
             dgvAlunos.Location = new Point(-1, -3);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
+            dgvAlunos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAlunos.Size = new Size(493, 453);
             dgvAlunos.TabIndex = 9;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(lblTotalRetidos);
+            groupBox1.Controls.Add(comboBox1);
             groupBox1.Controls.Add(lblTotalAprovados);
             groupBox1.Controls.Add(lblMelhorAluno);
             groupBox1.Controls.Add(lblMediaTurma);
@@ -137,6 +158,16 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Estatísticas da Escola";
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(340, 13);
+            label6.Name = "label6";
+            label6.Size = new Size(106, 15);
+            label6.TabIndex = 22;
+            label6.Text = "Filtrar por Situação";
+            label6.Click += label6_Click;
+            // 
             // lblTotalRetidos
             // 
             lblTotalRetidos.AutoSize = true;
@@ -145,6 +176,16 @@
             lblTotalRetidos.Size = new Size(154, 15);
             lblTotalRetidos.TabIndex = 3;
             lblTotalRetidos.Text = "Recuperação/Reprovados: 0";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Todos", "Aprovado", "Reprovado", "Recuperação" });
+            comboBox1.Location = new Point(323, 31);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(137, 23);
+            comboBox1.TabIndex = 21;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // lblTotalAprovados
             // 
@@ -209,14 +250,16 @@
             txtTurma.CharacterCasing = CharacterCasing.Upper;
             txtTurma.Location = new Point(648, 58);
             txtTurma.Name = "txtTurma";
+            txtTurma.ReadOnly = true;
             txtTurma.Size = new Size(225, 23);
             txtTurma.TabIndex = 14;
+            txtTurma.KeyDown += txtTurma_KeyDown;
             // 
             // button1
             // 
             button1.BackColor = Color.Transparent;
             button1.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(694, 340);
+            button1.Location = new Point(693, 326);
             button1.Name = "button1";
             button1.Size = new Size(123, 75);
             button1.TabIndex = 16;
@@ -228,23 +271,24 @@
             // 
             button2.BackColor = Color.Transparent;
             button2.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(847, 340);
+            button2.Location = new Point(844, 316);
             button2.Name = "button2";
-            button2.Size = new Size(123, 75);
+            button2.Size = new Size(123, 98);
             button2.TabIndex = 19;
-            button2.Text = "Apagar Tabela";
+            button2.Text = "Apagar Todos Os Alunos";
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
             // button3
             // 
+            button3.BackColor = Color.Transparent;
             button3.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(541, 342);
+            button3.Location = new Point(540, 328);
             button3.Name = "button3";
             button3.Size = new Size(123, 75);
             button3.TabIndex = 20;
             button3.Text = "Ver Turmas";
-            button3.UseVisualStyleBackColor = true;
+            button3.UseVisualStyleBackColor = false;
             button3.Click += button3_Click;
             // 
             // Form1
@@ -301,5 +345,7 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private ComboBox comboBox1;
+        private Label label6;
     }
 }
