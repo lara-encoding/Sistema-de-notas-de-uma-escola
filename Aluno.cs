@@ -19,6 +19,7 @@ namespace WinFormsApp1
         public double MediaFinal { get; set; }
         public string Situacao { get; set; }
         public int Faltas { get; set; }
+        public int Id { get; internal set; }
 
         public Aluno(string nome, string turma, double teste, double trabalho, double participacao)
         {
@@ -30,6 +31,10 @@ namespace WinFormsApp1
 
             CalcularMediaESituacao();
 
+        }
+
+        public Aluno()
+        {
         }
 
         public void CalcularMediaESituacao()

@@ -24,8 +24,6 @@ namespace WinFormsApp1
             dgvAlunos.CellFormatting += dgvAlunos_CellFormatting;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
 
-            txtTurma.Text = "<- Clique em \"Ver Turmas\"";
-
             CarregarHistoricoDaBaseDeDados();
         }
 
@@ -133,16 +131,14 @@ namespace WinFormsApp1
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if (string.IsNullOrWhiteSpace(txtTurma.Text) ||
-                txtTurma.Text == "<- Clique em \"Ver Turmas\"" ||
-                txtTurma.Text.Trim() == "")
+            if (cmbTurmas.SelectedItem == null)
             {
-                MessageBox.Show("Por favor, clique primeiro no botão 'Ver Turmas' para selecionar uma turma válida antes de adicionar o aluno!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, selecione uma turma na lista antes de adicionar o aluno!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string nomeInserido = txtNome.Text.Trim();
-            string turmaInserida = txtTurma.Text.Trim();
+            string turmaInserida = cmbTurmas.SelectedItem.ToString();
 
             if (string.IsNullOrWhiteSpace(nomeInserido))
             {
@@ -211,7 +207,7 @@ namespace WinFormsApp1
 
             SalvarAlunoNoFirebird(nomeInserido, turmaInserida, notaTeste, notaTrabalho, notaParticipacao);
 
-            Aluno novoAluno = new Aluno(txtNome.Text, txtTurma.Text, notaTeste, notaTrabalho, notaParticipacao);
+            Aluno novoAluno = new Aluno(txtNome.Text, cmbTurmas.Text, notaTeste, notaTrabalho, notaParticipacao);
             listaAlunos.Add(novoAluno);
 
             dgvAlunos.DataSource = null;
@@ -224,11 +220,9 @@ namespace WinFormsApp1
             txtNotaTrabalho.Clear();
             txtNotaParticipacao.Clear();
 
-            txtTurma.Text = "<- Clique em \"Ver Turmas\"";
+            if (cmbTurmas.Items.Count > 0) cmbTurmas.SelectedIndex = 0;
 
             txtNome.Focus();
-
-
         }
 
         private void SalvarAlunoNoFirebird(string nome, string turma, double teste, double trabalho, double participacao)
@@ -346,23 +340,23 @@ namespace WinFormsApp1
 
         private void CalcularEstatisticas()
         {
-            if (listaAlunos.Count == 0)
-            {
-                lblMediaTurma.Text = "Média da Escola: 0";
-                lblMelhorAluno.Text = "Melhor Aluno: Nenhum";
-                lblTotalAprovados.Text = "Aprovados: 0 (Total de alunos: 0)";
-                lblTotalRetidos.Text = "Recuperação/Reprovados: 0";
-                return;
-            }
+            if (listaAlunos == null || listaAlunos.Count == 0) return;
 
             double somaDasMedias = 0;
             double maiorMedia = -1;
             int aprovados = 0;
             int retidos = 0;
+            double somatorioTestes = 0;
+            double somatorioTrabalhos = 0;
+            double somatorioParticipacao = 0;
 
             foreach (Aluno aluno in listaAlunos)
             {
                 somaDasMedias += aluno.MediaFinal;
+                somatorioTestes += aluno.NotaTeste;
+                somatorioTrabalhos += aluno.NotaTrabalho;
+                somatorioParticipacao += aluno.NotaParticipacao;
+
                 if (aluno.MediaFinal > maiorMedia) maiorMedia = aluno.MediaFinal;
                 if (aluno.Situacao == "Aprovado(a)") aprovados++;
                 else retidos++;
@@ -378,9 +372,31 @@ namespace WinFormsApp1
             double mediaGeralTurma = Math.Round(somaDasMedias / listaAlunos.Count, 2);
 
             lblMediaTurma.Text = $"Média da Escola: {mediaGeralTurma}";
-            lblMelhorAluno.Text = $"Melhor Aluno: {nomeMelhorAluno} ({maiorMedia})";
+            lblMelhorAluno.Text = $"Melhor Aluno(a): {nomeMelhorAluno} ({maiorMedia})";
             lblTotalAprovados.Text = $"Aprovados: {aprovados} (Total de alunos: {listaAlunos.Count})";
             lblTotalRetidos.Text = $"Recuperação/Reprovados: {retidos}";
+
+            List<Aluno> listaComRodape = new List<Aluno>(listaAlunos);
+
+            Aluno linhaTotais = new Aluno();
+            linhaTotais.Id = 0;
+            linhaTotais.Nome = "--- TOTAIS DAS NOTAS ---";
+            linhaTotais.Turma = "";
+            linhaTotais.NotaTeste = Math.Round(somatorioTestes, 1);
+            linhaTotais.NotaTrabalho = Math.Round(somatorioTrabalhos, 1);
+            linhaTotais.NotaParticipacao = Math.Round(somatorioParticipacao, 1);
+            linhaTotais.MediaFinal = mediaGeralTurma;
+            linhaTotais.Situacao = "Fim da Lista";
+
+            listaComRodape.Add(linhaTotais);
+
+            dgvAlunos.DataSource = null;
+            dgvAlunos.DataSource = listaComRodape;
+
+            if (dgvAlunos.Columns["Id"] != null)
+            {
+                dgvAlunos.Columns["Id"].Visible = false;
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -435,12 +451,6 @@ namespace WinFormsApp1
         {
             Form2 janelaTurmas = new Form2(dgvAlunos);
             janelaTurmas.ShowDialog();
-
-            if (!string.IsNullOrEmpty(janelaTurmas.TurmaSelecionada))
-            {
-                txtTurma.Text = janelaTurmas.TurmaSelecionada;
-                txtNome.Focus();
-            }
         }
 
         private void dgvAlunos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -470,11 +480,11 @@ namespace WinFormsApp1
             {
                 e.SuppressKeyPress = true;
 
-                txtTurma.Focus();
+                cmbTurmas.Focus();
             }
         }
 
-        private void txtTurma_KeyDown(object sender, KeyEventArgs e)
+        private void cmbTurmas_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -548,6 +558,8 @@ namespace WinFormsApp1
             }
 
             dgvAlunos.Refresh();
+
+            if (dgvAlunos.Columns["Id"] != null) dgvAlunos.Columns["Id"].Visible = false;
         }
     }
 }

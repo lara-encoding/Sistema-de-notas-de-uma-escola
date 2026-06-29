@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace WinFormsApp1
 {
     public partial class Form2 : Form
-    {
+    {   
 
             private List<Aluno> listaCompleta = new List<Aluno>();
 
@@ -28,9 +28,14 @@ namespace WinFormsApp1
                     if (linha.IsNewRow) continue;
 
                     string nomeLinha = linha.Cells["Nome"].Value?.ToString() ?? "";
+
+                    if (nomeLinha == "--- TOTAIS DA TURMA ---") continue;
+
                     string turmaLinha = linha.Cells["Turma"].Value?.ToString() ?? "";
+                    string situacaoLinha = linha.Cells["Situacao"].Value?.ToString() ?? "";
 
                     Aluno al = new Aluno(nomeLinha, turmaLinha, 0, 0, 0);
+                    al.Situacao = situacaoLinha;
 
                     double media = 0;
                     if (linha.Cells["MediaFinal"].Value != null){
@@ -57,7 +62,6 @@ namespace WinFormsApp1
         private void botaoTurma_Click(object? sender, EventArgs e)
         {
             Button botaoClicado = (Button)sender;
-
             string nomeDaTurma = botaoClicado.Text;
 
             List<Aluno> listaFiltrada = listaCompleta
@@ -65,23 +69,41 @@ namespace WinFormsApp1
                                         .ToList();
 
             int quantidadeAlunos = listaFiltrada.Count;
-            double mediaTurma = 0;
 
-            if (quantidadeAlunos > 0)
+            if (quantidadeAlunos == 0)
             {
-                double soma = listaFiltrada.Sum(a => a.MediaFinal);
-                mediaTurma = Math.Round(soma / quantidadeAlunos, 2);
+                MessageBox.Show($"A turma {nomeDaTurma} ainda não tem alunos registados.",
+                                $"Informação {nomeDaTurma}",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
             }
 
-            MessageBox.Show($"--- Estatísticas da Turma {nomeDaTurma} ---\n\n" +
-                            $"Alunos na turma: {quantidadeAlunos}\n" +
-                            $"Média da turma: {(quantidadeAlunos > 0 ? mediaTurma.ToString() : "-")}", 
-                            $"Informação {nomeDaTurma}",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+            double soma = listaFiltrada.Sum(a => a.MediaFinal);
+            double mediaTurma = Math.Round(soma / quantidadeAlunos, 2);
+            int aprovados = listaFiltrada.Count(a => a.Situacao == "Aprovado(a)");
+            int retidos = quantidadeAlunos - aprovados;
+
+            double maiorMedia = listaFiltrada.Max(a => a.MediaFinal);
+            List<string> melhoresNotas = listaFiltrada
+                .Where(a => a.MediaFinal == maiorMedia)
+                .Select(a => a.Nome)
+                .ToList();
+
+            string nomeMelhorAluno = string.Join(", ", melhoresNotas);
+
+            string mensagem = $"--- Estatísticas da Turma {nomeDaTurma} ---\n\n" +
+                              $"Total de Alunos: {quantidadeAlunos}\n" +
+                              $"Média Geral da Turma: {mediaTurma}\n" +
+                              $"Alunos Aprovados. {aprovados}\n" +
+                              $"Em Recuperação/Reprovados: {retidos}\n " +
+                              $"Melhor Aluno(a): {nomeMelhorAluno} ({maiorMedia})";
+
+            MessageBox.Show(mensagem, $"Relatótio da Turma {nomeDaTurma}",
+                           MessageBoxButtons.OK,
+                           MessageBoxIcon.Information);
 
             TurmaSelecionada = nomeDaTurma;
-            this.Close();
         }
 
         private void button3_Click(object sender, EventArgs e)

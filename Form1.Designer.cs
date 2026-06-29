@@ -48,10 +48,10 @@
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
-            txtTurma = new TextBox();
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
+            cmbTurmas = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -245,16 +245,6 @@
             label5.Text = "Turma";
             label5.Click += label5_Click_1;
             // 
-            // txtTurma
-            // 
-            txtTurma.CharacterCasing = CharacterCasing.Upper;
-            txtTurma.Location = new Point(648, 58);
-            txtTurma.Name = "txtTurma";
-            txtTurma.ReadOnly = true;
-            txtTurma.Size = new Size(225, 23);
-            txtTurma.TabIndex = 14;
-            txtTurma.KeyDown += txtTurma_KeyDown;
-            // 
             // button1
             // 
             button1.BackColor = Color.Transparent;
@@ -291,16 +281,26 @@
             button3.UseVisualStyleBackColor = false;
             button3.Click += button3_Click;
             // 
+            // cmbTurmas
+            // 
+            cmbTurmas.FormattingEnabled = true;
+            cmbTurmas.Items.AddRange(new object[] { "1ºA", "2ºA", "3ºA", "1ºC", "2ºC", "3ºC", "1ºG", "2ºG", "3ºG" });
+            cmbTurmas.Location = new Point(648, 58);
+            cmbTurmas.Name = "cmbTurmas";
+            cmbTurmas.Size = new Size(225, 23);
+            cmbTurmas.TabIndex = 21;
+            cmbTurmas.KeyDown += cmbTurmas_KeyDown;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(cmbTurmas);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(txtTurma);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(groupBox1);
@@ -341,11 +341,11 @@
         private Label label3;
         private Label label4;
         private Label label5;
-        private TextBox txtTurma;
         private Button button1;
         private Button button2;
         private Button button3;
         private ComboBox comboBox1;
         private Label label6;
+        private ComboBox cmbTurmas;
     }
 }
