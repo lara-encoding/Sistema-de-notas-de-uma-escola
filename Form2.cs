@@ -34,7 +34,7 @@ namespace WinFormsApp1
                     string turmaLinha = linha.Cells["Turma"].Value?.ToString() ?? "";
                     string situacaoLinha = linha.Cells["Situacao"].Value?.ToString() ?? "";
 
-                    Aluno al = new Aluno(nomeLinha, turmaLinha, 0, 0, 0);
+                    Aluno al = new Aluno(nomeLinha, turmaLinha, 0, 0, 0, 0);
                     al.Situacao = situacaoLinha;
 
                     double media = 0;

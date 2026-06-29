@@ -12,6 +12,7 @@ namespace WinFormsApp1
         private string nomeAntigo = "";
         private string turmaAntiga = "";
         private object comando;
+        private object faltas;
 
         public Form1()
         {
@@ -23,17 +24,54 @@ namespace WinFormsApp1
             button1.Click += btnApagarAluno_Click;
             dgvAlunos.CellFormatting += dgvAlunos_CellFormatting;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            cmbTurmas.SelectedIndexChanged += cmbTurmas_SelectedIndexChanged;
+            txtNome.TextChanged += txtNome_TextChanged;
 
             CarregarHistoricoDaBaseDeDados();
         }
 
+        private void txtNome_TextChanged(object? sender, EventArgs e)
+        {
+            if (listaAlunos == null || listaAlunos.Count == 0) return;
+
+            string textoPesquisa = txtNome.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(textoPesquisa))
+            {
+                dgvAlunos.DataSource = null;
+                dgvAlunos.DataSource = listaAlunos;
+            } else
+            {
+                var alunosFiltrados = listaAlunos
+                    .Where(aluno => aluno.Nome != null && aluno.Nome.ToLower().Contains(textoPesquisa))
+                    .ToList();
+
+                dgvAlunos.DataSource = null;
+                dgvAlunos.DataSource = alunosFiltrados;
+            }
+
+            if (dgvAlunos.Columns["Id"] != null) dgvAlunos.Columns["Id"].Visible = false;
+        }
+
+        private void cmbTurmas_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (listaAlunos == null || listaAlunos.Count == 0 || cmbTurmas.SelectedItem == null) return;
+            
+            string turmaSelecionada = cmbTurmas.SelectedItem.ToString();
+
+            var alunosFiltrados = listaAlunos.Where(aluno => aluno.Turma == turmaSelecionada).ToList();
+
+            dgvAlunos.DataSource = null;
+            dgvAlunos.DataSource = alunosFiltrados;
+            if (dgvAlunos.Columns["Id"] != null) dgvAlunos.Columns["Id"].Visible = false;
+        }
+
         private void CarregarHistoricoDaBaseDeDados()
         {
-
             if (listaAlunos == null) listaAlunos = new List<Aluno>();
             listaAlunos.Clear();
 
-            string querySelect = "SELECT NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO FROM ALUNOS";
+            string querySelect = "SELECT NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS, MEDIA_FINAL, SITUACAO FROM ALUNOS";
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
                 try
@@ -51,7 +89,9 @@ namespace WinFormsApp1
                                 double notaTrabalho = Convert.ToDouble(leitor["NOTA_TRABALHO"]);
                                 double notaParticipacao = Convert.ToDouble(leitor["NOTA_PARTICIPACAO"]);
 
-                                Aluno aluno = new Aluno(nome, turma, notaTeste, notaTrabalho, notaParticipacao);
+                                int faltasRecuperadas = leitor["FALTAS"] != DBNull.Value ? Convert.ToInt32(leitor["FALTAS"]) : 0;
+
+                                Aluno aluno = new Aluno(nome, turma, notaTeste, notaTrabalho, notaParticipacao, faltasRecuperadas);
                                 listaAlunos.Add(aluno);
                             }
                         }
@@ -61,7 +101,6 @@ namespace WinFormsApp1
                     dgvAlunos.DataSource = listaAlunos;
 
                     CalcularEstatisticas();
-
                 }
                 catch (Exception ex)
                 {
@@ -100,7 +139,7 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
                     string queryUpdate = "UPDATE ALUNOS SET NOME = @v_nome, TURMA = @v_turma, NOTA_TESTE = @v_teste, " +
-                                         "NOTA_TRABALHO = @v_trabalho, NOTA_PARTICIPACAO = @v_participacao, " +
+                                         "NOTA_TRABALHO = @v_trabalho, NOTA_PARTICIPACAO = @v_participacao, FALTAS = @v_faltas, " +
                                          "MEDIA_FINAL = @v_media, SITUACAO = @v_situacao " +
                                          "WHERE NOME = @v_nomeAntigo AND TURMA = @v_turmaAntiga";
 
@@ -111,6 +150,7 @@ namespace WinFormsApp1
                         comando.Parameters.AddWithValue("@v_teste", alunoEditado.NotaTeste);
                         comando.Parameters.AddWithValue("@v_trabalho", alunoEditado.NotaTrabalho);
                         comando.Parameters.AddWithValue("@v_participacao", alunoEditado.NotaParticipacao);
+                        comando.Parameters.AddWithValue("@v_faltas", alunoEditado.Faltas);
                         comando.Parameters.AddWithValue("@v_media", alunoEditado.MediaFinal);
                         comando.Parameters.AddWithValue("@v_situacao", alunoEditado.Situacao);
                         comando.Parameters.AddWithValue("@v_nomeAntigo", string.IsNullOrEmpty(nomeAntigo) ? alunoEditado.Nome : nomeAntigo);
@@ -121,7 +161,7 @@ namespace WinFormsApp1
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao atualizar no Firebird: {ex.Message}", "Erro de Sincronização");
+                    MessageBox.Show($"Erro ao actualizar no Firebird: {ex.Message}", "Erro de Sincronização");
                 }
             }
             nomeAntigo = "";
@@ -130,7 +170,6 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             if (cmbTurmas.SelectedItem == null)
             {
                 MessageBox.Show("Por favor, selecione uma turma na lista antes de adicionar o aluno!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -205,9 +244,10 @@ namespace WinFormsApp1
                 return;
             }
 
-            SalvarAlunoNoFirebird(nomeInserido, turmaInserida, notaTeste, notaTrabalho, notaParticipacao);
+            int faltasInseridas = Convert.ToInt32(numFaltas.Value);
+            SalvarAlunoNoFirebird(nomeInserido, turmaInserida, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas);
 
-            Aluno novoAluno = new Aluno(txtNome.Text, cmbTurmas.Text, notaTeste, notaTrabalho, notaParticipacao);
+            Aluno novoAluno = new Aluno(txtNome.Text, cmbTurmas.Text, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas);
             listaAlunos.Add(novoAluno);
 
             dgvAlunos.DataSource = null;
@@ -219,13 +259,14 @@ namespace WinFormsApp1
             txtNotaTeste.Clear();
             txtNotaTrabalho.Clear();
             txtNotaParticipacao.Clear();
+            numFaltas.Value = 0;
 
             if (cmbTurmas.Items.Count > 0) cmbTurmas.SelectedIndex = 0;
 
             txtNome.Focus();
         }
 
-        private void SalvarAlunoNoFirebird(string nome, string turma, double teste, double trabalho, double participacao)
+        private void SalvarAlunoNoFirebird(string nome, string turma, double teste, double trabalho, double participacao, int faltas)
         {
             double media = Math.Round((teste * 0.5) + (trabalho * 0.3) + (participacao * 0.2), 2);
             string situacao = media >= 10 ? "Aprovado(a)" : (media >= 8 ? "Recuperação" : "Reprovado(a)");
@@ -243,8 +284,8 @@ namespace WinFormsApp1
                         proximoId = Convert.ToInt32(cmdId.ExecuteScalar());
                     }
 
-                    string query = "INSERT INTO ALUNOS (ID, NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO) " +
-                                   "VALUES (@id, @nome, @turma, @teste, @trabalho, @participacao, @media, @situacao)";
+                    string query = "INSERT INTO ALUNOS (ID, NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS, MEDIA_FINAL, SITUACAO) " +
+                                   "VALUES (@id, @nome, @turma, @teste, @trabalho, @participacao, @faltas, @media, @situacao)";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
@@ -254,6 +295,7 @@ namespace WinFormsApp1
                         comando.Parameters.AddWithValue("@teste", teste);
                         comando.Parameters.AddWithValue("@trabalho", trabalho);
                         comando.Parameters.AddWithValue("@participacao", participacao);
+                        comando.Parameters.AddWithValue("@faltas", faltas);
                         comando.Parameters.AddWithValue("@media", media);
                         comando.Parameters.AddWithValue("@situacao", situacao);
 
@@ -442,10 +484,7 @@ namespace WinFormsApp1
         private void label5_Click_1(object sender, EventArgs e) { }
         private void label1_Click_1(object sender, EventArgs e) { }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-
-        }
+        private void button1_Click_1(object sender, EventArgs e) { }
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -459,7 +498,6 @@ namespace WinFormsApp1
             {
                 if (double.TryParse(e.Value.ToString(), out double media))
                 {
-
                     if (media < 10)
                     {
                         e.CellStyle.ForeColor = Color.Red;
@@ -479,7 +517,6 @@ namespace WinFormsApp1
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-
                 cmbTurmas.Focus();
             }
         }
@@ -489,7 +526,6 @@ namespace WinFormsApp1
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-
                 txtNotaTeste.Focus();
             }
         }
@@ -499,7 +535,6 @@ namespace WinFormsApp1
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-
                 txtNotaTrabalho.Focus();
             }
         }
@@ -509,7 +544,6 @@ namespace WinFormsApp1
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-
                 txtNotaParticipacao.Focus();
             }
         }
@@ -519,15 +553,19 @@ namespace WinFormsApp1
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-
-                btnAdicionar.Focus();
+                numFaltas.Focus();
             }
         }
 
-        private void label6_Click(object sender, EventArgs e)
+        private void numFaltas_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1.Focus();
+            }
         }
+
+        private void label6_Click(object sender, EventArgs e) { }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -560,6 +598,11 @@ namespace WinFormsApp1
             dgvAlunos.Refresh();
 
             if (dgvAlunos.Columns["Id"] != null) dgvAlunos.Columns["Id"].Visible = false;
+        }
+
+        private void numFaltas_PreviewKeyDown_1(object sender, PreviewKeyDownEventArgs e)
+        {
+            btnAdicionar.Focus();
         }
     }
 }

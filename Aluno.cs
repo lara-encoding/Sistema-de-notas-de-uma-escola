@@ -21,13 +21,14 @@ namespace WinFormsApp1
         public int Faltas { get; set; }
         public int Id { get; internal set; }
 
-        public Aluno(string nome, string turma, double teste, double trabalho, double participacao)
+        public Aluno(string nome, string turma, double teste, double trabalho, double participacao, int faltas)
         {
             Nome = nome;
             Turma = turma;
             NotaTeste = teste;
             NotaTrabalho = trabalho;
             NotaParticipacao = participacao;
+            Faltas = faltas;
 
             CalcularMediaESituacao();
 
