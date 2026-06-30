@@ -388,16 +388,16 @@ namespace WinFormsApp1
             double maiorMedia = -1;
             int aprovados = 0;
             int retidos = 0;
-            double somatorioTestes = 0;
-            double somatorioTrabalhos = 0;
-            double somatorioParticipacao = 0;
+            double somaTestes = 0;
+            double somaTrabalhos = 0;
+            double somaParticipacao = 0;
 
             foreach (Aluno aluno in listaAlunos)
             {
                 somaDasMedias += aluno.MediaFinal;
-                somatorioTestes += aluno.NotaTeste;
-                somatorioTrabalhos += aluno.NotaTrabalho;
-                somatorioParticipacao += aluno.NotaParticipacao;
+                somaTestes += aluno.NotaTeste;
+                somaTrabalhos += aluno.NotaTrabalho;
+                somaParticipacao += aluno.NotaParticipacao;
 
                 if (aluno.MediaFinal > maiorMedia) maiorMedia = aluno.MediaFinal;
                 if (aluno.Situacao == "Aprovado(a)") aprovados++;
@@ -420,17 +420,17 @@ namespace WinFormsApp1
 
             List<Aluno> listaComRodape = new List<Aluno>(listaAlunos);
 
-            Aluno linhaTotais = new Aluno();
-            linhaTotais.Id = 0;
-            linhaTotais.Nome = "--- TOTAIS DAS NOTAS ---";
-            linhaTotais.Turma = "";
-            linhaTotais.NotaTeste = Math.Round(somatorioTestes, 1);
-            linhaTotais.NotaTrabalho = Math.Round(somatorioTrabalhos, 1);
-            linhaTotais.NotaParticipacao = Math.Round(somatorioParticipacao, 1);
-            linhaTotais.MediaFinal = mediaGeralTurma;
-            linhaTotais.Situacao = "Fim da Lista";
+            Aluno linhamedia = new Aluno();
+            linhamedia.Id = 0;
+            linhamedia.Nome = "--- MÉDIAS DAS NOTAS ---";
+            linhamedia.Turma = "";
+            linhamedia.NotaTeste = Math.Round(somaTestes / listaAlunos.Count, 2);
+            linhamedia.NotaTrabalho = Math.Round(somaTrabalhos / listaAlunos.Count, 2);
+            linhamedia.NotaParticipacao = Math.Round(somaParticipacao / listaAlunos.Count, 2);
+            linhamedia.MediaFinal = mediaGeralTurma;
+            linhamedia.Situacao = "Fim da Lista";
 
-            listaComRodape.Add(linhaTotais);
+            listaComRodape.Add(linhamedia);
 
             dgvAlunos.DataSource = null;
             dgvAlunos.DataSource = listaComRodape;
