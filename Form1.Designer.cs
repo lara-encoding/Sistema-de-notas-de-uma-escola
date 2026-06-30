@@ -54,6 +54,8 @@
             cmbTurmas = new ComboBox();
             numFaltas = new NumericUpDown();
             label7 = new Label();
+            button4 = new Button();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
@@ -144,6 +146,7 @@
             dgvAlunos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAlunos.Size = new Size(493, 453);
             dgvAlunos.TabIndex = 9;
+            dgvAlunos.CellContentClick += dgvAlunos_CellContentClick;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
             // 
             // groupBox1
@@ -252,9 +255,9 @@
             // 
             button1.BackColor = Color.Transparent;
             button1.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(693, 348);
+            button1.Location = new Point(690, 338);
             button1.Name = "button1";
-            button1.Size = new Size(123, 75);
+            button1.Size = new Size(132, 61);
             button1.TabIndex = 16;
             button1.Text = "Apagar Aluno";
             button1.UseVisualStyleBackColor = false;
@@ -266,7 +269,7 @@
             button2.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
             button2.Location = new Point(844, 338);
             button2.Name = "button2";
-            button2.Size = new Size(123, 98);
+            button2.Size = new Size(137, 61);
             button2.TabIndex = 19;
             button2.Text = "Apagar Todos Os Alunos";
             button2.UseVisualStyleBackColor = false;
@@ -276,9 +279,9 @@
             // 
             button3.BackColor = Color.Transparent;
             button3.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(540, 350);
+            button3.Location = new Point(527, 338);
             button3.Name = "button3";
-            button3.Size = new Size(123, 75);
+            button3.Size = new Size(141, 61);
             button3.TabIndex = 20;
             button3.Text = "Ver Turmas";
             button3.UseVisualStyleBackColor = false;
@@ -311,12 +314,33 @@
             label7.TabIndex = 23;
             label7.Text = "Faltas";
             // 
+            // button4
+            // 
+            button4.Location = new Point(630, 405);
+            button4.Name = "button4";
+            button4.Size = new Size(102, 34);
+            button4.TabIndex = 25;
+            button4.Text = "Importar";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(781, 405);
+            button5.Name = "button5";
+            button5.Size = new Size(104, 34);
+            button5.TabIndex = 26;
+            button5.Text = "Exportar";
+            button5.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(button5);
+            Controls.Add(button4);
             Controls.Add(label7);
             Controls.Add(numFaltas);
             Controls.Add(cmbTurmas);
@@ -372,5 +396,7 @@
         private ComboBox cmbTurmas;
         private NumericUpDown numFaltas;
         private Label label7;
+        private Button button4;
+        private Button button5;
     }
 }

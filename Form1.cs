@@ -1,6 +1,8 @@
 ﻿using FirebirdSql.Data.FirebirdClient;
 using System.Data;
 using System.Text.RegularExpressions;
+using ClosedXML.Excel;
+using ExcelDataReader;
 
 namespace WinFormsApp1
 {
@@ -13,6 +15,8 @@ namespace WinFormsApp1
         private string turmaAntiga = "";
         private object comando;
         private object faltas;
+        private object linha;
+        private Aluno novoAluno;
 
         public Form1()
         {
@@ -40,7 +44,8 @@ namespace WinFormsApp1
             {
                 dgvAlunos.DataSource = null;
                 dgvAlunos.DataSource = listaAlunos;
-            } else
+            }
+            else
             {
                 var alunosFiltrados = listaAlunos
                     .Where(aluno => aluno.Nome != null && aluno.Nome.ToLower().Contains(textoPesquisa))
@@ -56,7 +61,7 @@ namespace WinFormsApp1
         private void cmbTurmas_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (listaAlunos == null || listaAlunos.Count == 0 || cmbTurmas.SelectedItem == null) return;
-            
+
             string turmaSelecionada = cmbTurmas.SelectedItem.ToString();
 
             var alunosFiltrados = listaAlunos.Where(aluno => aluno.Turma == turmaSelecionada).ToList();
@@ -301,8 +306,6 @@ namespace WinFormsApp1
 
                         comando.ExecuteNonQuery();
                     }
-
-                    MessageBox.Show("Aluno gravado no Firebird com sucesso!", "Sucesso!");
                 }
                 catch (Exception ex)
                 {
@@ -459,7 +462,7 @@ namespace WinFormsApp1
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Erro ao limpar a Bae de Dados: {ex.Message}", "Erro");
+                        MessageBox.Show("Erro ao limpar a Base de Dados: {ex.Message}", "Erro");
                         return;
                     }
                 }
@@ -603,6 +606,69 @@ namespace WinFormsApp1
         private void numFaltas_PreviewKeyDown_1(object sender, PreviewKeyDownEventArgs e)
         {
             btnAdicionar.Focus();
+        }
+
+        private void dgvAlunos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Excel Files|*.xlsx;*.xls";
+            openFileDialog.Title = "Selecionar Tabela de Notas";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string caminhoFicheiro = openFileDialog.FileName;
+
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+                int contagemImportados = 0;
+
+                using (var stream = System.IO.File.Open(caminhoFicheiro, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                {
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    {
+                        var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                        {
+                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration() { UseHeaderRow = true }
+                        });
+
+                        var tabelaExcel = result.Tables[0];
+
+                        foreach (var linhaGenerica in tabelaExcel.Rows)
+                        {
+
+                            var linha = (System.Data.DataRow)linhaGenerica;
+
+                            if (linha[0] == null || string.IsNullOrWhiteSpace(linha[0].ToString()))
+                                continue;
+
+                            string nome = linha[0].ToString().Trim();
+                            string turma = linha[1].ToString().Trim();
+                            double.TryParse(linha[2]?.ToString(), out double teste);
+                            double.TryParse(linha[3]?.ToString(), out double trabalho);
+                            double.TryParse(linha[4]?.ToString(), out double participacao);
+                            int.TryParse(linha[5]?.ToString(), out int faltas);
+
+                            SalvarAlunoNoFirebird(nome, turma, teste, trabalho, participacao, faltas);
+
+                            Aluno aluno = new Aluno(nome, turma, teste, trabalho, participacao, faltas);
+                            listaAlunos.Add(aluno);
+
+                            contagemImportados++;
+                        }
+                    }
+                }
+                dgvAlunos.DataSource = null;
+                dgvAlunos.DataSource = listaAlunos;
+
+                CalcularEstatisticas();
+
+                MessageBox.Show($"{contagemImportados} alunos importados e guardados na base de dados com sucesso!", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

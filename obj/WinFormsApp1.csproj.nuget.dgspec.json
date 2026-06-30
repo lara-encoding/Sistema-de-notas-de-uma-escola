@@ -45,6 +45,14 @@
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
           "dependencies": {
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "ExcelDataReader.DataSet": {
+              "target": "Package",
+              "version": "[3.9.0, )"
+            },
             "FirebirdSql.Data.FirebirdClient": {
               "target": "Package",
               "version": "[10.3.4, )"

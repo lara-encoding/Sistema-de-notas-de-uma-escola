@@ -95,8 +95,8 @@ namespace WinFormsApp1
             string mensagem = $"--- Estatísticas da Turma {nomeDaTurma} ---\n\n" +
                               $"Total de Alunos: {quantidadeAlunos}\n" +
                               $"Média Geral da Turma: {mediaTurma}\n" +
-                              $"Alunos Aprovados. {aprovados}\n" +
-                              $"Em Recuperação/Reprovados: {retidos}\n " +
+                              $"Alunos Aprovados: {aprovados}\n" +
+                              $"Em Recuperação/Reprovados: {retidos}\n" +
                               $"Melhor Aluno(a): {nomeMelhorAluno} ({maiorMedia})";
 
             MessageBox.Show(mensagem, $"Relatótio da Turma {nomeDaTurma}",

@@ -18,3 +18,13 @@ C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\ref\WinForms
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\FirebirdSql.Data.FirebirdClient.dll
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.csproj.CopyComplete
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.Form2.resources
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ClosedXML.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ClosedXML.Parser.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\DocumentFormat.OpenXml.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\DocumentFormat.OpenXml.Framework.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelNumberFormat.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\RBush.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\SixLabors.Fonts.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\System.IO.Packaging.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.DataSet.dll
