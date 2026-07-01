@@ -3,6 +3,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using ExcelDataReader;
+using System.Linq;
 
 namespace WinFormsApp1
 {
@@ -275,6 +276,10 @@ namespace WinFormsApp1
         {
             double media = Math.Round((teste * 0.5) + (trabalho * 0.3) + (participacao * 0.2), 2);
             string situacao = media >= 10 ? "Aprovado(a)" : (media >= 8 ? "Recuperação" : "Reprovado(a)");
+            string nomeLimpo = nome.Trim();
+            string turmaLimpa = turma.Trim();
+            string query = "UPDATE OR INSERT INTO ALUNOS (NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS, MEDIA_FINAL, SITUACAO) " +
+                                   "VALUES (@nome, @turma, @teste, @trabalho, @participacao, @faltas, @media, @situacao) MATCHING (NOME, TURMA)";
 
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
@@ -282,21 +287,10 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    int proximoId = 1;
-                    string sqlId = "SELECT COALESCE(MAX(ID), 0) + 1 FROM ALUNOS";
-                    using (FbCommand cmdId = new FbCommand(sqlId, conexao))
-                    {
-                        proximoId = Convert.ToInt32(cmdId.ExecuteScalar());
-                    }
-
-                    string query = "INSERT INTO ALUNOS (ID, NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS, MEDIA_FINAL, SITUACAO) " +
-                                   "VALUES (@id, @nome, @turma, @teste, @trabalho, @participacao, @faltas, @media, @situacao)";
-
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
-                        comando.Parameters.AddWithValue("@id", proximoId);
-                        comando.Parameters.AddWithValue("@nome", nome);
-                        comando.Parameters.AddWithValue("@turma", turma);
+                        comando.Parameters.AddWithValue("@nome", nomeLimpo);
+                        comando.Parameters.AddWithValue("@turma", turmaLimpa);
                         comando.Parameters.AddWithValue("@teste", teste);
                         comando.Parameters.AddWithValue("@trabalho", trabalho);
                         comando.Parameters.AddWithValue("@participacao", participacao);
@@ -598,23 +592,22 @@ namespace WinFormsApp1
             int posicao = comboBox1.SelectedIndex;
             List<Aluno> alunosFiltrados = new List<Aluno>();
 
-            if (posicao == 0)
+            switch (posicao)
             {
-                alunosFiltrados = listaAlunos.ToList();
+                case 0:
+                    alunosFiltrados = listaAlunos.ToList();
+                    break;
+                case 1:
+                    alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("aprov") == true).ToList();
+                    break;
+                case 2:
+                    alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("repro") == true).ToList();
+                    break;
+                case 3:
+                    alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("recup") == true).ToList();
+                    break;
             }
-            else if (posicao == 1)
-            {
-                alunosFiltrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("aprov")).ToList();
-            }
-            else if (posicao == 2)
-            {
-                alunosFiltrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("repro")).ToList();
-            }
-            else if (posicao == 3)
-            {
-                alunosFiltrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("recup")).ToList();
-            }
-
+            
             CalcularEstatisticas(alunosFiltrados);
         }
 
@@ -652,6 +645,7 @@ namespace WinFormsApp1
                         });
 
                         var tabelaExcel = result.Tables[0];
+                        listaAlunos.Clear();
 
                         foreach (var linhaGenerica in tabelaExcel.Rows)
                         {
@@ -671,11 +665,11 @@ namespace WinFormsApp1
                             SalvarAlunoNoFirebird(nome, turma, teste, trabalho, participacao, faltas);
 
                             Aluno aluno = new Aluno(nome, turma, teste, trabalho, participacao, faltas);
-                            listaAlunos.Add(aluno);
 
                             contagemImportados++;
                         }
                     }
+                    CarregarHistoricoDaBaseDeDados();
                 }
                 dgvAlunos.DataSource = null;
                 dgvAlunos.DataSource = listaAlunos;
