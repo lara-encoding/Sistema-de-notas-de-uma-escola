@@ -105,7 +105,7 @@ namespace WinFormsApp1
                     dgvAlunos.DataSource = null;
                     dgvAlunos.DataSource = listaAlunos;
 
-                    CalcularEstatisticas();
+                    CalcularEstatisticas(listaAlunos);
                 }
                 catch (Exception ex)
                 {
@@ -135,7 +135,7 @@ namespace WinFormsApp1
             else if (alunoEditado.MediaFinal >= 8) alunoEditado.Situacao = "Recuperação";
             else alunoEditado.Situacao = "Reprovado(a)";
 
-            CalcularEstatisticas();
+            CalcularEstatisticas(listaAlunos);
             dgvAlunos.Refresh();
 
             using (FbConnection conexao = new FbConnection(stringConexao))
@@ -258,7 +258,7 @@ namespace WinFormsApp1
             dgvAlunos.DataSource = null;
             dgvAlunos.DataSource = listaAlunos;
 
-            CalcularEstatisticas();
+            CalcularEstatisticas(listaAlunos);
 
             txtNome.Clear();
             txtNotaTeste.Clear();
@@ -355,7 +355,7 @@ namespace WinFormsApp1
                         dgvAlunos.DataSource = null;
                         dgvAlunos.DataSource = listaAlunos;
 
-                        CalcularEstatisticas();
+                        CalcularEstatisticas(listaAlunos);
                         MessageBox.Show("Aluno eliminado com sucesso!", "Sucesso");
                     }
                 }
@@ -374,7 +374,7 @@ namespace WinFormsApp1
                 if (resposta == DialogResult.Yes)
                 {
                     listaAlunos.RemoveAt(e.Row.Index);
-                    this.BeginInvoke((MethodInvoker)delegate { CalcularEstatisticas(); });
+                    this.BeginInvoke((MethodInvoker)delegate { CalcularEstatisticas(listaAlunos); });
                 }
                 else
                 {
@@ -383,9 +383,13 @@ namespace WinFormsApp1
             }
         }
 
-        private void CalcularEstatisticas()
+        private void CalcularEstatisticas(List<Aluno>? listaParaCalcular)
         {
-            if (listaAlunos == null || listaAlunos.Count == 0) return;
+            if (listaParaCalcular == null || listaParaCalcular.Count == 0)
+            {
+                dgvAlunos.DataSource = null;
+                return;
+            }
 
             double somaDasMedias = 0;
             double maiorMedia = -1;
@@ -394,42 +398,59 @@ namespace WinFormsApp1
             double somaTestes = 0;
             double somaTrabalhos = 0;
             double somaParticipacao = 0;
+            int totalAlunosReais = 0;
 
-            foreach (Aluno aluno in listaAlunos)
+            foreach (Aluno aluno in listaParaCalcular)
             {
+
+                if (aluno.Nome != null && aluno.Nome.Contains("---"))
+                    continue;
+
+                totalAlunosReais++;
+
                 somaDasMedias += aluno.MediaFinal;
                 somaTestes += aluno.NotaTeste;
                 somaTrabalhos += aluno.NotaTrabalho;
                 somaParticipacao += aluno.NotaParticipacao;
 
                 if (aluno.MediaFinal > maiorMedia) maiorMedia = aluno.MediaFinal;
-                if (aluno.Situacao == "Aprovado(a)") aprovados++;
+                if (aluno.Situacao != null && aluno.Situacao.ToLower().Contains("aprov")) aprovados++;
                 else retidos++;
             }
 
             List<string> melhoresNotas = new List<string>();
-            foreach (Aluno aluno in listaAlunos)
+            foreach (Aluno aluno in listaParaCalcular)
             {
+                if (aluno.Nome != null && aluno.Nome.Contains("---")) continue;
                 if (aluno.MediaFinal == maiorMedia) melhoresNotas.Add(aluno.Nome);
             }
 
+            if (totalAlunosReais == 0) totalAlunosReais = 1;
+
             string nomeMelhorAluno = string.Join(", ", melhoresNotas);
-            double mediaGeralTurma = Math.Round(somaDasMedias / listaAlunos.Count, 2);
+            double mediaGeralTurma = Math.Round(somaDasMedias / totalAlunosReais, 2);
 
             lblMediaTurma.Text = $"Média da Escola: {mediaGeralTurma}";
             lblMelhorAluno.Text = $"Melhor Aluno(a): {nomeMelhorAluno} ({maiorMedia})";
             lblTotalAprovados.Text = $"Aprovados: {aprovados} (Total de alunos: {listaAlunos.Count})";
             lblTotalRetidos.Text = $"Recuperação/Reprovados: {retidos}";
 
-            List<Aluno> listaComRodape = new List<Aluno>(listaAlunos);
+            List<Aluno> listaComRodape = new List<Aluno>();
+            foreach (Aluno aluno in listaParaCalcular)
+            {
+                if (aluno.Nome != null && !aluno.Nome.Contains("---"))
+                {
+                    listaComRodape.Add(aluno);
+                }
+            }
 
             Aluno linhamedia = new Aluno();
             linhamedia.Id = 0;
             linhamedia.Nome = "--- MÉDIAS DAS NOTAS ---";
             linhamedia.Turma = "";
-            linhamedia.NotaTeste = Math.Round(somaTestes / listaAlunos.Count, 2);
-            linhamedia.NotaTrabalho = Math.Round(somaTrabalhos / listaAlunos.Count, 2);
-            linhamedia.NotaParticipacao = Math.Round(somaParticipacao / listaAlunos.Count, 2);
+            linhamedia.NotaTeste = Math.Round((double)somaTestes / totalAlunosReais, 2);
+            linhamedia.NotaTrabalho = Math.Round((double)somaTrabalhos / totalAlunosReais, 2);
+            linhamedia.NotaParticipacao = Math.Round((double)somaParticipacao / totalAlunosReais, 2);
             linhamedia.MediaFinal = mediaGeralTurma;
             linhamedia.Situacao = "Fim da Lista";
 
@@ -470,7 +491,7 @@ namespace WinFormsApp1
                 listaAlunos.Clear();
                 dgvAlunos.DataSource = null;
                 dgvAlunos.DataSource = listaAlunos;
-                CalcularEstatisticas();
+                CalcularEstatisticas(listaAlunos);
 
                 MessageBox.Show("Todo o histórico foi eliminado com sucesso!", "Sucesso");
             }
@@ -574,33 +595,27 @@ namespace WinFormsApp1
         {
             if (listaAlunos == null || listaAlunos.Count == 0) return;
 
-            dgvAlunos.DataSource = null;
-
             int posicao = comboBox1.SelectedIndex;
+            List<Aluno> alunosFiltrados = new List<Aluno>();
 
             if (posicao == 0)
             {
-                dgvAlunos.DataSource = listaAlunos;
+                alunosFiltrados = listaAlunos.ToList();
             }
             else if (posicao == 1)
             {
-                var filtrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("aprov")).ToList();
-                dgvAlunos.DataSource = filtrados;
+                alunosFiltrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("aprov")).ToList();
             }
             else if (posicao == 2)
             {
-                var filtrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("repro")).ToList();
-                dgvAlunos.DataSource = filtrados;
+                alunosFiltrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("repro")).ToList();
             }
             else if (posicao == 3)
             {
-                var filtrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("recup")).ToList();
-                dgvAlunos.DataSource = filtrados;
+                alunosFiltrados = listaAlunos.Where(aluno => aluno.Situacao != null && aluno.Situacao.ToLower().Contains("recup")).ToList();
             }
 
-            dgvAlunos.Refresh();
-
-            if (dgvAlunos.Columns["Id"] != null) dgvAlunos.Columns["Id"].Visible = false;
+            CalcularEstatisticas(alunosFiltrados);
         }
 
         private void numFaltas_PreviewKeyDown_1(object sender, PreviewKeyDownEventArgs e)
@@ -665,7 +680,7 @@ namespace WinFormsApp1
                 dgvAlunos.DataSource = null;
                 dgvAlunos.DataSource = listaAlunos;
 
-                CalcularEstatisticas();
+                CalcularEstatisticas(listaAlunos);
 
                 MessageBox.Show($"{contagemImportados} alunos importados e guardados na base de dados com sucesso!", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
