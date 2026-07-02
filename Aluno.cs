@@ -18,20 +18,24 @@ namespace WinFormsApp1
         public double NotaParticipacao { get; set; }
         public double MediaFinal { get; set; }
         public string Situacao { get; set; }
-        public int Faltas { get; set; }
         public int Id { get; internal set; }
+        public int FaltasInjustificadas { get; set; }
+        public int FaltasJustificadas { get; set; }
+        public int FaltasRecuperadas { get; set; }
 
-        public Aluno(string nome, string turma, double teste, double trabalho, double participacao, int faltas)
+        public Aluno(int id, string nome, string turma, double teste, double trabalho, double participacao, int faltasInjustificadas, int faltasJustificadas, int faltasRecuperadas)
         {
+            Id = id;
             Nome = nome;
             Turma = turma;
             NotaTeste = teste;
             NotaTrabalho = trabalho;
             NotaParticipacao = participacao;
-            Faltas = faltas;
+            FaltasInjustificadas = faltasInjustificadas;
+            FaltasJustificadas = faltasJustificadas;
+            FaltasRecuperadas = faltasRecuperadas;
 
             CalcularMediaESituacao();
-
         }
 
         public Aluno()
@@ -40,20 +44,27 @@ namespace WinFormsApp1
 
         public void CalcularMediaESituacao()
         {
-
             MediaFinal = Math.Round((NotaTeste * 0.5) + (NotaTrabalho * 0.3) + (NotaParticipacao * 0.2), 2);
 
-            if (MediaFinal >= 10)
+            int faltasEfetivas = FaltasInjustificadas - FaltasRecuperadas;
+
+
+            if (FaltasInjustificadas > 10)
             {
-                Situacao = "Aprovado(a)";
-            }
-            else if (MediaFinal >= 8)
+                if (faltasEfetivas <= 10 && FaltasJustificadas > 0 && FaltasRecuperadas > 0)
+                {
+                    if (MediaFinal >= 10) Situacao = "Aprovado(a)";
+                    else if (MediaFinal >= 8) Situacao = "Recuperação";
+                    else Situacao = "Reprovado(a)";
+                } else
+                {
+                    Situacao = "Reprovado(a) por Faltas";
+                }
+            } else
             {
-                Situacao = "Recuperação";
-            }
-            else
-            {
-                Situacao = "Reprovado";
+                if (MediaFinal >= 10) Situacao = "Aprovado(a)";
+                else if (MediaFinal >= 8) Situacao = "Recuperação";
+                else Situacao = "Reprovado(a)";
             }
         }
     }
