@@ -18,6 +18,9 @@ namespace WinFormsApp1
         private object faltas;
         private object linha;
         private Aluno novoAluno;
+        private bool emValidacao = false;
+        private bool bloqueioPopupAtivo = false;
+        private bool gravandoDados = false;
 
         public Form1()
         {
@@ -134,9 +137,29 @@ namespace WinFormsApp1
 
         private void dgvAlunos_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            if (gravandoDados) return;
+
             if (e.RowIndex < 0 || e.RowIndex >= listaAlunos.Count) return;
 
             Aluno alunoEditado = listaAlunos[e.RowIndex];
+
+            if (alunoEditado.FaltasRecuperadas > alunoEditado.FaltasJustificadas)
+            {
+                gravandoDados = true;
+
+                MessageBox.Show($"Erro: As faltas recuperadas ({alunoEditado.FaltasRecuperadas}) não podem ser maiores do que as faltas justificadas ({alunoEditado.FaltasJustificadas})!",
+                                "Aviso de Validação",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                alunoEditado.FaltasRecuperadas = alunoEditado.FaltasJustificadas;
+                dgvAlunos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = alunoEditado.FaltasJustificadas;
+
+                dgvAlunos.Refresh();
+
+                gravandoDados = false;
+                return;
+            }
 
             alunoEditado.MediaFinal = Math.Round((alunoEditado.NotaTeste * 0.5) + (alunoEditado.NotaTrabalho * 0.3) + (alunoEditado.NotaParticipacao * 0.2), 2);
 
@@ -527,8 +550,12 @@ namespace WinFormsApp1
 
             listaComRodape.Add(linhamedia);
 
+            dgvAlunos.CellValueChanged -= dgvAlunos_CellValueChanged;
+
             dgvAlunos.DataSource = null;
             dgvAlunos.DataSource = listaComRodape;
+
+            dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
 
             if (dgvAlunos.Columns["Id"] != null)
             {
