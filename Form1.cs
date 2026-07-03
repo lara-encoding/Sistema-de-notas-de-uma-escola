@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using ExcelDataReader;
 using System.Linq;
+using System.Text;
 
 namespace WinFormsApp1
 {
@@ -21,6 +22,7 @@ namespace WinFormsApp1
         private bool emValidacao = false;
         private bool bloqueioPopupAtivo = false;
         private bool gravandoDados = false;
+        private string ultimoConteudoExportado = "";
 
         public Form1()
         {
@@ -420,7 +422,7 @@ namespace WinFormsApp1
                 return;
             }
 
-            DialogResult resposta = MessageBox.Show($"Tens a certeza de que queres eliminar os {dgvAlunos.SelectedRows.Count} alunos selecionados?", "Confirmar Eliminação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);if (resposta == DialogResult.Yes)
+            DialogResult resposta = MessageBox.Show($"Tens a certeza de que queres eliminar os {dgvAlunos.SelectedRows.Count} alunos selecionados?", "Confirmar Eliminação", MessageBoxButtons.YesNo, MessageBoxIcon.Question); if (resposta == DialogResult.Yes)
             {
                 using (FbConnection conexao = new FbConnection(stringConexao))
                 {
@@ -446,18 +448,18 @@ namespace WinFormsApp1
                             }
                         }
                     }
-                      catch (Exception ex)
-                      {
-                          MessageBox.Show($"Erro ao apagar na Base de Dados: {ex.Message}", "Erro");
-                          return;
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erro ao apagar na Base de Dados: {ex.Message}", "Erro");
+                        return;
                     }
                 }
                 CarregarHistoricoDaBaseDeDados();
 
-                        CalcularEstatisticas(listaAlunos);
-                        MessageBox.Show("Aluno eliminado com sucesso!", "Sucesso");
+                CalcularEstatisticas(listaAlunos);
+                MessageBox.Show("Aluno eliminado com sucesso!", "Sucesso");
             }
-                
+
         }
 
         private void dgvAlunos_UserDeletingRow(object? sender, DataGridViewRowCancelEventArgs e)
@@ -711,7 +713,7 @@ namespace WinFormsApp1
                     alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("recup") == true).ToList();
                     break;
             }
-            
+
             CalcularEstatisticas(alunosFiltrados);
         }
 
@@ -781,6 +783,61 @@ namespace WinFormsApp1
                 CalcularEstatisticas(listaAlunos);
 
                 MessageBox.Show($"{contagemImportados} alunos importados e guardados na base de dados com sucesso!", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < dgvAlunos.Columns.Count; i++)
+            {
+                sb.Append(dgvAlunos.Columns[i].HeaderText);
+                if (i < dgvAlunos.Columns.Count - 1) sb.Append(";");
+            }
+            sb.AppendLine();
+
+            for (int i = 0; i < dgvAlunos.Rows.Count; i++)
+            {
+                if (dgvAlunos.Rows[i].IsNewRow) continue;
+
+                for (int j = 0; j < dgvAlunos.Columns.Count; j++)
+                {
+                    string valor = dgvAlunos.Rows[i].Cells[j].Value?.ToString() ?? "";
+                    sb.Append(valor.Replace(";", ","));
+                    if (j < dgvAlunos.Columns.Count - 1) sb.Append(";");
+                }
+                sb.AppendLine();
+            }
+            string conteudoAtual = sb.ToString();
+
+            if (conteudoAtual == ultimoConteudoExportado)
+            {
+                MessageBox.Show("As informações não foram alteradas desde a última exportação. Não é necessário exportar novamente.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Ficheiro CSV (*.csv)|*.csv";
+            sfd.FileName = "Relatorio_Alunos.csv";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8)) 
+                    {
+                        sw.Write(conteudoAtual);
+                    }
+
+                    ultimoConteudoExportado = conteudoAtual;
+
+                    MessageBox.Show("Dados exportados com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                } catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao exportar: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
         }
     }
