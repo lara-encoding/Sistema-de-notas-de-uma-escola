@@ -221,7 +221,7 @@ namespace WinFormsApp1
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao actualizar no Firebird: {ex.Message}", "Erro de Sincronização");
+                    MessageBox.Show($"Erro ao atualizar no Firebird: {ex.Message}", "Erro de Sincronização");
                 }
             }
             nomeAntigo = "";
@@ -310,18 +310,22 @@ namespace WinFormsApp1
             Aluno novoAluno = new Aluno(0, txtNome.Text, cmbTurmas.Text, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
             listaAlunos.Add(novoAluno);
 
-            dgvAlunos.DataSource = null;
-            dgvAlunos.DataSource = listaAlunos;
-
-            CalcularEstatisticas(listaAlunos);
-
             txtNome.Clear();
             txtNotaTeste.Clear();
             txtNotaTrabalho.Clear();
             txtNotaParticipacao.Clear();
             numFaltas.Value = 0;
 
-            if (cmbTurmas.Items.Count > 0) cmbTurmas.SelectedIndex = 0;
+            cmbTurmas.SelectedIndex = -1;
+
+            if (comboBox1.Items.Count > 0)
+            {
+                comboBox1.SelectedIndex = 0;
+            }
+
+            comboBox1_SelectedIndexChanged(comboBox1, EventArgs.Empty);
+
+            MessageBox.Show("Aluno adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             txtNome.Focus();
         }

@@ -28,3 +28,4 @@ C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\SixLabors.Fo
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\System.IO.Packaging.dll
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.dll
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.DataSet.dll
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.Form3.resources
