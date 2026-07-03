@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
             btnAdicionar = new Button();
             txtNotaTrabalho = new TextBox();
             txtNome = new TextBox();
@@ -56,6 +56,7 @@
             label7 = new Label();
             button4 = new Button();
             button5 = new Button();
+            btnEnviarEmail = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
@@ -128,18 +129,18 @@
             // 
             // dgvAlunos
             // 
-            dataGridViewCellStyle1.BackColor = Color.LightGray;
-            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.BackColor = Color.LightGray;
+            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
             dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = Color.White;
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle8;
             dgvAlunos.Location = new Point(-1, -3);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
@@ -254,10 +255,10 @@
             // button1
             // 
             button1.BackColor = Color.Transparent;
-            button1.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(690, 338);
+            button1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(702, 339);
             button1.Name = "button1";
-            button1.Size = new Size(132, 61);
+            button1.Size = new Size(113, 46);
             button1.TabIndex = 16;
             button1.Text = "Apagar Aluno";
             button1.UseVisualStyleBackColor = false;
@@ -266,10 +267,10 @@
             // button2
             // 
             button2.BackColor = Color.Transparent;
-            button2.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(844, 338);
+            button2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Location = new Point(835, 339);
             button2.Name = "button2";
-            button2.Size = new Size(137, 61);
+            button2.Size = new Size(111, 46);
             button2.TabIndex = 19;
             button2.Text = "Apagar Todos Os Alunos";
             button2.UseVisualStyleBackColor = false;
@@ -278,10 +279,10 @@
             // button3
             // 
             button3.BackColor = Color.Transparent;
-            button3.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(527, 338);
+            button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button3.Location = new Point(570, 339);
             button3.Name = "button3";
-            button3.Size = new Size(141, 61);
+            button3.Size = new Size(113, 46);
             button3.TabIndex = 20;
             button3.Text = "Ver Turmas";
             button3.UseVisualStyleBackColor = false;
@@ -316,9 +317,10 @@
             // 
             // button4
             // 
-            button4.Location = new Point(630, 405);
+            button4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button4.Location = new Point(570, 394);
             button4.Name = "button4";
-            button4.Size = new Size(102, 34);
+            button4.Size = new Size(113, 46);
             button4.TabIndex = 25;
             button4.Text = "Importar";
             button4.UseVisualStyleBackColor = true;
@@ -326,13 +328,25 @@
             // 
             // button5
             // 
-            button5.Location = new Point(781, 405);
+            button5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button5.Location = new Point(702, 394);
             button5.Name = "button5";
-            button5.Size = new Size(104, 34);
+            button5.Size = new Size(113, 46);
             button5.TabIndex = 26;
             button5.Text = "Exportar";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
+            // 
+            // btnEnviarEmail
+            // 
+            btnEnviarEmail.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            btnEnviarEmail.Location = new Point(833, 394);
+            btnEnviarEmail.Name = "btnEnviarEmail";
+            btnEnviarEmail.Size = new Size(113, 45);
+            btnEnviarEmail.TabIndex = 27;
+            btnEnviarEmail.Text = "Enviar Email";
+            btnEnviarEmail.UseVisualStyleBackColor = true;
+            btnEnviarEmail.Click += btnEnviarEmail_Click;
             // 
             // Form1
             // 
@@ -340,6 +354,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(btnEnviarEmail);
             Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(label7);
@@ -399,5 +414,6 @@
         private Label label7;
         private Button button4;
         private Button button5;
+        private Button btnEnviarEmail;
     }
 }
