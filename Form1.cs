@@ -44,6 +44,7 @@ namespace WinFormsApp1
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             cmbTurmas.SelectedIndexChanged += cmbTurmas_SelectedIndexChanged;
             txtNome.TextChanged += txtNome_TextChanged;
+            button6.Click += button6_Click;
 
             CarregarHistoricoDaBaseDeDados();
             ToolTip dicaBotao = new ToolTip();
@@ -54,30 +55,10 @@ namespace WinFormsApp1
             dicaBotao.SetToolTip(button1, "Dica: Pode selecionar vários alunos segurando a tecla CTRL enquanto clicas nas linhas");
         }
 
-        private void btnEnviarEmail_Click(object sender, EventArgs e)
-        {
-            if (dgvAlunos.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Por favor, seleciona o aluno(a) na tabela clicando no início da linha dele.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            DataGridViewRow linhaSelecionada = dgvAlunos.SelectedRows[0];
-
-            if (linhaSelecionada.Cells["Nome"].Value == null || linhaSelecionada.Cells["Nome"].Value.ToString().StartsWith("---"))
-            {
-                MessageBox.Show("Não podes enviar um e-mail para a linha de médias do radapé!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string nomeAluno = linhaSelecionada.Cells["Nome"].Value.ToString();
-            string turmaAluno = linhaSelecionada.Cells["Nome"].Value.ToString();
-        }
-
         private void EnviarEmailAluno(Aluno aluno, string emailDestinatario)
         {
             string emailRemetente = "anamedici634@gmail.com";
-            string palavraPasse = "anamedici.160308";
+            string palavraPasse = "czpbrzktanvhyyik";
 
             string assunto = $"Notas e Situação Final - {aluno.Nome}";
             string corpoTexto = "";
@@ -87,61 +68,64 @@ namespace WinFormsApp1
             switch (aluno.Situacao)
             {
                 case "Aprovado(a)":
-                    corpoTexto = $@"Olá {aluno.Nome}," +
-            "Parabéns! É com grande satisfação que informo que foste Aprovado(a)." +
-            "A tua média final nesta disciplina foi de {{aluno.MediaFinal}} valores." +
-            "Continua com o excelente trabalho e votos de ótimas férias!" +
-            "Atenciosamente," +
-            "O Teu Professor / Conselho de Turma.";
+                    corpoTexto = $"Olá {aluno.Nome}," +
+            $"\n\nParabéns! É com grande satisfação que informo que foste Aprovado(a).\n" +
+            $"A tua média final nesta disciplina foi de {aluno.MediaFinal} valores.\n" +
+            $"Continua com o excelente trabalho e votos de ótimas férias!\n" +
+            $"\nAtenciosamente,\n" +
+            $"O Teu Professor / Conselho de Turma.";
                     break;
 
                 case "Recuperação":
-                    corpoTexto = $@"Olá {aluno.Nome}," +
-            "Envio esta mensagem para informar que a tua situação atual é de Recuperação de Nota." +
-            "A tua média final momentânea é de {{aluno.MediaFinal}} valores." +
-            "As tuas notas parciais foram:" +
-            "- Nota do Teste: {{aluno.NotaTeste}}" +
-            "- Nota do Trabalho: {{aluno.NotaTrabalho}}" +
-            "- Nota de Participação: {{aluno.NotaParticipacao}}" +
-            "Como tens direito a realizar uma prova de recurso para tentar melhorar esta nota, por favor, entra em contacto comigo o quanto antes para combinarmos os detalhes e a data da prova." +
-            "Atenciosamente," +
-                    "O Teu Professor.";
+                    corpoTexto = $"Olá {aluno.Nome}," +
+            $"Envio esta mensagem para informar que a tua situação atual é de Recuperação de Nota." +
+            $"A tua média final momentânea é de {aluno.MediaFinal} valores." +
+            $"As tuas notas parciais foram:" +
+            $"- Nota do Teste: {aluno.NotaTeste}" +
+            $"- Nota do Trabalho: {aluno.NotaTrabalho}" +
+            $"- Nota de Participação: {aluno.NotaParticipacao}" +
+            $"Como tens direito a realizar uma prova de recurso para tentar melhorar esta nota, por favor, entra em contacto comigo o quanto antes para combinarmos os detalhes e a data da prova." +
+            $"Atenciosamente," +
+                    $"O Teu Professor.";
                     break;
 
                 case "Reprovado(a) por Faltas":
-                    corpoTexto = $@"Olá {aluno.Nome}," +
-            "Entro em contacto para informar que a tua situação final nesta disciplina é de Reprovado(a) por Faltas, por teres excedido o limite legal de faltas." +
-            "- Total de Faltas Injustificadas: {aluno.FaltasInjustificadas}" +
-            "-Faltas Efetivas(após recuperação): {faltasEfetivas}" +
-            "Para saberes quais os procedimentos necessários agora, deverás consultar a secretaria ou a direção da escola juntamente com o teu encarregado de educação." +
-            "Atenciosamente," +
-            "O Teu Professor.";
+                    corpoTexto = $"Olá {aluno.Nome}," +
+            $"\n\nEntro em contacto para informar que a tua situação final nesta disciplina é de Reprovado(a) por Faltas, por teres excedido o limite legal de faltas.\n" +
+            $"\n- Total de Faltas Injustificadas: {aluno.FaltasInjustificadas}" +
+            $"\n-Faltas Efetivas(após recuperação): {faltasEfetivas}" +
+            $"\nPara saberes quais os procedimentos necessários agora, deverás consultar a secretaria ou a direção da escola juntamente com o teu encarregado de educação." +
+            $"\n\nAtenciosamente," +
+            $"\nO Teu Professor.";
                     break;
 
                 default:
-                    corpoTexto = $@"Olá {aluno.Nome}," +
-            "Informo que a tua situação final é de Reprovado(a) por insuficiência de nota." +
-            "A tua média final foi de { aluno.MediaFinal} valores, ficando abaixo do mínimo de 10 valores necessário para transitar." +
-            "Para esclarecimentos adicionais sobre a avaliação ou sobre os próximos passos, entra em contacto comigo ou consulta a secretaria da escola." +
-            "Atenciosamente," +
-            "O Teu Professor.";
+                    corpoTexto = $"Olá {aluno.Nome}," +
+            $"Informo que a tua situação final é de Reprovado(a) por insuficiência de nota.\n" +
+            $"\nA tua média final foi de {aluno.MediaFinal} valores, ficando abaixo do mínimo de 10 valores necessário para transitar." +
+            $"\nPara esclarecimentos adicionais sobre a avaliação ou sobre os próximos passos, entra em contacto comigo ou consulta a secretaria da escola." +
+            $"\n\nAtenciosamente," +
+            $"\nO Teu Professor.";
                     break;
             }
 
             try
             {
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
+
                 MailMessage email = new MailMessage();
                 email.From = new MailAddress(emailRemetente, "Professor (Via Sistema)");
                 email.To.Add(emailDestinatario);
                 email.Subject = assunto;
                 email.Body = corpoTexto;
-                email.Encoding = System.Text.Encoding.UTF8;
+                email.BodyEncoding = System.Text.Encoding.UTF8;
                 email.IsBodyHtml = false;
 
-                SmtpClient smtp = new SmtpClient("smtp-mail.outlook.com", 587);
-                smtp.EnableSsl = true;
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(emailRemetente, palavraPasse);
+                smtp.Credentials = new NetworkCredential(emailRemetente.Trim(), palavraPasse.Trim());
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(email);
 
                 MessageBox.Show($"Email enviado com sucesso para {aluno.Nome}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -149,6 +133,7 @@ namespace WinFormsApp1
             }
             catch (Exception ex)
             {
+                string erroDetalhado = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 MessageBox.Show($"Erro técnico ao enviar e-mail: {ex.Message}", "Erro de Envio", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -950,6 +935,45 @@ namespace WinFormsApp1
                     MessageBox.Show("Erro ao exportar: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (dgvAlunos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Por favor, seleciona o aluno(a) na tabela clicando no início da linha dele.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DataGridViewRow linhaSelecionada = dgvAlunos.SelectedRows[0];
+
+            if (linhaSelecionada.Cells["Nome"].Value == null || linhaSelecionada.Cells["Nome"].Value.ToString().StartsWith("---"))
+            {
+                MessageBox.Show("Não podes enviar um e-mail para a linha de médias do radapé!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string nomeAluno = linhaSelecionada.Cells["Nome"].Value.ToString();
+            string turmaAluno = linhaSelecionada.Cells["Turma"].Value.ToString();
+
+            Aluno alunoSelecionado = listaAlunos.FirstOrDefault(a => a.Nome == nomeAluno && a.Turma == turmaAluno);
+
+            if (alunoSelecionado != null)
+            {
+                string emailDestino = Microsoft.VisualBasic.Interaction.InputBox(
+                    $"Insira o e-mail do(a) aluno(a) {alunoSelecionado.Nome}:",
+                    "Enviar Relatório de Notas",
+                    "");
+
+                if (!string.IsNullOrWhiteSpace(emailDestino) && emailDestino.Contains("@"))
+                {
+                    EnviarEmailAluno(alunoSelecionado, emailDestino);
+                }
+                else if (!string.IsNullOrWhiteSpace(emailDestino))
+                {
+                    MessageBox.Show("O e-mail digitado parece inválido. Certifica-te de que incluis o '@'.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
