@@ -31,10 +31,12 @@ namespace WinFormsApp1
         private bool bloqueioPopupAtivo = false;
         private bool gravandoDados = false;
         private string ultimoConteudoExportado = "";
+        private string professorLogado;
 
-        public Form1()
+        public Form1(string nomeUsuario)
         {
             InitializeComponent();
+            professorLogado = nomeUsuario;
 
             dgvAlunos.CellBeginEdit += dgvAlunos_CellBeginEdit;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
@@ -78,22 +80,22 @@ namespace WinFormsApp1
 
                 case "Recuperação":
                     corpoTexto = $"Olá {aluno.Nome}," +
-            $"Envio esta mensagem para informar que a tua situação atual é de Recuperação de Nota." +
-            $"A tua média final momentânea é de {aluno.MediaFinal} valores." +
-            $"As tuas notas parciais foram:" +
-            $"- Nota do Teste: {aluno.NotaTeste}" +
-            $"- Nota do Trabalho: {aluno.NotaTrabalho}" +
-            $"- Nota de Participação: {aluno.NotaParticipacao}" +
-            $"Como tens direito a realizar uma prova de recurso para tentar melhorar esta nota, por favor, entra em contacto comigo o quanto antes para combinarmos os detalhes e a data da prova." +
-            $"Atenciosamente," +
-                    $"O Teu Professor.";
+            $"\n\nEnvio esta mensagem para informar que a tua situação atual é de Recuperação de Nota.\n" +
+            $"A tua média final momentânea é de {aluno.MediaFinal} valores.\n" +
+            $"As tuas notas parciais foram:\n" +
+            $"- Nota do Teste: {aluno.NotaTeste}\n" +
+            $"- Nota do Trabalho: {aluno.NotaTrabalho}\n" +
+            $"- Nota de Participação: {aluno.NotaParticipacao}\n" +
+            $"\nComo tens direito a realizar uma prova de recurso para tentar melhorar esta nota, por favor, entra em contacto comigo o quanto antes para combinarmos os detalhes e a data da prova." +
+            $"\n\nAtenciosamente," +
+                    $"\nO Teu Professor.";
                     break;
 
                 case "Reprovado(a) por Faltas":
                     corpoTexto = $"Olá {aluno.Nome}," +
             $"\n\nEntro em contacto para informar que a tua situação final nesta disciplina é de Reprovado(a) por Faltas, por teres excedido o limite legal de faltas.\n" +
             $"\n- Total de Faltas Injustificadas: {aluno.FaltasInjustificadas}" +
-            $"\n-Faltas Efetivas(após recuperação): {faltasEfetivas}" +
+            $"\n- Faltas Efetivas(após recuperação): {faltasEfetivas}" +
             $"\nPara saberes quais os procedimentos necessários agora, deverás consultar a secretaria ou a direção da escola juntamente com o teu encarregado de educação." +
             $"\n\nAtenciosamente," +
             $"\nO Teu Professor.";
@@ -694,7 +696,10 @@ namespace WinFormsApp1
         }
 
         private void btnAdicionar_Click(object sender, EventArgs e) { }
-        private void Form1_Load(object sender, EventArgs e) { }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            lblUsuario.Text = $"Professor(a) ligado(a): {professorLogado}";
+        }
         private void textBox1_TextChanged(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
         private void label5_Click(object sender, EventArgs e) { }

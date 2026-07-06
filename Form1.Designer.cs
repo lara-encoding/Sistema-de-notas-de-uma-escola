@@ -57,6 +57,7 @@
             button4 = new Button();
             button5 = new Button();
             button6 = new Button();
+            lblUsuario = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
@@ -66,7 +67,7 @@
             // 
             btnAdicionar.BackColor = Color.ForestGreen;
             btnAdicionar.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAdicionar.Location = new Point(890, 55);
+            btnAdicionar.Location = new Point(891, 57);
             btnAdicionar.Name = "btnAdicionar";
             btnAdicionar.Size = new Size(103, 97);
             btnAdicionar.TabIndex = 0;
@@ -76,7 +77,7 @@
             // 
             // txtNotaTrabalho
             // 
-            txtNotaTrabalho.Location = new Point(650, 118);
+            txtNotaTrabalho.Location = new Point(651, 120);
             txtNotaTrabalho.Name = "txtNotaTrabalho";
             txtNotaTrabalho.Size = new Size(225, 23);
             txtNotaTrabalho.TabIndex = 2;
@@ -85,7 +86,7 @@
             // 
             // txtNome
             // 
-            txtNome.Location = new Point(650, 31);
+            txtNome.Location = new Point(651, 33);
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(225, 23);
             txtNome.TabIndex = 4;
@@ -93,7 +94,7 @@
             // 
             // txtNotaTeste
             // 
-            txtNotaTeste.Location = new Point(650, 89);
+            txtNotaTeste.Location = new Point(651, 91);
             txtNotaTeste.Name = "txtNotaTeste";
             txtNotaTeste.Size = new Size(225, 23);
             txtNotaTeste.TabIndex = 5;
@@ -101,7 +102,7 @@
             // 
             // txtNotaParticipacao
             // 
-            txtNotaParticipacao.Location = new Point(650, 147);
+            txtNotaParticipacao.Location = new Point(651, 149);
             txtNotaParticipacao.Name = "txtNotaParticipacao";
             txtNotaParticipacao.Size = new Size(225, 23);
             txtNotaParticipacao.TabIndex = 6;
@@ -110,7 +111,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(554, 34);
+            label1.Location = new Point(555, 36);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 7;
@@ -120,7 +121,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(563, 121);
+            label2.Location = new Point(564, 123);
             label2.Name = "label2";
             label2.Size = new Size(81, 15);
             label2.TabIndex = 8;
@@ -158,7 +159,7 @@
             groupBox1.Controls.Add(lblTotalAprovados);
             groupBox1.Controls.Add(lblMelhorAluno);
             groupBox1.Controls.Add(lblMediaTurma);
-            groupBox1.Location = new Point(521, 211);
+            groupBox1.Location = new Point(522, 213);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(471, 115);
             groupBox1.TabIndex = 10;
@@ -225,7 +226,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(582, 92);
+            label3.Location = new Point(583, 94);
             label3.Name = "label3";
             label3.Size = new Size(62, 15);
             label3.TabIndex = 11;
@@ -235,7 +236,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(543, 150);
+            label4.Location = new Point(544, 152);
             label4.Name = "label4";
             label4.Size = new Size(101, 15);
             label4.TabIndex = 12;
@@ -245,7 +246,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(603, 63);
+            label5.Location = new Point(604, 65);
             label5.Name = "label5";
             label5.Size = new Size(41, 15);
             label5.TabIndex = 13;
@@ -256,7 +257,7 @@
             // 
             button1.BackColor = Color.Transparent;
             button1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(702, 339);
+            button1.Location = new Point(703, 341);
             button1.Name = "button1";
             button1.Size = new Size(113, 46);
             button1.TabIndex = 16;
@@ -268,7 +269,7 @@
             // 
             button2.BackColor = Color.Transparent;
             button2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(835, 339);
+            button2.Location = new Point(836, 341);
             button2.Name = "button2";
             button2.Size = new Size(111, 46);
             button2.TabIndex = 19;
@@ -280,7 +281,7 @@
             // 
             button3.BackColor = Color.Transparent;
             button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(570, 339);
+            button3.Location = new Point(571, 341);
             button3.Name = "button3";
             button3.Size = new Size(113, 46);
             button3.TabIndex = 20;
@@ -292,7 +293,7 @@
             // 
             cmbTurmas.FormattingEnabled = true;
             cmbTurmas.Items.AddRange(new object[] { "1ºA", "2ºA", "3ºA", "1ºC", "2ºC", "3ºC", "1ºG", "2ºG", "3ºG" });
-            cmbTurmas.Location = new Point(650, 60);
+            cmbTurmas.Location = new Point(651, 62);
             cmbTurmas.Name = "cmbTurmas";
             cmbTurmas.Size = new Size(225, 23);
             cmbTurmas.TabIndex = 21;
@@ -300,7 +301,7 @@
             // 
             // numFaltas
             // 
-            numFaltas.Location = new Point(650, 176);
+            numFaltas.Location = new Point(651, 178);
             numFaltas.Name = "numFaltas";
             numFaltas.Size = new Size(225, 23);
             numFaltas.TabIndex = 22;
@@ -309,7 +310,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(603, 178);
+            label7.Location = new Point(604, 180);
             label7.Name = "label7";
             label7.Size = new Size(37, 15);
             label7.TabIndex = 23;
@@ -318,7 +319,7 @@
             // button4
             // 
             button4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button4.Location = new Point(570, 394);
+            button4.Location = new Point(571, 396);
             button4.Name = "button4";
             button4.Size = new Size(113, 46);
             button4.TabIndex = 25;
@@ -329,7 +330,7 @@
             // button5
             // 
             button5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button5.Location = new Point(702, 394);
+            button5.Location = new Point(703, 396);
             button5.Name = "button5";
             button5.Size = new Size(113, 46);
             button5.TabIndex = 26;
@@ -340,7 +341,7 @@
             // button6
             // 
             button6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button6.Location = new Point(835, 394);
+            button6.Location = new Point(836, 396);
             button6.Name = "button6";
             button6.Size = new Size(111, 46);
             button6.TabIndex = 27;
@@ -348,12 +349,22 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
+            // lblUsuario
+            // 
+            lblUsuario.AutoSize = true;
+            lblUsuario.Location = new Point(679, 9);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(38, 15);
+            lblUsuario.TabIndex = 28;
+            lblUsuario.Text = "label8";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(lblUsuario);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button4);
@@ -415,5 +426,6 @@
         private Button button4;
         private Button button5;
         private Button button6;
+        private Label lblUsuario;
     }
 }

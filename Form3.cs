@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FirebirdSql.Data.FirebirdClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,18 +25,43 @@ namespace WinFormsApp1
 
         private void btnEntrar_Click(object sender, EventArgs e)
         {
-            if (txtUtilizador.Text == "admin" && txtSenha.Text == "1234")
-            {
-                MessageBox.Show("Login efetuado com sucesso!", "Bem vindo(a)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
+            string query = "SELECT NOME FROM PROFESSORES WHERE UTILIZADOR = @user AND SENHA = @pass";
 
-                this.Hide();
-                Form1 principal = new Form1();
-                principal.ShowDialog();
-                this.Close();
-            }
-            else
+            using (FbConnection conexao = new FbConnection(conexaoString))
             {
-                MessageBox.Show("Utilizador ou palavra-passe incorretos!", "Erro de autenticação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    conexao.Open();
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@user", txtUtilizador.Text);
+                        comando.Parameters.AddWithValue("@pass", txtSenha.Text);
+
+                        object resultado = comando.ExecuteScalar();
+
+                        if (resultado != null)
+                        {
+                            string nomeProfessor = resultado.ToString();
+
+                            MessageBox.Show($"Login efetuado com sucesso!\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            this.Hide();
+                            Form1 principal = new Form1(txtUtilizador.Text);
+                            principal.ShowDialog();
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Utilizador ou palavra-passe incorretos!", "Erro de autenticação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao ligar à base de dados: {ex.Message}", "Erro do Sistema", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -67,6 +93,21 @@ namespace WinFormsApp1
                 e.SuppressKeyPress = true;
                 btnEntrar.Focus();
             }
+        }
+
+        private void lnkCriarConta_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            panelRegisto.Visible = true;
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            panelRegisto.Visible = false;
+        }
+
+        private void btnConfirmarRegisto_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -34,6 +34,17 @@
             chkMostrarSenha = new CheckBox();
             btnEntrar = new Button();
             label1 = new Label();
+            btnConfirmarRegisto = new Button();
+            btnCancelar = new Button();
+            txtNovoNome = new TextBox();
+            txtNovoUtilizador = new TextBox();
+            txtNovaSenha = new TextBox();
+            panelRegisto = new Panel();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            lnkCriarConta = new LinkLabel();
+            panelRegisto.SuspendLayout();
             SuspendLayout();
             // 
             // label2
@@ -80,7 +91,7 @@
             btnEntrar.FlatStyle = FlatStyle.Flat;
             btnEntrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             btnEntrar.ForeColor = Color.White;
-            btnEntrar.Location = new Point(351, 291);
+            btnEntrar.Location = new Point(351, 292);
             btnEntrar.Name = "btnEntrar";
             btnEntrar.Size = new Size(107, 48);
             btnEntrar.TabIndex = 5;
@@ -98,12 +109,113 @@
             label1.TabIndex = 6;
             label1.Text = "Utilizador:";
             // 
+            // btnConfirmarRegisto
+            // 
+            btnConfirmarRegisto.BackColor = Color.DodgerBlue;
+            btnConfirmarRegisto.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            btnConfirmarRegisto.Location = new Point(37, 240);
+            btnConfirmarRegisto.Name = "btnConfirmarRegisto";
+            btnConfirmarRegisto.Size = new Size(107, 48);
+            btnConfirmarRegisto.TabIndex = 0;
+            btnConfirmarRegisto.Text = "Registar";
+            btnConfirmarRegisto.UseVisualStyleBackColor = false;
+            btnConfirmarRegisto.Click += btnConfirmarRegisto_Click;
+            // 
+            // btnCancelar
+            // 
+            btnCancelar.BackColor = Color.DodgerBlue;
+            btnCancelar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCancelar.Location = new Point(176, 240);
+            btnCancelar.Name = "btnCancelar";
+            btnCancelar.Size = new Size(107, 48);
+            btnCancelar.TabIndex = 1;
+            btnCancelar.Text = "Cancelar";
+            btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += btnCancelar_Click;
+            // 
+            // txtNovoNome
+            // 
+            txtNovoNome.Location = new Point(142, 61);
+            txtNovoNome.Name = "txtNovoNome";
+            txtNovoNome.Size = new Size(141, 23);
+            txtNovoNome.TabIndex = 2;
+            // 
+            // txtNovoUtilizador
+            // 
+            txtNovoUtilizador.Location = new Point(142, 101);
+            txtNovoUtilizador.Name = "txtNovoUtilizador";
+            txtNovoUtilizador.Size = new Size(141, 23);
+            txtNovoUtilizador.TabIndex = 3;
+            // 
+            // txtNovaSenha
+            // 
+            txtNovaSenha.Location = new Point(142, 141);
+            txtNovaSenha.Name = "txtNovaSenha";
+            txtNovaSenha.Size = new Size(141, 23);
+            txtNovaSenha.TabIndex = 4;
+            // 
+            // panelRegisto
+            // 
+            panelRegisto.Controls.Add(label5);
+            panelRegisto.Controls.Add(label4);
+            panelRegisto.Controls.Add(label3);
+            panelRegisto.Controls.Add(txtNovaSenha);
+            panelRegisto.Controls.Add(txtNovoUtilizador);
+            panelRegisto.Controls.Add(txtNovoNome);
+            panelRegisto.Controls.Add(btnCancelar);
+            panelRegisto.Controls.Add(btnConfirmarRegisto);
+            panelRegisto.Location = new Point(489, 3);
+            panelRegisto.Name = "panelRegisto";
+            panelRegisto.Size = new Size(311, 360);
+            panelRegisto.TabIndex = 7;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(54, 144);
+            label5.Name = "label5";
+            label5.Size = new Size(82, 15);
+            label5.TabIndex = 7;
+            label5.Text = "Palavra-passe:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(76, 104);
+            label4.Name = "label4";
+            label4.Size = new Size(60, 15);
+            label4.TabIndex = 6;
+            label4.Text = "Utilizador:";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(37, 64);
+            label3.Name = "label3";
+            label3.Size = new Size(99, 15);
+            label3.TabIndex = 5;
+            label3.Text = "Nome Completo:";
+            // 
+            // lnkCriarConta
+            // 
+            lnkCriarConta.AutoSize = true;
+            lnkCriarConta.LinkColor = Color.White;
+            lnkCriarConta.Location = new Point(318, 366);
+            lnkCriarConta.Name = "lnkCriarConta";
+            lnkCriarConta.Size = new Size(174, 15);
+            lnkCriarConta.TabIndex = 8;
+            lnkCriarConta.TabStop = true;
+            lnkCriarConta.Text = "Não tem conta? Registe-se aqui";
+            lnkCriarConta.LinkClicked += lnkCriarConta_LinkClicked;
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(30, 30, 30);
             ClientSize = new Size(800, 450);
+            Controls.Add(lnkCriarConta);
+            Controls.Add(panelRegisto);
             Controls.Add(label1);
             Controls.Add(btnEntrar);
             Controls.Add(chkMostrarSenha);
@@ -117,6 +229,8 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Acesso ao Sistema";
             Load += Form3_Load;
+            panelRegisto.ResumeLayout(false);
+            panelRegisto.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -128,5 +242,15 @@
         private CheckBox chkMostrarSenha;
         private Button btnEntrar;
         private Label label1;
+        private Button btnConfirmarRegisto;
+        private Button btnCancelar;
+        private TextBox txtNovoNome;
+        private TextBox txtNovoUtilizador;
+        private TextBox txtNovaSenha;
+        private Panel panelRegisto;
+        private Label label5;
+        private Label label4;
+        private Label label3;
+        private LinkLabel lnkCriarConta;
     }
 }
