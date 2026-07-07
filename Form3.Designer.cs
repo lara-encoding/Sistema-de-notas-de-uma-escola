@@ -51,7 +51,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(226, 215);
+            label2.Location = new Point(226, 182);
             label2.Name = "label2";
             label2.Size = new Size(102, 20);
             label2.TabIndex = 1;
@@ -59,7 +59,7 @@
             // 
             // txtUtilizador
             // 
-            txtUtilizador.Location = new Point(334, 161);
+            txtUtilizador.Location = new Point(334, 128);
             txtUtilizador.Name = "txtUtilizador";
             txtUtilizador.Size = new Size(149, 23);
             txtUtilizador.TabIndex = 2;
@@ -67,7 +67,7 @@
             // 
             // txtSenha
             // 
-            txtSenha.Location = new Point(334, 214);
+            txtSenha.Location = new Point(334, 181);
             txtSenha.Name = "txtSenha";
             txtSenha.PasswordChar = '*';
             txtSenha.Size = new Size(149, 23);
@@ -77,7 +77,7 @@
             // chkMostrarSenha
             // 
             chkMostrarSenha.AutoSize = true;
-            chkMostrarSenha.Location = new Point(357, 243);
+            chkMostrarSenha.Location = new Point(357, 210);
             chkMostrarSenha.Name = "chkMostrarSenha";
             chkMostrarSenha.Size = new Size(101, 19);
             chkMostrarSenha.TabIndex = 4;
@@ -91,7 +91,7 @@
             btnEntrar.FlatStyle = FlatStyle.Flat;
             btnEntrar.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
             btnEntrar.ForeColor = Color.White;
-            btnEntrar.Location = new Point(351, 292);
+            btnEntrar.Location = new Point(351, 259);
             btnEntrar.Name = "btnEntrar";
             btnEntrar.Size = new Size(107, 48);
             btnEntrar.TabIndex = 5;
@@ -103,7 +103,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(251, 160);
+            label1.Location = new Point(251, 127);
             label1.Name = "label1";
             label1.Size = new Size(77, 20);
             label1.TabIndex = 6;
@@ -113,7 +113,7 @@
             // 
             btnConfirmarRegisto.BackColor = Color.DodgerBlue;
             btnConfirmarRegisto.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConfirmarRegisto.Location = new Point(37, 240);
+            btnConfirmarRegisto.Location = new Point(37, 226);
             btnConfirmarRegisto.Name = "btnConfirmarRegisto";
             btnConfirmarRegisto.Size = new Size(107, 48);
             btnConfirmarRegisto.TabIndex = 0;
@@ -125,7 +125,7 @@
             // 
             btnCancelar.BackColor = Color.DodgerBlue;
             btnCancelar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCancelar.Location = new Point(176, 240);
+            btnCancelar.Location = new Point(176, 226);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(107, 48);
             btnCancelar.TabIndex = 1;
@@ -139,6 +139,7 @@
             txtNovoNome.Name = "txtNovoNome";
             txtNovoNome.Size = new Size(141, 23);
             txtNovoNome.TabIndex = 2;
+            txtNovoNome.KeyDown += txtNovoNome_KeyDown;
             // 
             // txtNovoUtilizador
             // 
@@ -146,6 +147,7 @@
             txtNovoUtilizador.Name = "txtNovoUtilizador";
             txtNovoUtilizador.Size = new Size(141, 23);
             txtNovoUtilizador.TabIndex = 3;
+            txtNovoUtilizador.KeyDown += txtNovoUtilizador_KeyDown;
             // 
             // txtNovaSenha
             // 
@@ -164,10 +166,11 @@
             panelRegisto.Controls.Add(txtNovoNome);
             panelRegisto.Controls.Add(btnCancelar);
             panelRegisto.Controls.Add(btnConfirmarRegisto);
-            panelRegisto.Location = new Point(489, 3);
+            panelRegisto.Location = new Point(226, 50);
             panelRegisto.Name = "panelRegisto";
-            panelRegisto.Size = new Size(311, 360);
+            panelRegisto.Size = new Size(332, 360);
             panelRegisto.TabIndex = 7;
+            panelRegisto.Visible = false;
             // 
             // label5
             // 
@@ -200,7 +203,7 @@
             // 
             lnkCriarConta.AutoSize = true;
             lnkCriarConta.LinkColor = Color.White;
-            lnkCriarConta.Location = new Point(318, 366);
+            lnkCriarConta.Location = new Point(319, 343);
             lnkCriarConta.Name = "lnkCriarConta";
             lnkCriarConta.Size = new Size(174, 15);
             lnkCriarConta.TabIndex = 8;

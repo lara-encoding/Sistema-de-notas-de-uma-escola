@@ -32,11 +32,18 @@ namespace WinFormsApp1
         private bool gravandoDados = false;
         private string ultimoConteudoExportado = "";
         private string professorLogado;
+        private int idTurmaAtual;
+        private string nomeTurmaAtual;
+        private string turmaAtual = "1ºA";
 
-        public Form1(string nomeUsuario)
+        public Form1(string nomeUsuario, int idTurma, string nomeTurma)
         {
             InitializeComponent();
             professorLogado = nomeUsuario;
+            this.idTurmaAtual = idTurma;
+            this.nomeTurmaAtual = nomeTurma;
+
+            this.Text = $"Gestão de Alunos - Turma: {nomeTurma} (Prof. {nomeUsuario})";
 
             dgvAlunos.CellBeginEdit += dgvAlunos_CellBeginEdit;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
@@ -44,7 +51,6 @@ namespace WinFormsApp1
             button1.Click += btnApagarAluno_Click;
             dgvAlunos.CellFormatting += dgvAlunos_CellFormatting;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-            cmbTurmas.SelectedIndexChanged += cmbTurmas_SelectedIndexChanged;
             txtNome.TextChanged += txtNome_TextChanged;
             button6.Click += button6_Click;
 
@@ -166,15 +172,6 @@ namespace WinFormsApp1
 
         private void cmbTurmas_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (listaAlunos == null || listaAlunos.Count == 0 || cmbTurmas.SelectedItem == null) return;
-
-            string turmaSelecionada = cmbTurmas.SelectedItem.ToString();
-
-            var alunosFiltrados = listaAlunos.Where(aluno => aluno.Turma == turmaSelecionada).ToList();
-
-            dgvAlunos.DataSource = null;
-            dgvAlunos.DataSource = alunosFiltrados;
-            if (dgvAlunos.Columns["Id"] != null) dgvAlunos.Columns["Id"].Visible = false;
         }
 
         private void CarregarHistoricoDaBaseDeDados()
@@ -182,7 +179,7 @@ namespace WinFormsApp1
             if (listaAlunos == null) listaAlunos = new List<Aluno>();
             listaAlunos.Clear();
 
-            string querySelect = "SELECT NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS FROM ALUNOS";
+            string querySelect = "SELECT NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS FROM ALUNOS WHERE ID_TURMA = @idTurma";
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
                 try
@@ -190,12 +187,14 @@ namespace WinFormsApp1
                     conexao.Open();
                     using (FbCommand comando = new FbCommand(querySelect, conexao))
                     {
+                        comando.Parameters.AddWithValue("@idTurma", this.idTurmaAtual);
+
                         using (FbDataReader leitor = comando.ExecuteReader())
                         {
                             while (leitor.Read())
                             {
                                 string nome = leitor["Nome"].ToString();
-                                string turma = leitor["Turma"].ToString();
+                                string turma = this.nomeTurmaAtual;
                                 double notaTeste = Convert.ToDouble(leitor["NOTA_TESTE"]);
                                 double notaTrabalho = Convert.ToDouble(leitor["NOTA_TRABALHO"]);
                                 double notaParticipacao = Convert.ToDouble(leitor["NOTA_PARTICIPACAO"]);
@@ -212,6 +211,11 @@ namespace WinFormsApp1
 
                     dgvAlunos.DataSource = null;
                     dgvAlunos.DataSource = listaAlunos;
+
+                    if (dgvAlunos.Columns["Turma"] != null)
+                    {
+                        dgvAlunos.Columns["Turma"].Visible = false;
+                    }
 
                     CalcularEstatisticas(listaAlunos);
                 }
@@ -324,18 +328,11 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (cmbTurmas.SelectedItem == null)
-            {
-                MessageBox.Show("Por favor, selecione uma turma na lista antes de adicionar o aluno!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             string nomeInserido = txtNome.Text.Trim();
-            string turmaInserida = cmbTurmas.SelectedItem.ToString();
 
             if (string.IsNullOrWhiteSpace(nomeInserido))
             {
-                MessageBox.Show("Insira o nome do aluno:", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Insira o nome do aluno:", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -352,12 +349,11 @@ namespace WinFormsApp1
                 try
                 {
                     conexaoValidar.Open();
-                    string queryCheck = "SELECT COUNT(*) FROM ALUNOS WHERE LOWER(NOME) = LOWER(@v_nome) AND LOWER(TURMA) = LOWER(@v_turma)";
+                    string queryCheck = "SELECT COUNT(*) FROM ALUNOS WHERE LOWER(NOME) = LOWER(@v_nome)";
 
                     using (FbCommand cmdCheck = new FbCommand(queryCheck, conexaoValidar))
                     {
                         cmdCheck.Parameters.AddWithValue("@v_nome", nomeInserido);
-                        cmdCheck.Parameters.AddWithValue("@v_turma", turmaInserida);
 
                         int resultadoDvd = Convert.ToInt32(cmdCheck.ExecuteScalar());
                         if (resultadoDvd > 0)
@@ -374,7 +370,7 @@ namespace WinFormsApp1
 
             if (existeNaBD)
             {
-                MessageBox.Show("Já existe um aluno com esse nome nesta turma!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Já existe um aluno com esse nome registado!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -399,9 +395,9 @@ namespace WinFormsApp1
             }
 
             int faltasInseridas = Convert.ToInt32(numFaltas.Value);
-            SalvarAlunoNoFirebird(0, nomeInserido, turmaInserida, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
+            SalvarAlunoNoFirebird(0, nomeInserido, turmaAtual, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
 
-            Aluno novoAluno = new Aluno(0, txtNome.Text, cmbTurmas.Text, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
+            Aluno novoAluno = new Aluno(0, txtNome.Text, turmaAtual, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
             listaAlunos.Add(novoAluno);
 
             txtNome.Clear();
@@ -409,8 +405,6 @@ namespace WinFormsApp1
             txtNotaTrabalho.Clear();
             txtNotaParticipacao.Clear();
             numFaltas.Value = 0;
-
-            cmbTurmas.SelectedIndex = -1;
 
             if (comboBox1.Items.Count > 0)
             {
@@ -451,9 +445,8 @@ namespace WinFormsApp1
             }
 
             string nomeLimpo = nome.Trim();
-            string turmaLimpa = turma.Trim();
 
-            string query = "UPDATE ALUNOS SET NOTA_TESTE = @teste, NOTA_TRABALHO = @trabalho, NOTA_PARTICIPACAO = @participacao, " +
+            string query = "UPDATE ALUNOS SET NOME = @nome, NOTA_TESTE = @teste, NOTA_TRABALHO = @trabalho, NOTA_PARTICIPACAO = @participacao, " +
                            "FALTAS_INJUSTIFICADAS = @injustificadas, FALTAS_JUSTIFICADAS = @justificadas, FALTAS_RECUPERADAS = @recuperadas, " +
                            "MEDIA_FINAL = @media, SITUACAO = @situacao WHERE ID = @id";
 
@@ -468,8 +461,8 @@ namespace WinFormsApp1
                     {
                         using (FbCommand comando = new FbCommand(query, conexao))
                         {
+                            comando.Parameters.AddWithValue("@id", id);
                             comando.Parameters.AddWithValue("@nome", nomeLimpo);
-                            comando.Parameters.AddWithValue("@turma", turmaLimpa);
                             comando.Parameters.AddWithValue("@teste", teste);
                             comando.Parameters.AddWithValue("@trabalho", trabalho);
                             comando.Parameters.AddWithValue("@participacao", participacao);
@@ -485,13 +478,12 @@ namespace WinFormsApp1
 
                     if (linhasAfetadas == 0)
                     {
-                        string queryInsert = "INSERT INTO ALUNOS (NOME, TURMA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS, MEDIA_FINAL, SITUACAO) " +
-                                             "VALUES (@nome, @turma, @teste, @trabalho, @participacao, @injustificadas, @justificadas, @recuperadas, @media, @situacao)";
+                        string queryInsert = "INSERT INTO ALUNOS (NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS, MEDIA_FINAL, SITUACAO) " +
+                                             "VALUES (@nome, @teste, @trabalho, @participacao, @injustificadas, @justificadas, @recuperadas, @media, @situacao)";
 
                         using (FbCommand comandoInsert = new FbCommand(queryInsert, conexao))
                         {
                             comandoInsert.Parameters.AddWithValue("@nome", nomeLimpo);
-                            comandoInsert.Parameters.AddWithValue("@turma", turmaLimpa);
                             comandoInsert.Parameters.AddWithValue("@teste", teste);
                             comandoInsert.Parameters.AddWithValue("@trabalho", trabalho);
                             comandoInsert.Parameters.AddWithValue("@participacao", participacao);
@@ -681,7 +673,7 @@ namespace WinFormsApp1
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Erro ao limpar a Base de Dados: {ex.Message}", "Erro");
+                        MessageBox.Show($"Erro ao limpar a Base de Dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
@@ -691,15 +683,17 @@ namespace WinFormsApp1
                 dgvAlunos.DataSource = listaAlunos;
                 CalcularEstatisticas(listaAlunos);
 
-                MessageBox.Show("Todo o histórico foi eliminado com sucesso!", "Sucesso");
+                MessageBox.Show("Todo o histórico foi eliminado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void btnAdicionar_Click(object sender, EventArgs e) { }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             lblUsuario.Text = $"Professor(a) ligado(a): {professorLogado}";
         }
+
         private void textBox1_TextChanged(object sender, EventArgs e) { }
         private void label1_Click(object sender, EventArgs e) { }
         private void label5_Click(object sender, EventArgs e) { }
@@ -708,7 +702,6 @@ namespace WinFormsApp1
         private void label4_Click(object sender, EventArgs e) { }
         private void label5_Click_1(object sender, EventArgs e) { }
         private void label1_Click_1(object sender, EventArgs e) { }
-
         private void button1_Click_1(object sender, EventArgs e) { }
 
         private void button3_Click(object sender, EventArgs e)
@@ -719,7 +712,7 @@ namespace WinFormsApp1
 
         private void dgvAlunos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvAlunos.Columns[e.ColumnIndex].Name == "MediaFinal" && e.Value != null)
+            if (e.RowIndex >= 0 && dgvAlunos.Columns[e.ColumnIndex].Name == "MediaFinal" && e.Value != null)
             {
                 if (double.TryParse(e.Value.ToString(), out double media))
                 {
@@ -738,15 +731,6 @@ namespace WinFormsApp1
         }
 
         private void txtNome_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true;
-                cmbTurmas.Focus();
-            }
-        }
-
-        private void cmbTurmas_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -805,13 +789,13 @@ namespace WinFormsApp1
                     alunosFiltrados = listaAlunos.ToList();
                     break;
                 case 1:
-                    alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("aprov") == true).ToList();
+                    alunosFiltrados = listaAlunos.Where(a => a.Situacao != null && a.Situacao.ToLower().Contains("aprov")).ToList();
                     break;
                 case 2:
-                    alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("repro") == true).ToList();
+                    alunosFiltrados = listaAlunos.Where(a => a.Situacao != null && a.Situacao.ToLower().Contains("repro")).ToList();
                     break;
                 case 3:
-                    alunosFiltrados = listaAlunos.Where(a => a.Situacao.ToLower().Contains("recup") == true).ToList();
+                    alunosFiltrados = listaAlunos.Where(a => a.Situacao != null && a.Situacao.ToLower().Contains("recup")).ToList();
                     break;
             }
 
@@ -823,10 +807,7 @@ namespace WinFormsApp1
             btnAdicionar.Focus();
         }
 
-        private void dgvAlunos_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
+        private void dgvAlunos_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -837,62 +818,65 @@ namespace WinFormsApp1
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 string caminhoFicheiro = openFileDialog.FileName;
-
                 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-
                 int contagemImportados = 0;
 
-                using (var stream = System.IO.File.Open(caminhoFicheiro, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                try
                 {
-                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    using (var stream = System.IO.File.Open(caminhoFicheiro, System.IO.FileMode.Open, System.IO.FileAccess.Read))
                     {
-                        var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                        using (var reader = ExcelReaderFactory.CreateReader(stream))
                         {
-                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration() { UseHeaderRow = true }
-                        });
+                            var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                            {
+                                ConfigureDataTable = (_) => new ExcelDataTableConfiguration() { UseHeaderRow = true }
+                            });
 
-                        var tabelaExcel = result.Tables[0];
-                        listaAlunos.Clear();
+                            if (result.Tables.Count == 0) return;
 
-                        foreach (var linhaGenerica in tabelaExcel.Rows)
-                        {
+                            var tabelaExcel = result.Tables[0];
+                            listaAlunos.Clear();
 
-                            var linha = (System.Data.DataRow)linhaGenerica;
+                            foreach (var linhaGenerica in tabelaExcel.Rows)
+                            {
+                                var linha = (System.Data.DataRow)linhaGenerica;
 
-                            if (linha[0] == null || string.IsNullOrWhiteSpace(linha[0].ToString()))
-                                continue;
+                                if (linha[0] == null || string.IsNullOrWhiteSpace(linha[0].ToString()))
+                                    continue;
 
-                            string nome = linha[0].ToString().Trim();
-                            string turma = linha[1].ToString().Trim();
-                            double.TryParse(linha[2]?.ToString(), out double teste);
-                            double.TryParse(linha[3]?.ToString(), out double trabalho);
-                            double.TryParse(linha[4]?.ToString(), out double participacao);
-                            int.TryParse(linha[5]?.ToString(), out int faltas);
+                                string nome = linha[0].ToString().Trim();
+                                string turma = linha[1]?.ToString().Trim() ?? "";
 
-                            SalvarAlunoNoFirebird(0, nome, turma, teste, trabalho, participacao, faltas, 0, 0);
+                                double.TryParse(linha[2]?.ToString(), out double teste);
+                                double.TryParse(linha[3]?.ToString(), out double trabalho);
+                                double.TryParse(linha[4]?.ToString(), out double participacao);
+                                int.TryParse(linha[5]?.ToString(), out int faltas);
 
-                            Aluno aluno = new Aluno(0, nome, turma, teste, trabalho, participacao, faltas, 0, 0);
-
-                            contagemImportados++;
+                                SalvarAlunoNoFirebird(0, nome, turma, teste, trabalho, participacao, faltas, 0, 0);
+                                contagemImportados++;
+                            }
                         }
                     }
+
                     CarregarHistoricoDaBaseDeDados();
+                    MessageBox.Show($"{contagemImportados} alunos importados e sincronizados com sucesso!", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                dgvAlunos.DataSource = null;
-                dgvAlunos.DataSource = listaAlunos;
-
-                CalcularEstatisticas(listaAlunos);
-
-                MessageBox.Show($"{contagemImportados} alunos importados e guardados na base de dados com sucesso!", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao ler ou processar o ficheiro Excel: {ex.Message}", "Erro de Importação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            if (dgvAlunos.Rows.Count == 0) return;
+
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < dgvAlunos.Columns.Count; i++)
             {
+                if (!dgvAlunos.Columns[i].Visible) continue;
                 sb.Append(dgvAlunos.Columns[i].HeaderText);
                 if (i < dgvAlunos.Columns.Count - 1) sb.Append(";");
             }
@@ -904,17 +888,19 @@ namespace WinFormsApp1
 
                 for (int j = 0; j < dgvAlunos.Columns.Count; j++)
                 {
+                    if (!dgvAlunos.Columns[j].Visible) continue;
                     string valor = dgvAlunos.Rows[i].Cells[j].Value?.ToString() ?? "";
                     sb.Append(valor.Replace(";", ","));
                     if (j < dgvAlunos.Columns.Count - 1) sb.Append(";");
                 }
                 sb.AppendLine();
             }
+
             string conteudoAtual = sb.ToString();
 
             if (conteudoAtual == ultimoConteudoExportado)
             {
-                MessageBox.Show("As informações não foram alteradas desde a última exportação. Não é necessário exportar novamente.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("As informações não foram alteradas desde a última exportação.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -932,14 +918,12 @@ namespace WinFormsApp1
                     }
 
                     ultimoConteudoExportado = conteudoAtual;
-
                     MessageBox.Show("Dados exportados com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Erro ao exportar: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
             }
         }
 
@@ -955,7 +939,7 @@ namespace WinFormsApp1
 
             if (linhaSelecionada.Cells["Nome"].Value == null || linhaSelecionada.Cells["Nome"].Value.ToString().StartsWith("---"))
             {
-                MessageBox.Show("Não podes enviar um e-mail para a linha de médias do radapé!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Não podes enviar um e-mail para a linha de médias do rodapé!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -979,6 +963,10 @@ namespace WinFormsApp1
                 {
                     MessageBox.Show("O e-mail digitado parece inválido. Certifica-te de que incluis o '@'.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+            else
+            {
+                MessageBox.Show("Aluno não encontrado na lista interna.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

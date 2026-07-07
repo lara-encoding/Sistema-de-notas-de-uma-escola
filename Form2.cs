@@ -11,19 +11,21 @@ using System.Windows.Forms;
 namespace WinFormsApp1
 {
     public partial class Form2 : Form
-    {   
+    {
 
-            private List<Aluno> listaCompleta = new List<Aluno>();
+        private List<Aluno> listaCompleta = new List<Aluno>();
+        private string professorLogado;
 
         public string TurmaSelecionada { get; private set; } = "";
 
         public Form2(DataGridView dgvOriginal)
         {
             InitializeComponent();
+            this.professorLogado = professor;
 
-            if(dgvOriginal != null && dgvOriginal.Rows.Count > 0)
+            if (dgvOriginal != null && dgvOriginal.Rows.Count > 0)
             {
-                foreach (DataGridViewRow linha in  dgvOriginal.Rows)
+                foreach (DataGridViewRow linha in dgvOriginal.Rows)
                 {
                     if (linha.IsNewRow) continue;
 
@@ -38,7 +40,8 @@ namespace WinFormsApp1
                     al.Situacao = situacaoLinha;
 
                     double media = 0;
-                    if (linha.Cells["MediaFinal"].Value != null){
+                    if (linha.Cells["MediaFinal"].Value != null)
+                    {
                         double.TryParse(linha.Cells["MediaFinal"].Value?.ToString(), out media);
                     }
                     al.MediaFinal = media;
@@ -51,7 +54,8 @@ namespace WinFormsApp1
 
         private void AssociarEventosAosBotoes()
         {
-            foreach (Control controlo in this.Controls){
+            foreach (Control controlo in this.Controls)
+            {
                 if (controlo is Button botao)
                 {
                     botao.Click += botaoTurma_Click;
@@ -107,6 +111,11 @@ namespace WinFormsApp1
         }
 
         private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
         {
 
         }

@@ -48,8 +48,8 @@ namespace WinFormsApp1
                             MessageBox.Show($"Login efetuado com sucesso!\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             this.Hide();
-                            Form1 principal = new Form1(txtUtilizador.Text);
-                            principal.ShowDialog();
+                            EscolhaTurma ecraTurma = new EscolhaTurma(txtNovoUtilizador.Text);
+                            ecraTurma.ShowDialog();
                             this.Close();
                         }
                         else
@@ -107,7 +107,77 @@ namespace WinFormsApp1
 
         private void btnConfirmarRegisto_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtNovoNome.Text) || string.IsNullOrWhiteSpace(txtNovoUtilizador.Text) || string.IsNullOrWhiteSpace(txtNovaSenha.Text))
+            {
+                MessageBox.Show("Por favor, preencha todos os campos do resgito!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
+            string queryId = "SELECT COALESCE(MAX(ID), 0) + 1 FROM PROFESSORES";
+            string queryInsert = "INSERT INTO PROFESSORES (ID, NOME, UTILIZADOR, SENHA) VALUES (@id, @nome, @user, @pass)";
+
+            using (FbConnection conexao = new FbConnection(conexaoString))
+            {
+                try
+                {
+                    conexao.Open();
+
+                    int proximoId = 1;
+
+                    using (FbCommand cmdId = new FbCommand(queryId, conexao))
+                    {
+                        proximoId = Convert.ToInt32(cmdId.ExecuteScalar());
+                    }
+
+                    using (FbCommand cmdInsert = new FbCommand(queryInsert, conexao))
+                    {
+                        cmdInsert.Parameters.AddWithValue("@id", proximoId);
+                        cmdInsert.Parameters.AddWithValue("@nome", txtNovoNome.Text);
+                        cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
+                        cmdInsert.Parameters.AddWithValue("@pass", txtNovaSenha.Text);
+
+                        cmdInsert.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Conta criada com sucesso! Já pode fazer o login.", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    panelRegisto.Visible = false;
+                    txtNovoNome.Clear();
+                    txtNovoUtilizador.Clear();
+                    txtNovaSenha.Clear();
+
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("Violates FOREING KEY or UNIQUE KEY"))
+                    {
+                        MessageBox.Show("Este utilizador já existe! Por favor, escolha outro nome de utilizador", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Erro ao registar na base de dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void txtNovoNome_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                txtNovoUtilizador.Focus();
+            }
+        }
+
+        private void txtNovoUtilizador_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                txtNovaSenha.Focus();
+            }
         }
     }
 }

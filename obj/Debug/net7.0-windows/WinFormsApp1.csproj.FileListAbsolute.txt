@@ -29,3 +29,4 @@ C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\System.IO.Pa
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.dll
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.DataSet.dll
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.Form3.resources
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.EscolhaTurma.resources

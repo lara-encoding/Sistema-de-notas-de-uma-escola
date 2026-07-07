@@ -47,11 +47,9 @@
             lblMediaTurma = new Label();
             label3 = new Label();
             label4 = new Label();
-            label5 = new Label();
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
-            cmbTurmas = new ComboBox();
             numFaltas = new NumericUpDown();
             label7 = new Label();
             button4 = new Button();
@@ -67,7 +65,7 @@
             // 
             btnAdicionar.BackColor = Color.ForestGreen;
             btnAdicionar.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAdicionar.Location = new Point(891, 57);
+            btnAdicionar.Location = new Point(876, 77);
             btnAdicionar.Name = "btnAdicionar";
             btnAdicionar.Size = new Size(103, 97);
             btnAdicionar.TabIndex = 0;
@@ -77,7 +75,7 @@
             // 
             // txtNotaTrabalho
             // 
-            txtNotaTrabalho.Location = new Point(651, 120);
+            txtNotaTrabalho.Location = new Point(636, 111);
             txtNotaTrabalho.Name = "txtNotaTrabalho";
             txtNotaTrabalho.Size = new Size(225, 23);
             txtNotaTrabalho.TabIndex = 2;
@@ -86,7 +84,7 @@
             // 
             // txtNome
             // 
-            txtNome.Location = new Point(651, 33);
+            txtNome.Location = new Point(636, 53);
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(225, 23);
             txtNome.TabIndex = 4;
@@ -94,7 +92,7 @@
             // 
             // txtNotaTeste
             // 
-            txtNotaTeste.Location = new Point(651, 91);
+            txtNotaTeste.Location = new Point(636, 82);
             txtNotaTeste.Name = "txtNotaTeste";
             txtNotaTeste.Size = new Size(225, 23);
             txtNotaTeste.TabIndex = 5;
@@ -102,7 +100,7 @@
             // 
             // txtNotaParticipacao
             // 
-            txtNotaParticipacao.Location = new Point(651, 149);
+            txtNotaParticipacao.Location = new Point(636, 140);
             txtNotaParticipacao.Name = "txtNotaParticipacao";
             txtNotaParticipacao.Size = new Size(225, 23);
             txtNotaParticipacao.TabIndex = 6;
@@ -111,7 +109,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(555, 36);
+            label1.Location = new Point(540, 56);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 7;
@@ -121,7 +119,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(564, 123);
+            label2.Location = new Point(549, 114);
             label2.Name = "label2";
             label2.Size = new Size(81, 15);
             label2.TabIndex = 8;
@@ -226,7 +224,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(583, 94);
+            label3.Location = new Point(568, 85);
             label3.Name = "label3";
             label3.Size = new Size(62, 15);
             label3.TabIndex = 11;
@@ -236,22 +234,12 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(544, 152);
+            label4.Location = new Point(529, 143);
             label4.Name = "label4";
             label4.Size = new Size(101, 15);
             label4.TabIndex = 12;
             label4.Text = "Nota Participação";
             label4.Click += label4_Click;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(604, 65);
-            label5.Name = "label5";
-            label5.Size = new Size(41, 15);
-            label5.TabIndex = 13;
-            label5.Text = "Turma";
-            label5.Click += label5_Click_1;
             // 
             // button1
             // 
@@ -289,19 +277,9 @@
             button3.UseVisualStyleBackColor = false;
             button3.Click += button3_Click;
             // 
-            // cmbTurmas
-            // 
-            cmbTurmas.FormattingEnabled = true;
-            cmbTurmas.Items.AddRange(new object[] { "1ºA", "2ºA", "3ºA", "1ºC", "2ºC", "3ºC", "1ºG", "2ºG", "3ºG" });
-            cmbTurmas.Location = new Point(651, 62);
-            cmbTurmas.Name = "cmbTurmas";
-            cmbTurmas.Size = new Size(225, 23);
-            cmbTurmas.TabIndex = 21;
-            cmbTurmas.KeyDown += cmbTurmas_KeyDown;
-            // 
             // numFaltas
             // 
-            numFaltas.Location = new Point(651, 178);
+            numFaltas.Location = new Point(636, 169);
             numFaltas.Name = "numFaltas";
             numFaltas.Size = new Size(225, 23);
             numFaltas.TabIndex = 22;
@@ -310,7 +288,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(604, 180);
+            label7.Location = new Point(589, 171);
             label7.Name = "label7";
             label7.Size = new Size(37, 15);
             label7.TabIndex = 23;
@@ -352,7 +330,7 @@
             // lblUsuario
             // 
             lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(679, 9);
+            lblUsuario.Location = new Point(713, 9);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(38, 15);
             lblUsuario.TabIndex = 28;
@@ -370,11 +348,9 @@
             Controls.Add(button4);
             Controls.Add(label7);
             Controls.Add(numFaltas);
-            Controls.Add(cmbTurmas);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(groupBox1);
             Controls.Add(txtNotaTrabalho);
@@ -414,13 +390,11 @@
         private Label lblMediaTurma;
         private Label label3;
         private Label label4;
-        private Label label5;
         private Button button1;
         private Button button2;
         private Button button3;
         private ComboBox comboBox1;
         private Label label6;
-        private ComboBox cmbTurmas;
         private NumericUpDown numFaltas;
         private Label label7;
         private Button button4;
