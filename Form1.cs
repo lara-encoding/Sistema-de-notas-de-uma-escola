@@ -89,9 +89,9 @@ namespace WinFormsApp1
             $"\n\nEnvio esta mensagem para informar que a tua situação atual é de Recuperação de Nota.\n" +
             $"A tua média final momentânea é de {aluno.MediaFinal} valores.\n" +
             $"As tuas notas parciais foram:\n" +
-            $"- Nota do Teste: {aluno.NotaTeste}\n" +
-            $"- Nota do Trabalho: {aluno.NotaTrabalho}\n" +
-            $"- Nota de Participação: {aluno.NotaParticipacao}\n" +
+            $"- Nota do Teste: {aluno.Nota_Teste}\n" +
+            $"- Nota do Trabalho: {aluno.Nota_Trabalho}\n" +
+            $"- Nota de Participação: {aluno.Nota_Participacao}\n" +
             $"\nComo tens direito a realizar uma prova de recurso para tentar melhorar esta nota, por favor, entra em contacto comigo o quanto antes para combinarmos os detalhes e a data da prova." +
             $"\n\nAtenciosamente," +
                     $"\nO Teu Professor.";
@@ -179,7 +179,7 @@ namespace WinFormsApp1
             if (listaAlunos == null) listaAlunos = new List<Aluno>();
             listaAlunos.Clear();
 
-            string querySelect = "SELECT NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS FROM ALUNOS WHERE ID_TURMA = @idTurma";
+            string querySelect = "SELECT ID, NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS FROM ALUNOS WHERE ID_TURMA = @idTurma";
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
                 try
@@ -193,6 +193,7 @@ namespace WinFormsApp1
                         {
                             while (leitor.Read())
                             {
+                                int id = Convert.ToInt32(leitor["ID"]);
                                 string nome = leitor["Nome"].ToString();
                                 string turma = this.nomeTurmaAtual;
                                 double notaTeste = Convert.ToDouble(leitor["NOTA_TESTE"]);
@@ -203,7 +204,7 @@ namespace WinFormsApp1
                                 int faltasJustificadas = leitor["FALTAS_JUSTIFICADAS"] != DBNull.Value ? Convert.ToInt32(leitor["FALTAS_JUSTIFICADAS"]) : 0;
                                 int faltasRecuperadas = leitor["FALTAS_RECUPERADAS"] != DBNull.Value ? Convert.ToInt32(leitor["FALTAS_RECUPERADAS"]) : 0;
 
-                                Aluno aluno = new Aluno(0, nome, turma, notaTeste, notaTrabalho, notaParticipacao, faltasInjustificadas, faltasJustificadas, faltasRecuperadas);
+                                Aluno aluno = new Aluno(id, nome, turma, notaTeste, notaTrabalho, notaParticipacao, faltasInjustificadas, faltasJustificadas, faltasRecuperadas);
                                 listaAlunos.Add(aluno);
                             }
                         }
@@ -212,16 +213,15 @@ namespace WinFormsApp1
                     dgvAlunos.DataSource = null;
                     dgvAlunos.DataSource = listaAlunos;
 
-                    if (dgvAlunos.Columns["Turma"] != null)
-                    {
-                        dgvAlunos.Columns["Turma"].Visible = false;
-                    }
+                    if (dgvAlunos.Columns["ID"] != null) dgvAlunos.Columns["ID"].Visible = false;
 
+                    if (dgvAlunos.Columns["Turma"] != null) dgvAlunos.Columns["Turma"].Visible = false;
+                    
                     CalcularEstatisticas(listaAlunos);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao carregar o histórico da Base de Dados: {ex.Message}", "Erro ao iniciar");
+                    MessageBox.Show($"Erro ao carregar o histórico: {ex.Message}");
                 }
             }
         }
@@ -261,7 +261,7 @@ namespace WinFormsApp1
                 return;
             }
 
-            alunoEditado.MediaFinal = Math.Round((alunoEditado.NotaTeste * 0.5) + (alunoEditado.NotaTrabalho * 0.3) + (alunoEditado.NotaParticipacao * 0.2), 2);
+            alunoEditado.MediaFinal = Math.Round((alunoEditado.Nota_Teste * 0.5) + (alunoEditado.Nota_Trabalho * 0.3) + (alunoEditado.Nota_Participacao * 0.2), 2);
 
             int faltasEfetivas = alunoEditado.FaltasInjustificadas - alunoEditado.FaltasRecuperadas;
 
@@ -303,9 +303,9 @@ namespace WinFormsApp1
                     {
                         comando.Parameters.AddWithValue("@v_nome", alunoEditado.Nome);
                         comando.Parameters.AddWithValue("@v_turma", alunoEditado.Turma);
-                        comando.Parameters.AddWithValue("@v_teste", alunoEditado.NotaTeste);
-                        comando.Parameters.AddWithValue("@v_trabalho", alunoEditado.NotaTrabalho);
-                        comando.Parameters.AddWithValue("@v_participacao", alunoEditado.NotaParticipacao);
+                        comando.Parameters.AddWithValue("@v_teste", alunoEditado.Nota_Teste);
+                        comando.Parameters.AddWithValue("@v_trabalho", alunoEditado.Nota_Trabalho);
+                        comando.Parameters.AddWithValue("@v_participacao", alunoEditado.Nota_Participacao);
                         comando.Parameters.AddWithValue("@v_faltasInjustificadas", alunoEditado.FaltasInjustificadas);
                         comando.Parameters.AddWithValue("@v_faltasJustificadas", alunoEditado.FaltasJustificadas);
                         comando.Parameters.AddWithValue("@v_faltasRecuperadas", alunoEditado.FaltasRecuperadas);
@@ -595,9 +595,9 @@ namespace WinFormsApp1
                 totalAlunosReais++;
 
                 somaDasMedias += aluno.MediaFinal;
-                somaTestes += aluno.NotaTeste;
-                somaTrabalhos += aluno.NotaTrabalho;
-                somaParticipacao += aluno.NotaParticipacao;
+                somaTestes += aluno.Nota_Teste;
+                somaTrabalhos += aluno.Nota_Trabalho;
+                somaParticipacao += aluno.Nota_Participacao;
 
                 if (aluno.MediaFinal > maiorMedia) maiorMedia = aluno.MediaFinal;
                 if (aluno.Situacao != null && aluno.Situacao.ToLower().Contains("aprov")) aprovados++;
@@ -634,9 +634,9 @@ namespace WinFormsApp1
             linhamedia.Id = 0;
             linhamedia.Nome = "--- MÉDIAS DAS NOTAS ---";
             linhamedia.Turma = "";
-            linhamedia.NotaTeste = Math.Round((double)somaTestes / totalAlunosReais, 2);
-            linhamedia.NotaTrabalho = Math.Round((double)somaTrabalhos / totalAlunosReais, 2);
-            linhamedia.NotaParticipacao = Math.Round((double)somaParticipacao / totalAlunosReais, 2);
+            linhamedia.Nota_Teste = Math.Round((double)somaTestes / totalAlunosReais, 2);
+            linhamedia.Nota_Trabalho = Math.Round((double)somaTrabalhos / totalAlunosReais, 2);
+            linhamedia.Nota_Participacao = Math.Round((double)somaParticipacao / totalAlunosReais, 2);
             linhamedia.MediaFinal = mediaGeralTurma;
             linhamedia.Situacao = "Fim da Lista";
 
@@ -706,7 +706,7 @@ namespace WinFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form2 janelaTurmas = new Form2(dgvAlunos);
+            Form2 janelaTurmas = new Form2(dgvAlunos, professorLogado);
             janelaTurmas.ShowDialog();
         }
 
@@ -969,5 +969,52 @@ namespace WinFormsApp1
                 MessageBox.Show("Aluno não encontrado na lista interna.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (FbConnection conexao = new FbConnection(stringConexao))
+                {
+                    conexao.Open();
+                    string query = "UPDATE ALUNOS SET " +
+                        "NOME = @nome, " +
+                        "NOTA_TESTE = @n1, " +
+                        "NOTA_TRABALHO = @n2, " +
+                        "NOTA_PARTICIPACAO = @n3, " +
+                        "FALTAS_INJUSTIFICADAS = @f_injust, " +
+                        "FALTAS_JUSTIFICADAS = @f_just, " +
+                        "FALTAS_RECUPERADAS = @f_rec " +
+                        "WHERE ID = @id";
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    {
+                        foreach (DataGridViewRow linha in dgvAlunos.Rows)
+                        {
+                            if (linha.IsNewRow) continue;
+
+                            Aluno aluno = (Aluno)linha.DataBoundItem;
+
+                            comando.Parameters.Clear();
+
+                            comando.Parameters.AddWithValue("@id", FbDbType.Integer).Value = aluno.Id;
+                            comando.Parameters.AddWithValue("@nome", FbDbType.VarChar).Value = aluno.Nome;
+                            comando.Parameters.AddWithValue("@n1", FbDbType.Numeric).Value = aluno.Nota_Teste;
+                            comando.Parameters.AddWithValue("@n2", FbDbType.Numeric).Value = aluno.Nota_Trabalho;
+                            comando.Parameters.AddWithValue("@n3", FbDbType.Numeric).Value = aluno.Nota_Participacao;
+                            comando.Parameters.AddWithValue("@f_injust", FbDbType.Integer).Value = aluno.FaltasInjustificadas;
+                            comando.Parameters.AddWithValue("@f_just", FbDbType.Integer).Value = aluno.FaltasJustificadas;
+                            comando.Parameters.AddWithValue("@f_rec", FbDbType.Integer).Value = aluno.FaltasRecuperadas;
+
+                            comando.ExecuteNonQuery();
+                        }
+                    }
+                }
+                MessageBox.Show("Alterações gravadas com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"Erro crítico: {ex.Message}");
+            }
+        } 
     }
 }

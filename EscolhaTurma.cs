@@ -29,7 +29,10 @@ namespace WinFormsApp1
 
         private void carregarTurmas()
         {
-            string query = "SELECT ID_TURMA, NOME FROM TURMAS ORDER BY NOME";
+            string query = @"SELECT t.ID_TURMA, t.NOME FROM TURMAS t "+
+                "INNER JOIN PROFESSORES p ON t.ID_PROFESSOR = p.ID " +
+                "WHERE p.NOME LIKE @professor " +
+                "ORDER BY t.NOME";
 
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
@@ -39,6 +42,8 @@ namespace WinFormsApp1
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
+                        comando.Parameters.AddWithValue("@professor", "%" + this.professorLogado + "%");
+
                         FbDataAdapter adapter = new FbDataAdapter(comando);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);

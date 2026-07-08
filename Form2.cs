@@ -18,7 +18,7 @@ namespace WinFormsApp1
 
         public string TurmaSelecionada { get; private set; } = "";
 
-        public Form2(DataGridView dgvOriginal)
+        public Form2(DataGridView dgvOriginal, string professor)
         {
             InitializeComponent();
             this.professorLogado = professor;

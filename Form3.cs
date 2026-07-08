@@ -48,7 +48,7 @@ namespace WinFormsApp1
                             MessageBox.Show($"Login efetuado com sucesso!\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             this.Hide();
-                            EscolhaTurma ecraTurma = new EscolhaTurma(txtNovoUtilizador.Text);
+                            EscolhaTurma ecraTurma = new EscolhaTurma(nomeProfessor);
                             ecraTurma.ShowDialog();
                             this.Close();
                         }

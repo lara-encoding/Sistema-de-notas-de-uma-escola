@@ -13,9 +13,9 @@ namespace WinFormsApp1
     {
         public string Nome { get; set; }
         public string Turma { get; set; }
-        public double NotaTeste { get; set; }
-        public double NotaTrabalho { get; set; }
-        public double NotaParticipacao { get; set; }
+        public double Nota_Teste { get; set; }
+        public double Nota_Trabalho { get; set; }
+        public double Nota_Participacao { get; set; }
         public double MediaFinal { get; set; }
         public string Situacao { get; set; }
         public int Id { get; internal set; }
@@ -28,9 +28,9 @@ namespace WinFormsApp1
             Id = id;
             Nome = nome;
             Turma = turma;
-            NotaTeste = teste;
-            NotaTrabalho = trabalho;
-            NotaParticipacao = participacao;
+            Nota_Teste = teste;
+            Nota_Trabalho = trabalho;
+            Nota_Participacao = participacao;
             FaltasInjustificadas = faltasInjustificadas;
             FaltasJustificadas = faltasJustificadas;
             FaltasRecuperadas = faltasRecuperadas;
@@ -44,7 +44,7 @@ namespace WinFormsApp1
 
         public void CalcularMediaESituacao()
         {
-            MediaFinal = Math.Round((NotaTeste * 0.5) + (NotaTrabalho * 0.3) + (NotaParticipacao * 0.2), 2);
+            MediaFinal = Math.Round((Nota_Teste * 0.5) + (Nota_Trabalho * 0.3) + (Nota_Participacao * 0.2), 2);
 
             int faltasEfetivas = FaltasInjustificadas - FaltasRecuperadas;
 

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             btnAdicionar = new Button();
             txtNotaTrabalho = new TextBox();
             txtNome = new TextBox();
@@ -56,6 +56,7 @@
             button5 = new Button();
             button6 = new Button();
             lblUsuario = new Label();
+            button7 = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
@@ -64,10 +65,10 @@
             // btnAdicionar
             // 
             btnAdicionar.BackColor = Color.ForestGreen;
-            btnAdicionar.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAdicionar.Location = new Point(876, 77);
+            btnAdicionar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnAdicionar.Location = new Point(879, 61);
             btnAdicionar.Name = "btnAdicionar";
-            btnAdicionar.Size = new Size(103, 97);
+            btnAdicionar.Size = new Size(103, 67);
             btnAdicionar.TabIndex = 0;
             btnAdicionar.Text = "Adicionar Aluno";
             btnAdicionar.UseVisualStyleBackColor = false;
@@ -128,18 +129,18 @@
             // 
             // dgvAlunos
             // 
-            dataGridViewCellStyle1.BackColor = Color.LightGray;
-            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.BackColor = Color.LightGray;
+            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.White;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle6;
             dgvAlunos.Location = new Point(-1, -3);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
@@ -330,11 +331,22 @@
             // lblUsuario
             // 
             lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(713, 9);
+            lblUsuario.Location = new Point(636, 18);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(38, 15);
             lblUsuario.TabIndex = 28;
             lblUsuario.Text = "label8";
+            // 
+            // button7
+            // 
+            button7.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button7.Location = new Point(879, 134);
+            button7.Name = "button7";
+            button7.Size = new Size(103, 52);
+            button7.TabIndex = 23;
+            button7.Text = "Guardar Alterações";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
             // 
             // Form1
             // 
@@ -342,6 +354,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(button7);
             Controls.Add(lblUsuario);
             Controls.Add(button6);
             Controls.Add(button5);
@@ -401,5 +414,6 @@
         private Button button5;
         private Button button6;
         private Label lblUsuario;
+        private Button button7;
     }
 }
