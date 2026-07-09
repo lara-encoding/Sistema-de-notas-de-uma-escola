@@ -37,14 +37,15 @@ namespace WinFormsApp1
         private string nomeTurmaAtual;
         private string turmaAtual = "1ºA";
 
-        public Form1(string nomeUsuario, int idTurma, string nomeTurma)
+        public Form1(int idProfessorLogado, string professorLogado, int idTurmaAtual, string nomeTurmaAtual)
         {
             InitializeComponent();
-            professorLogado = nomeUsuario;
-            this.idTurmaAtual = idTurma;
-            this.nomeTurmaAtual = nomeTurma;
+            this.idProfessorLogado = idProfessorLogado;
+            this.professorLogado = professorLogado;
+            this.idTurmaAtual = idTurmaAtual;
+            this.nomeTurmaAtual = nomeTurmaAtual;
 
-            this.Text = $"Gestão de Alunos - Turma: {nomeTurma} (Prof. {nomeUsuario})";
+            this.Text = $"Gestão de Alunos - Turma: {nomeTurmaAtual} (Prof. {professorLogado})";
 
             dgvAlunos.CellBeginEdit += dgvAlunos_CellBeginEdit;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
@@ -173,6 +174,15 @@ namespace WinFormsApp1
 
         private void cmbTurmas_SelectedIndexChanged(object? sender, EventArgs e)
         {
+            if (cmbTurmas.SelectedText == null)
+                return;
+
+            Turma turmaSelecionada = (Turma)cmbTurmas.SelectedItem;
+
+            idTurmaAtual = turmaSelecionada.Id;
+            nomeTurmaAtual = turmaSelecionada.Nome;
+
+            CarregarHistoricoDaBaseDeDados();
         }
 
         private void CarregarHistoricoDaBaseDeDados()
@@ -628,7 +638,7 @@ namespace WinFormsApp1
             string nomeMelhorAluno = string.Join(", ", melhoresNotas);
             double mediaGeralTurma = Math.Round(somaDasMedias / totalAlunosReais, 2);
 
-            lblMediaTurma.Text = $"Média da Escola: {mediaGeralTurma}";
+            lblMediaTurma.Text = $"Média da Turma: {mediaGeralTurma}";
             lblMelhorAluno.Text = $"Melhor Aluno(a): {nomeMelhorAluno} ({maiorMedia})";
             lblTotalAprovados.Text = $"Aprovados: {aprovados} (Total de alunos: {listaAlunos.Count})";
             lblTotalRetidos.Text = $"Recuperação/Reprovados: {retidos}";
@@ -705,6 +715,7 @@ namespace WinFormsApp1
         {
             lblUsuario.Text = $"Professor(a) ligado(a): {professorLogado}";
 
+            CarregarTurmas();
             CarregarHistoricoDaBaseDeDados();
         }
 
@@ -720,7 +731,7 @@ namespace WinFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form2 janelaTurmas = new Form2(dgvAlunos, professorLogado);
+            Form2 janelaTurmas = new Form2(idProfessorLogado, professorLogado);
             janelaTurmas.ShowDialog();
         }
 
@@ -984,7 +995,49 @@ namespace WinFormsApp1
 
         private void CarregarTurmas()
         {
+            cmbTurmas.Items.Clear();
 
+            string query = "SELECT ID_TURMA, NOME FROM TURMAS WHERE ID_PROFESSOR = @idProfessor ORDER BY NOME";
+
+            using (FbConnection conexao = new FbConnection(stringConexao))
+            {
+                try
+                {
+                    conexao.Open();
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+
+                        using (FbDataReader leitor = comando.ExecuteReader())
+                        {
+                            while (leitor.Read())
+                            {
+                                Turma turma = new Turma();
+
+                                turma.Id = Convert.ToInt32(leitor["ID_TURMA"]);
+                                turma.Nome = leitor["NOME"].ToString();
+
+                                cmbTurmas.Items.Add(turma);
+                            }
+                        }
+                    }
+                    for (int i = 0; i < cmbTurmas.Items.Count; i++)
+                    {
+                        Turma turma = (Turma)cmbTurmas.Items[i];
+
+                        if (turma.Id == idTurmaAtual)
+                        {
+                            cmbTurmas.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao carregar as turmas: {ex.Message}");
+                }
+            }
         }
     }
 }

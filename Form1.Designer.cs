@@ -57,6 +57,7 @@
             button6 = new Button();
             lblUsuario = new Label();
             cmbTurmas = new ComboBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
@@ -163,7 +164,7 @@
             groupBox1.Size = new Size(471, 115);
             groupBox1.TabIndex = 10;
             groupBox1.TabStop = false;
-            groupBox1.Text = "Estatísticas da Escola";
+            groupBox1.Text = "Estatísticas da Turma";
             // 
             // label6
             // 
@@ -220,7 +221,7 @@
             lblMediaTurma.Name = "lblMediaTurma";
             lblMediaTurma.Size = new Size(103, 15);
             lblMediaTurma.TabIndex = 0;
-            lblMediaTurma.Text = "Média da Escola: -";
+            lblMediaTurma.Text = "Média da Turma: -";
             // 
             // label3
             // 
@@ -341,10 +342,20 @@
             // 
             cmbTurmas.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTurmas.FormattingEnabled = true;
-            cmbTurmas.Location = new Point(636, 27);
+            cmbTurmas.Location = new Point(740, 27);
             cmbTurmas.Name = "cmbTurmas";
             cmbTurmas.Size = new Size(121, 23);
             cmbTurmas.TabIndex = 29;
+            cmbTurmas.SelectedIndexChanged += cmbTurmas_SelectedIndexChanged;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(642, 30);
+            label5.Name = "label5";
+            label5.Size = new Size(92, 15);
+            label5.TabIndex = 23;
+            label5.Text = "Trocar de Turma";
             // 
             // Form1
             // 
@@ -352,6 +363,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(label5);
             Controls.Add(cmbTurmas);
             Controls.Add(lblUsuario);
             Controls.Add(button6);
@@ -413,5 +425,6 @@
         private Button button6;
         private Label lblUsuario;
         private ComboBox cmbTurmas;
+        private Label label5;
     }
 }

@@ -15,10 +15,12 @@ namespace WinFormsApp1
     {
         private string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
         private string professorLogado;
+        private int idProfessorLogado;
 
-        public EscolhaTurma(string professorLogado)
+        public EscolhaTurma(int idProfessorLogado, string professorLogado)
         {
             InitializeComponent();
+            this.idProfessorLogado = idProfessorLogado;
             this.professorLogado = professorLogado;
         }
 
@@ -29,7 +31,7 @@ namespace WinFormsApp1
 
         private void carregarTurmas()
         {
-            string query = @"SELECT t.ID_TURMA, t.NOME FROM TURMAS t "+
+            string query = @"SELECT t.ID_TURMA, t.NOME FROM TURMAS t " +
                 "INNER JOIN PROFESSORES p ON t.ID_PROFESSOR = p.ID " +
                 "WHERE p.NOME LIKE @professor " +
                 "ORDER BY t.NOME";
@@ -79,7 +81,7 @@ namespace WinFormsApp1
 
             this.Hide();
 
-            Form1 principal = new Form1(professorLogado, idTurmaSelecionada, nomeTurmaSelecionada);
+            Form1 principal = new Form1(idProfessorLogado, professorLogado, idTurmaSelecionada, nomeTurmaSelecionada);
             principal.ShowDialog();
 
             this.Close();

@@ -26,7 +26,7 @@ namespace WinFormsApp1
         private void btnEntrar_Click(object sender, EventArgs e)
         {
             string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
-            string query = "SELECT NOME FROM PROFESSORES WHERE UTILIZADOR = @user AND SENHA = @pass";
+            string query = "SELECT ID, NOME FROM PROFESSORES WHERE UTILIZADOR = @user AND SENHA = @pass";
 
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
@@ -39,22 +39,25 @@ namespace WinFormsApp1
                         comando.Parameters.AddWithValue("@user", txtUtilizador.Text);
                         comando.Parameters.AddWithValue("@pass", txtSenha.Text);
 
-                        object resultado = comando.ExecuteScalar();
-
-                        if (resultado != null)
+                        using (FbDataReader leitor = comando.ExecuteReader())
                         {
-                            string nomeProfessor = resultado.ToString();
+                            if (leitor.Read())
+                            {
+                                int idProfessor = Convert.ToInt32(leitor["ID"]);
+                                string nomeProfessor = leitor["NOME"].ToString();
 
-                            MessageBox.Show($"Login efetuado com sucesso!\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBox.Show($"Login efetuado com sucesso\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                this.Hide();
 
-                            this.Hide();
-                            EscolhaTurma ecraTurma = new EscolhaTurma(nomeProfessor);
-                            ecraTurma.ShowDialog();
-                            this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Utilizador ou palavra-passe incorretos!", "Erro de autenticação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                EscolhaTurma ecraTurma = new EscolhaTurma(idProfessor, nomeProfessor);
+                                ecraTurma.ShowDialog();
+
+                                this.Close();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Utilizador ou palavra-passe incorretos!", "Erro de autenticação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                 }
