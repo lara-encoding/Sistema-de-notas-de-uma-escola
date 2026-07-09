@@ -166,7 +166,7 @@
             panelRegisto.Controls.Add(txtNovoNome);
             panelRegisto.Controls.Add(btnCancelar);
             panelRegisto.Controls.Add(btnConfirmarRegisto);
-            panelRegisto.Location = new Point(226, 50);
+            panelRegisto.Location = new Point(226, 45);
             panelRegisto.Name = "panelRegisto";
             panelRegisto.Size = new Size(332, 360);
             panelRegisto.TabIndex = 7;
@@ -203,7 +203,7 @@
             // 
             lnkCriarConta.AutoSize = true;
             lnkCriarConta.LinkColor = Color.White;
-            lnkCriarConta.Location = new Point(319, 343);
+            lnkCriarConta.Location = new Point(309, 342);
             lnkCriarConta.Name = "lnkCriarConta";
             lnkCriarConta.Size = new Size(174, 15);
             lnkCriarConta.TabIndex = 8;

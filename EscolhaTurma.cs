@@ -50,6 +50,31 @@ namespace WinFormsApp1
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
 
+                        if (dt.Rows.Count == 0)
+                        {
+                            DialogResult resposta = MessageBox.Show("Ainda não existem turmas registradas para este professor.\n\nPrentende criar a primeira turma?", "Sem Turmas", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                            if (resposta == DialogResult.Yes)
+                            {
+                                Form2 gerirTurmas = new Form2(idProfessorLogado, professorLogado);
+                                gerirTurmas.ShowDialog();
+
+                                carregarTurmas();
+                            } else
+                            {
+                                this.Hide();
+                                Form3 login = new Form3();
+                                login.ShowDialog();
+                                this.Close();
+                            }
+
+                            return;
+                        }
+
+                        cbTurmas.Enabled = true;
+                        btnEntrarTurma.Enabled = true;
+                        lblSemTurmas.Visible = false;
+
                         cbTurmas.DataSource = dt;
                         cbTurmas.DisplayMember = "NOME";
                         cbTurmas.ValueMember = "ID_TURMA";

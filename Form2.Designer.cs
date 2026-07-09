@@ -66,6 +66,7 @@
             lstTurmas.Name = "lstTurmas";
             lstTurmas.Size = new Size(323, 139);
             lstTurmas.TabIndex = 6;
+            lstTurmas.SelectedIndexChanged += lstTurmas_SelectedIndexChanged;
             // 
             // txtNomeTurma
             // 

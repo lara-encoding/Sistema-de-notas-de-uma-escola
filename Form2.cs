@@ -34,7 +34,43 @@ namespace WinFormsApp1
 
         private void btnEditar_Click(object sender, EventArgs e)
         {
+            if (lstTurmas.SelectedItem == null)
+            {
+                MessageBox.Show("Selecione uma turma para editar.");
+                return;
+            }
 
+            if (string.IsNullOrWhiteSpace(txtNomeTurma.Text))
+            {
+                MessageBox.Show("Introduza o novo nome da turma.");
+                return;
+            }
+
+            try
+            {
+                using (FbConnection conexao = new FbConnection(stringConexao))
+                {
+                    conexao.Open();
+
+                    string query = @"UPDATE TURMAS SET NOME = @novoNome WHERE NOME = @nomeAntigo AND ID_PROFESSOR = @idProfessor";
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@novoNome", txtNomeTurma.Text);
+                        comando.Parameters.AddWithValue("@nomeAntigo", lstTurmas.SelectedItem.ToString());
+                        comando.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+
+                        comando.ExecuteNonQuery();
+                    }
+                }
+
+                carregarTurmas();
+
+                MessageBox.Show("Turma editada com sucesso!");
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao editar a turma: {ex.Message}");
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -78,7 +114,7 @@ namespace WinFormsApp1
         {
             string nomeTurma = txtNomeTurma.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(nomeTurma) )
+            if (string.IsNullOrWhiteSpace(nomeTurma))
             {
                 MessageBox.Show("Introduza o nome da turma!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -120,11 +156,20 @@ namespace WinFormsApp1
 
                     MessageBox.Show("Turma adicionada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show($"Erro: {ex.Message}");
                 }
             }
+        }
+
+        private void lstTurmas_SelectedIndexChanged(object server, EventArgs e)
+        {
+            if (lstTurmas.SelectedItem != null)
+                return;
+
+            txtNomeTurma.Text = lstTurmas.SelectedItem.ToString();
         }
     }
 }

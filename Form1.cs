@@ -174,13 +174,15 @@ namespace WinFormsApp1
 
         private void cmbTurmas_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (cmbTurmas.SelectedText == null)
+            if (cmbTurmas.SelectedItem == null)
                 return;
 
             Turma turmaSelecionada = (Turma)cmbTurmas.SelectedItem;
 
             idTurmaAtual = turmaSelecionada.Id;
             nomeTurmaAtual = turmaSelecionada.Nome;
+
+            this.Text = $"Gestão de Alunos - Turma: {nomeTurmaAtual} (Prof. {professorLogado})";
 
             CarregarHistoricoDaBaseDeDados();
         }
@@ -1038,6 +1040,11 @@ namespace WinFormsApp1
                     MessageBox.Show($"Erro ao carregar as turmas: {ex.Message}");
                 }
             }
+        }
+
+        private void btnTerminarSessao_Click(object sender, EventArgs e)
+        {
+            Utilidades.TerminarSessao(this);
         }
     }
 }

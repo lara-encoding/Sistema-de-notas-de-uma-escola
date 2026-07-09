@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             btnAdicionar = new Button();
             txtNotaTrabalho = new TextBox();
             txtNome = new TextBox();
@@ -58,6 +58,7 @@
             lblUsuario = new Label();
             cmbTurmas = new ComboBox();
             label5 = new Label();
+            btnTerminarSessao = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
@@ -67,7 +68,7 @@
             // 
             btnAdicionar.BackColor = Color.ForestGreen;
             btnAdicionar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAdicionar.Location = new Point(879, 78);
+            btnAdicionar.Location = new Point(879, 85);
             btnAdicionar.Name = "btnAdicionar";
             btnAdicionar.Size = new Size(103, 97);
             btnAdicionar.TabIndex = 0;
@@ -77,7 +78,7 @@
             // 
             // txtNotaTrabalho
             // 
-            txtNotaTrabalho.Location = new Point(636, 118);
+            txtNotaTrabalho.Location = new Point(636, 125);
             txtNotaTrabalho.Name = "txtNotaTrabalho";
             txtNotaTrabalho.Size = new Size(225, 23);
             txtNotaTrabalho.TabIndex = 2;
@@ -86,7 +87,7 @@
             // 
             // txtNome
             // 
-            txtNome.Location = new Point(636, 60);
+            txtNome.Location = new Point(636, 67);
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(225, 23);
             txtNome.TabIndex = 4;
@@ -94,7 +95,7 @@
             // 
             // txtNotaTeste
             // 
-            txtNotaTeste.Location = new Point(636, 89);
+            txtNotaTeste.Location = new Point(636, 96);
             txtNotaTeste.Name = "txtNotaTeste";
             txtNotaTeste.Size = new Size(225, 23);
             txtNotaTeste.TabIndex = 5;
@@ -102,7 +103,7 @@
             // 
             // txtNotaParticipacao
             // 
-            txtNotaParticipacao.Location = new Point(636, 147);
+            txtNotaParticipacao.Location = new Point(636, 154);
             txtNotaParticipacao.Name = "txtNotaParticipacao";
             txtNotaParticipacao.Size = new Size(225, 23);
             txtNotaParticipacao.TabIndex = 6;
@@ -111,7 +112,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(540, 63);
+            label1.Location = new Point(540, 70);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 7;
@@ -121,7 +122,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(549, 121);
+            label2.Location = new Point(549, 128);
             label2.Name = "label2";
             label2.Size = new Size(81, 15);
             label2.TabIndex = 8;
@@ -130,18 +131,18 @@
             // 
             // dgvAlunos
             // 
-            dataGridViewCellStyle1.BackColor = Color.LightGray;
-            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.BackColor = Color.LightGray;
+            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.White;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle6;
             dgvAlunos.Location = new Point(-1, -3);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
@@ -219,14 +220,14 @@
             lblMediaTurma.AutoSize = true;
             lblMediaTurma.Location = new Point(6, 31);
             lblMediaTurma.Name = "lblMediaTurma";
-            lblMediaTurma.Size = new Size(103, 15);
+            lblMediaTurma.Size = new Size(104, 15);
             lblMediaTurma.TabIndex = 0;
             lblMediaTurma.Text = "Média da Turma: -";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(568, 92);
+            label3.Location = new Point(568, 99);
             label3.Name = "label3";
             label3.Size = new Size(62, 15);
             label3.TabIndex = 11;
@@ -236,7 +237,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(529, 150);
+            label4.Location = new Point(529, 157);
             label4.Name = "label4";
             label4.Size = new Size(101, 15);
             label4.TabIndex = 12;
@@ -281,7 +282,7 @@
             // 
             // numFaltas
             // 
-            numFaltas.Location = new Point(636, 176);
+            numFaltas.Location = new Point(636, 183);
             numFaltas.Name = "numFaltas";
             numFaltas.Size = new Size(225, 23);
             numFaltas.TabIndex = 22;
@@ -290,7 +291,7 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(589, 178);
+            label7.Location = new Point(589, 185);
             label7.Name = "label7";
             label7.Size = new Size(37, 15);
             label7.TabIndex = 23;
@@ -332,7 +333,7 @@
             // lblUsuario
             // 
             lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(636, 9);
+            lblUsuario.Location = new Point(642, 9);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(38, 15);
             lblUsuario.TabIndex = 28;
@@ -342,7 +343,7 @@
             // 
             cmbTurmas.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbTurmas.FormattingEnabled = true;
-            cmbTurmas.Location = new Point(740, 27);
+            cmbTurmas.Location = new Point(740, 38);
             cmbTurmas.Name = "cmbTurmas";
             cmbTurmas.Size = new Size(121, 23);
             cmbTurmas.TabIndex = 29;
@@ -351,11 +352,21 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(642, 30);
+            label5.Location = new Point(642, 41);
             label5.Name = "label5";
             label5.Size = new Size(92, 15);
             label5.TabIndex = 23;
             label5.Text = "Trocar de Turma";
+            // 
+            // btnTerminarSessao
+            // 
+            btnTerminarSessao.Location = new Point(918, 9);
+            btnTerminarSessao.Name = "btnTerminarSessao";
+            btnTerminarSessao.Size = new Size(75, 47);
+            btnTerminarSessao.TabIndex = 30;
+            btnTerminarSessao.Text = "Terminar Sessão";
+            btnTerminarSessao.UseVisualStyleBackColor = true;
+            btnTerminarSessao.Click += btnTerminarSessao_Click;
             // 
             // Form1
             // 
@@ -363,6 +374,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(btnTerminarSessao);
             Controls.Add(label5);
             Controls.Add(cmbTurmas);
             Controls.Add(lblUsuario);
@@ -426,5 +438,6 @@
         private Label lblUsuario;
         private ComboBox cmbTurmas;
         private Label label5;
+        private Button btnTerminarSessao;
     }
 }
