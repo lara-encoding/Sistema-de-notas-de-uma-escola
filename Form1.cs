@@ -32,6 +32,7 @@ namespace WinFormsApp1
         private bool gravandoDados = false;
         private string ultimoConteudoExportado = "";
         private string professorLogado;
+        private int idProfessorLogado;
         private int idTurmaAtual;
         private string nomeTurmaAtual;
         private string turmaAtual = "1ºA";
@@ -194,7 +195,7 @@ namespace WinFormsApp1
                             while (leitor.Read())
                             {
                                 int id = Convert.ToInt32(leitor["ID"]);
-                                string nome = leitor["Nome"].ToString();
+                                string nome = leitor["NOME"].ToString();
                                 string turma = this.nomeTurmaAtual;
                                 double notaTeste = Convert.ToDouble(leitor["NOTA_TESTE"]);
                                 double notaTrabalho = Convert.ToDouble(leitor["NOTA_TRABALHO"]);
@@ -215,8 +216,6 @@ namespace WinFormsApp1
 
                     if (dgvAlunos.Columns["ID"] != null) dgvAlunos.Columns["ID"].Visible = false;
 
-                    if (dgvAlunos.Columns["Turma"] != null) dgvAlunos.Columns["Turma"].Visible = false;
-                    
                     CalcularEstatisticas(listaAlunos);
                 }
                 catch (Exception ex)
@@ -293,16 +292,15 @@ namespace WinFormsApp1
                 try
                 {
                     conexao.Open();
-                    string queryUpdate = "UPDATE ALUNOS SET NOME = @v_nome, TURMA = @v_turma, NOTA_TESTE = @v_teste, " +
+                    string queryUpdate = "UPDATE ALUNOS SET NOME = @v_nome, NOTA_TESTE = @v_teste, " +
                                          "NOTA_TRABALHO = @v_trabalho, NOTA_PARTICIPACAO = @v_participacao, " +
                                          "FALTAS_INJUSTIFICADAS = @v_faltasInjustificadas, FALTAS_JUSTIFICADAS = @v_faltasJustificadas, FALTAS_RECUPERADAS = @v_faltasRecuperadas, " +
                                          "MEDIA_FINAL = @v_media, SITUACAO = @v_situacao " +
-                                         "WHERE NOME = @v_nomeAntigo AND TURMA = @v_turmaAntiga";
+                                         "WHERE ID = @v_id";
 
                     using (FbCommand comando = new FbCommand(queryUpdate, conexao))
                     {
                         comando.Parameters.AddWithValue("@v_nome", alunoEditado.Nome);
-                        comando.Parameters.AddWithValue("@v_turma", alunoEditado.Turma);
                         comando.Parameters.AddWithValue("@v_teste", alunoEditado.Nota_Teste);
                         comando.Parameters.AddWithValue("@v_trabalho", alunoEditado.Nota_Trabalho);
                         comando.Parameters.AddWithValue("@v_participacao", alunoEditado.Nota_Participacao);
@@ -311,8 +309,7 @@ namespace WinFormsApp1
                         comando.Parameters.AddWithValue("@v_faltasRecuperadas", alunoEditado.FaltasRecuperadas);
                         comando.Parameters.AddWithValue("@v_media", alunoEditado.MediaFinal);
                         comando.Parameters.AddWithValue("@v_situacao", alunoEditado.Situacao);
-                        comando.Parameters.AddWithValue("@v_nomeAntigo", string.IsNullOrEmpty(nomeAntigo) ? alunoEditado.Nome : nomeAntigo);
-                        comando.Parameters.AddWithValue("@v_turmaAntiga", string.IsNullOrEmpty(turmaAntiga) ? alunoEditado.Turma : turmaAntiga);
+                        comando.Parameters.AddWithValue("@v_id", alunoEditado.Id);
 
                         comando.ExecuteNonQuery();
                     }
@@ -396,9 +393,7 @@ namespace WinFormsApp1
 
             int faltasInseridas = Convert.ToInt32(numFaltas.Value);
             SalvarAlunoNoFirebird(0, nomeInserido, turmaAtual, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
-
-            Aluno novoAluno = new Aluno(0, txtNome.Text, turmaAtual, notaTeste, notaTrabalho, notaParticipacao, faltasInseridas, 0, 0);
-            listaAlunos.Add(novoAluno);
+            CarregarHistoricoDaBaseDeDados();
 
             txtNome.Clear();
             txtNotaTeste.Clear();
@@ -455,6 +450,24 @@ namespace WinFormsApp1
                 try
                 {
                     conexao.Open();
+
+                    if (id == 0)
+                    {
+                        string queryExiste = "SELECT ID FROM ALUNOS WHERE LOWER(NOME) = LOWER(@nome) AND ID_TURMA = @idTurma";
+
+                        using (FbCommand comandoExiste = new FbCommand(queryExiste, conexao))
+                        {
+                            comandoExiste.Parameters.AddWithValue("@nome", nomeLimpo);
+                            comandoExiste.Parameters.AddWithValue("@idTurma", idTurmaAtual);
+
+                            object resultado = comandoExiste.ExecuteScalar();
+
+                            if (resultado != null)
+                            {
+                                id = Convert.ToInt32(resultado);
+                            }
+                        }
+                    }
                     int linhasAfetadas = 0;
 
                     if (id > 0)
@@ -478,8 +491,8 @@ namespace WinFormsApp1
 
                     if (linhasAfetadas == 0)
                     {
-                        string queryInsert = "INSERT INTO ALUNOS (NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS, MEDIA_FINAL, SITUACAO) " +
-                                             "VALUES (@nome, @teste, @trabalho, @participacao, @injustificadas, @justificadas, @recuperadas, @media, @situacao)";
+                        string queryInsert = "INSERT INTO ALUNOS (NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS, MEDIA_FINAL, SITUACAO, ID_TURMA) " +
+                                             "VALUES (@nome, @teste, @trabalho, @participacao, @injustificadas, @justificadas, @recuperadas, @media, @situacao, @idTurma)";
 
                         using (FbCommand comandoInsert = new FbCommand(queryInsert, conexao))
                         {
@@ -492,6 +505,7 @@ namespace WinFormsApp1
                             comandoInsert.Parameters.AddWithValue("@recuperadas", faltasRecuperadas);
                             comandoInsert.Parameters.AddWithValue("@media", media);
                             comandoInsert.Parameters.AddWithValue("@situacao", situacao);
+                            comandoInsert.Parameters.AddWithValue("@idTurma", idTurmaAtual);
 
                             comandoInsert.ExecuteNonQuery();
                         }
@@ -525,15 +539,13 @@ namespace WinFormsApp1
 
                             if (linha.Cells["Nome"].Value == null || linha.Cells["Nome"].Value.ToString().StartsWith("---"))
                                 continue;
-                            string nomeParaApagar = linha.Cells["Nome"].Value.ToString();
-                            string turmaParaApagar = linha.Cells["Turma"].Value.ToString();
 
-                            string queryDelete = "DELETE FROM ALUNOS WHERE NOME = @nome AND TURMA = @turma";
+                            int idAluno = Convert.ToInt32(linha.Cells["ID"].Value);
+
+                            string queryDelete = "DELETE FROM ALUNOS WHERE ID = @id";
                             using (FbCommand comando = new FbCommand(queryDelete, conexao))
                             {
-                                comando.Parameters.AddWithValue("@nome", nomeParaApagar);
-                                comando.Parameters.AddWithValue("@turma", turmaParaApagar);
-
+                                comando.Parameters.AddWithValue("@id", idAluno);
                                 comando.ExecuteNonQuery();
                             }
                         }
@@ -692,6 +704,8 @@ namespace WinFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             lblUsuario.Text = $"Professor(a) ligado(a): {professorLogado}";
+
+            CarregarHistoricoDaBaseDeDados();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e) { }
@@ -845,14 +859,12 @@ namespace WinFormsApp1
                                     continue;
 
                                 string nome = linha[0].ToString().Trim();
-                                string turma = linha[1]?.ToString().Trim() ?? "";
+                                double.TryParse(linha[1]?.ToString(), out double teste);
+                                double.TryParse(linha[2]?.ToString(), out double trabalho);
+                                double.TryParse(linha[3]?.ToString(), out double participacao);
+                                int.TryParse(linha[4]?.ToString(), out int faltas);
 
-                                double.TryParse(linha[2]?.ToString(), out double teste);
-                                double.TryParse(linha[3]?.ToString(), out double trabalho);
-                                double.TryParse(linha[4]?.ToString(), out double participacao);
-                                int.TryParse(linha[5]?.ToString(), out int faltas);
-
-                                SalvarAlunoNoFirebird(0, nome, turma, teste, trabalho, participacao, faltas, 0, 0);
+                                SalvarAlunoNoFirebird(0, nome, "", teste, trabalho, participacao, faltas, 0, 0);
                                 contagemImportados++;
                             }
                         }
@@ -970,51 +982,9 @@ namespace WinFormsApp1
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void CarregarTurmas()
         {
-            try
-            {
-                using (FbConnection conexao = new FbConnection(stringConexao))
-                {
-                    conexao.Open();
-                    string query = "UPDATE ALUNOS SET " +
-                        "NOME = @nome, " +
-                        "NOTA_TESTE = @n1, " +
-                        "NOTA_TRABALHO = @n2, " +
-                        "NOTA_PARTICIPACAO = @n3, " +
-                        "FALTAS_INJUSTIFICADAS = @f_injust, " +
-                        "FALTAS_JUSTIFICADAS = @f_just, " +
-                        "FALTAS_RECUPERADAS = @f_rec " +
-                        "WHERE ID = @id";
 
-                    using (FbCommand comando = new FbCommand(query, conexao))
-                    {
-                        foreach (DataGridViewRow linha in dgvAlunos.Rows)
-                        {
-                            if (linha.IsNewRow) continue;
-
-                            Aluno aluno = (Aluno)linha.DataBoundItem;
-
-                            comando.Parameters.Clear();
-
-                            comando.Parameters.AddWithValue("@id", FbDbType.Integer).Value = aluno.Id;
-                            comando.Parameters.AddWithValue("@nome", FbDbType.VarChar).Value = aluno.Nome;
-                            comando.Parameters.AddWithValue("@n1", FbDbType.Numeric).Value = aluno.Nota_Teste;
-                            comando.Parameters.AddWithValue("@n2", FbDbType.Numeric).Value = aluno.Nota_Trabalho;
-                            comando.Parameters.AddWithValue("@n3", FbDbType.Numeric).Value = aluno.Nota_Participacao;
-                            comando.Parameters.AddWithValue("@f_injust", FbDbType.Integer).Value = aluno.FaltasInjustificadas;
-                            comando.Parameters.AddWithValue("@f_just", FbDbType.Integer).Value = aluno.FaltasJustificadas;
-                            comando.Parameters.AddWithValue("@f_rec", FbDbType.Integer).Value = aluno.FaltasRecuperadas;
-
-                            comando.ExecuteNonQuery();
-                        }
-                    }
-                }
-                MessageBox.Show("Alterações gravadas com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Exception ex)
-            {
-                MessageBox.Show($"Erro crítico: {ex.Message}");
-            }
-        } 
+        }
     }
 }
