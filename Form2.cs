@@ -1,4 +1,5 @@
-﻿using FirebirdSql.Data.FirebirdClient;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using FirebirdSql.Data.FirebirdClient;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -69,7 +70,8 @@ namespace WinFormsApp1
 
                 MessageBox.Show("Turma editada com sucesso!");
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao editar a turma: {ex.Message}");
             }
@@ -181,6 +183,67 @@ namespace WinFormsApp1
             Turma turma = (Turma)lstTurmas.SelectedItem;
 
             txtNomeTurma.Text = lstTurmas.SelectedItem.ToString();
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (lstTurmas.SelectedItem == null)
+            {
+                MessageBox.Show("Selecione uma turma para eliminar.");
+                return;
+            }
+
+            Turma turma = (Turma)lstTurmas.SelectedItem;
+
+            DialogResult resposta = MessageBox.Show($"Tem a certeza que pretende eliminara turma '{turma.Nome}'?", "Confirmar Eliminação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (resposta == DialogResult.No)
+                return;
+
+            try
+            {
+                using (FbConnection conexao = new FbConnection(stringConexao))
+                {
+                    conexao.Open();
+                    string queryVerificar = "SELECT COUNT(*) FROM ALUNOS WHERE ID_TURMA = @idTurma";
+
+                    using (FbCommand cmdVerificar = new FbCommand(queryVerificar, conexao))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@idTurma", turma.Id);
+                        int quantidade = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                        if (quantidade > 0)
+                        {
+                            MessageBox.Show("Não é possível eliminar esta turma porque existem alunos associados a ela.", "Operação não permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    string queryEliminar = "DELETE FROM TURMAS WHERE ID_TURMA = @idTurma";
+
+                    using (FbCommand comando = new FbCommand(queryEliminar, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@idTurma", turma.Id);
+                        comando.ExecuteNonQuery();
+                    }
+                }
+
+                carregarTurmas();
+                lstTurmas.ClearSelected();
+                txtNomeTurma.Clear();
+
+                MessageBox.Show("Turma eliminada com sucesso!");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao eliminar a turma: {ex.Message}");
+            }
+        }
+
+        private void btnFechar_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

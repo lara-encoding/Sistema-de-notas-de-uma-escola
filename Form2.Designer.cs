@@ -103,6 +103,7 @@
             btnEliminar.TabIndex = 10;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
             // 
             // btnFechar
             // 
@@ -112,6 +113,7 @@
             btnFechar.TabIndex = 11;
             btnFechar.Text = "Fechar";
             btnFechar.UseVisualStyleBackColor = true;
+            btnFechar.Click += btnFechar_Click;
             // 
             // label1
             // 
