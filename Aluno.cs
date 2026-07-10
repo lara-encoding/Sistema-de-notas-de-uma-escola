@@ -53,18 +53,29 @@ namespace WinFormsApp1
             {
                 if (faltasEfetivas <= 10 && FaltasJustificadas > 0 && FaltasRecuperadas > 0)
                 {
-                    if (MediaFinal >= 10) Situacao = "Aprovado(a)";
-                    else if (MediaFinal >= 8) Situacao = "Recuperação";
-                    else Situacao = "Reprovado(a)";
-                } else
-                {
-                    Situacao = "Reprovado(a) por Faltas";
+                    if (MediaFinal >= 10)
+                        Situacao = "Aprovado(a)";
+                    else if (MediaFinal >= 8)
+                        Situacao = "Recuperação";
+                    else
+                        Situacao = "Reprovado(a)";
                 }
-            } else
+                else
+                {
+                    if (MediaFinal < 8)
+                        Situacao = "Reprovado(a) por Nota e Faltas";
+                    else
+                        Situacao = "Reprovado(a) por Faltas";
+                }
+            }
+            else
             {
-                if (MediaFinal >= 10) Situacao = "Aprovado(a)";
-                else if (MediaFinal >= 8) Situacao = "Recuperação";
-                else Situacao = "Reprovado(a)";
+                if (MediaFinal >= 10)
+                    Situacao = "Aprovado(a)";
+                else if (MediaFinal >= 8)
+                    Situacao = "Recuperação";
+                else
+                    Situacao = "Reprovado(a)";
             }
         }
     }

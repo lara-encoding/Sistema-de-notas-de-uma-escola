@@ -60,7 +60,8 @@ namespace WinFormsApp1
                                 gerirTurmas.ShowDialog();
 
                                 carregarTurmas();
-                            } else
+                            }
+                            else
                             {
                                 this.Hide();
                                 Form3 login = new Form3();
@@ -110,6 +111,12 @@ namespace WinFormsApp1
             principal.ShowDialog();
 
             this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e) { 
+                
+            Utilidades.TerminarSessao(this);
+            
         }
     }
 }

@@ -435,20 +435,29 @@ namespace WinFormsApp1
             {
                 if (faltasEfetivas <= 10 && faltasJustificadas > 0 && faltasRecuperadas > 0)
                 {
-                    if (media >= 10) situacao = "Aprovado(a)";
-                    else if (media >= 8) situacao = "Recuperação";
-                    else situacao = "Reprovado(a)";
+                    if (media >= 10)
+                        situacao = "Aprovado(a)";
+                    else if (media >= 8)
+                        situacao = "Recuperação";
+                    else
+                        situacao = "Reprovado(a)";
                 }
                 else
                 {
-                    situacao = "Reprovado(a) por Faltas";
+                    if (media < 8)
+                        situacao = "Reprovado(a) por Nota e Faltas";
+                    else
+                        situacao = "Reprovado(a) por Faltas";
                 }
             }
             else
             {
-                if (media >= 10) situacao = "Aprovado(a)";
-                else if (media >= 8) situacao = "Recuperação";
-                else situacao = "Reprovado(a)";
+                if (media >= 10)
+                    situacao = "Aprovado(a)";
+                else if (media >= 8)
+                    situacao = "Recuperação";
+                else
+                    situacao = "Reprovado(a)";
             }
 
             string nomeLimpo = nome.Trim();

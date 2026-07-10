@@ -32,6 +32,7 @@
             cbTurmas = new ComboBox();
             btnEntrarTurma = new Button();
             lblSemTurmas = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // label1
@@ -58,7 +59,7 @@
             // btnEntrarTurma
             // 
             btnEntrarTurma.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnEntrarTurma.Location = new Point(312, 234);
+            btnEntrarTurma.Location = new Point(319, 242);
             btnEntrarTurma.Name = "btnEntrarTurma";
             btnEntrarTurma.Size = new Size(126, 61);
             btnEntrarTurma.TabIndex = 2;
@@ -77,11 +78,22 @@
             lblSemTurmas.Text = "Ainda não existem turmas registadas. Crie uma turma para começar.";
             lblSemTurmas.Visible = false;
             // 
+            // button1
+            // 
+            button1.Location = new Point(713, 12);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 41);
+            button1.TabIndex = 4;
+            button1.Text = "Terminar Sessão";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // EscolhaTurma
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(lblSemTurmas);
             Controls.Add(btnEntrarTurma);
             Controls.Add(cbTurmas);
@@ -99,5 +111,6 @@
         private ComboBox cbTurmas;
         private Button btnEntrarTurma;
         private Label lblSemTurmas;
+        private Button button1;
     }
 }
