@@ -46,19 +46,20 @@ namespace WinFormsApp1
                 return;
             }
 
+            Turma turma = (Turma)lstTurmas.SelectedItem;
+
             try
             {
                 using (FbConnection conexao = new FbConnection(stringConexao))
                 {
                     conexao.Open();
 
-                    string query = @"UPDATE TURMAS SET NOME = @novoNome WHERE NOME = @nomeAntigo AND ID_PROFESSOR = @idProfessor";
+                    string query = @"UPDATE TURMAS SET NOME = @novoNome WHERE ID_TURMA = @idTurma";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
                         comando.Parameters.AddWithValue("@novoNome", txtNomeTurma.Text);
-                        comando.Parameters.AddWithValue("@nomeAntigo", lstTurmas.SelectedItem.ToString());
-                        comando.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+                        comando.Parameters.AddWithValue("@idTurma", turma.Id);
 
                         comando.ExecuteNonQuery();
                     }
@@ -67,6 +68,7 @@ namespace WinFormsApp1
                 carregarTurmas();
 
                 MessageBox.Show("Turma editada com sucesso!");
+
             } catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao editar a turma: {ex.Message}");
@@ -88,7 +90,7 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string query = "SELECT NOME FROM TURMAS WHERE ID_PROFESSOR = @idProfessor ORDER BY NOME";
+                    string query = "SELECT ID_TURMA, NOME FROM TURMAS WHERE ID_PROFESSOR = @idProfessor ORDER BY NOME";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
@@ -98,7 +100,12 @@ namespace WinFormsApp1
                         {
                             while (leitor.Read())
                             {
-                                lstTurmas.Items.Add(leitor["NOME"].ToString());
+                                Turma turma = new Turma();
+
+                                turma.Id = Convert.ToInt32(leitor["ID_TURMA"]);
+                                turma.Nome = leitor["NOME"].ToString();
+
+                                lstTurmas.Items.Add(turma);
                             }
                         }
                     }
@@ -164,10 +171,14 @@ namespace WinFormsApp1
             }
         }
 
-        private void lstTurmas_SelectedIndexChanged(object server, EventArgs e)
+        private void lstTurmas_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lstTurmas.SelectedItem != null)
+            if (lstTurmas.SelectedItem == null)
+            {
                 return;
+            }
+
+            Turma turma = (Turma)lstTurmas.SelectedItem;
 
             txtNomeTurma.Text = lstTurmas.SelectedItem.ToString();
         }
