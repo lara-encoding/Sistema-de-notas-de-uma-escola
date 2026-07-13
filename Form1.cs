@@ -13,12 +13,13 @@ using DocumentFormat.OpenXml.Vml.Office;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
     {
-        private string stringConexao = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050";
+        private string stringConexao = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Charset=UTF8;";
 
         private List<Aluno> listaAlunos = new List<Aluno>();
         private string nomeAntigo = "";
@@ -208,6 +209,11 @@ namespace WinFormsApp1
                             {
                                 int id = Convert.ToInt32(leitor["ID"]);
                                 string nome = leitor["NOME"].ToString();
+
+                                nome = nome.Replace("Ã©", "é")
+                                           .Replace("Ã§", "ç")
+                                           .Replace("Âº", "º");
+
                                 string turma = this.nomeTurmaAtual;
                                 double notaTeste = Convert.ToDouble(leitor["NOTA_TESTE"]);
                                 double notaTrabalho = Convert.ToDouble(leitor["NOTA_TRABALHO"]);
@@ -337,6 +343,13 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            string nomeOriginal = txtNome.Text;
+            TextInfo textInfo = new CultureInfo("pt-PT", false).TextInfo;
+            string nomeFormatado = textInfo.ToTitleCase(nomeOriginal.ToLower());
+
+            string turma = "4" + (char)176 + "B";
+
             string nomeInserido = txtNome.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(nomeInserido))
@@ -418,7 +431,7 @@ namespace WinFormsApp1
                 comboBox1.SelectedIndex = 0;
             }
 
-            comboBox1_SelectedIndexChanged(comboBox1, EventArgs.Empty);
+            comboBox1_SelectedIndexChanged(cb1, EventArgs.Empty);
 
             MessageBox.Show("Aluno adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

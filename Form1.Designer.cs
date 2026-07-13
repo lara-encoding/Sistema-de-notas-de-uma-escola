@@ -38,13 +38,6 @@
             label1 = new Label();
             label2 = new Label();
             dgvAlunos = new DataGridView();
-            groupBox1 = new GroupBox();
-            label6 = new Label();
-            lblTotalRetidos = new Label();
-            comboBox1 = new ComboBox();
-            lblTotalAprovados = new Label();
-            lblMelhorAluno = new Label();
-            lblMediaTurma = new Label();
             label3 = new Label();
             label4 = new Label();
             button1 = new Button();
@@ -59,13 +52,23 @@
             cmbTurmas = new ComboBox();
             label5 = new Label();
             btnTerminarSessao = new Button();
+            panel1 = new Panel();
+            label6 = new Label();
+            lblTotalRetidos = new Label();
+            lblTotalAprovados = new Label();
+            lblMelhorAluno = new Label();
+            lblMediaTurma = new Label();
+            cb1 = new GroupBox();
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
-            groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
+            panel1.SuspendLayout();
+            cb1.SuspendLayout();
             SuspendLayout();
             // 
             // btnAdicionar
             // 
+            btnAdicionar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnAdicionar.BackColor = Color.ForestGreen;
             btnAdicionar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnAdicionar.Location = new Point(879, 85);
@@ -78,7 +81,7 @@
             // 
             // txtNotaTrabalho
             // 
-            txtNotaTrabalho.Location = new Point(636, 125);
+            txtNotaTrabalho.Location = new Point(125, 119);
             txtNotaTrabalho.Name = "txtNotaTrabalho";
             txtNotaTrabalho.Size = new Size(225, 23);
             txtNotaTrabalho.TabIndex = 2;
@@ -87,7 +90,7 @@
             // 
             // txtNome
             // 
-            txtNome.Location = new Point(636, 67);
+            txtNome.Location = new Point(125, 61);
             txtNome.Name = "txtNome";
             txtNome.Size = new Size(225, 23);
             txtNome.TabIndex = 4;
@@ -95,7 +98,7 @@
             // 
             // txtNotaTeste
             // 
-            txtNotaTeste.Location = new Point(636, 96);
+            txtNotaTeste.Location = new Point(125, 90);
             txtNotaTeste.Name = "txtNotaTeste";
             txtNotaTeste.Size = new Size(225, 23);
             txtNotaTeste.TabIndex = 5;
@@ -103,7 +106,7 @@
             // 
             // txtNotaParticipacao
             // 
-            txtNotaParticipacao.Location = new Point(636, 154);
+            txtNotaParticipacao.Location = new Point(125, 148);
             txtNotaParticipacao.Name = "txtNotaParticipacao";
             txtNotaParticipacao.Size = new Size(225, 23);
             txtNotaParticipacao.TabIndex = 6;
@@ -112,7 +115,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(540, 70);
+            label1.Location = new Point(29, 64);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 7;
@@ -122,7 +125,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(549, 128);
+            label2.Location = new Point(38, 122);
             label2.Name = "label2";
             label2.Size = new Size(81, 15);
             label2.TabIndex = 8;
@@ -133,7 +136,7 @@
             // 
             dataGridViewCellStyle1.BackColor = Color.LightGray;
             dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgvAlunos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvAlunos.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -144,29 +147,186 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             dgvAlunos.DefaultCellStyle = dataGridViewCellStyle2;
-            dgvAlunos.Location = new Point(-1, -3);
+            dgvAlunos.Location = new Point(0, 0);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
             dgvAlunos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAlunos.Size = new Size(493, 453);
+            dgvAlunos.Size = new Size(505, 450);
             dgvAlunos.TabIndex = 9;
             dgvAlunos.CellContentClick += dgvAlunos_CellContentClick;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
             // 
-            // groupBox1
+            // label3
             // 
-            groupBox1.Controls.Add(label6);
-            groupBox1.Controls.Add(lblTotalRetidos);
-            groupBox1.Controls.Add(comboBox1);
-            groupBox1.Controls.Add(lblTotalAprovados);
-            groupBox1.Controls.Add(lblMelhorAluno);
-            groupBox1.Controls.Add(lblMediaTurma);
-            groupBox1.Location = new Point(522, 213);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(471, 115);
-            groupBox1.TabIndex = 10;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Estatísticas da Turma";
+            label3.AutoSize = true;
+            label3.Location = new Point(57, 93);
+            label3.Name = "label3";
+            label3.Size = new Size(62, 15);
+            label3.TabIndex = 11;
+            label3.Text = "Nota Teste";
+            label3.Click += label3_Click;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(18, 151);
+            label4.Name = "label4";
+            label4.Size = new Size(101, 15);
+            label4.TabIndex = 12;
+            label4.Text = "Nota Participação";
+            label4.Click += label4_Click;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button1.BackColor = Color.Transparent;
+            button1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(690, 348);
+            button1.Name = "button1";
+            button1.Size = new Size(113, 46);
+            button1.TabIndex = 16;
+            button1.Text = "Apagar Aluno";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click_1;
+            // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button2.BackColor = Color.Transparent;
+            button2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button2.Location = new Point(834, 348);
+            button2.Name = "button2";
+            button2.Size = new Size(111, 46);
+            button2.TabIndex = 19;
+            button2.Text = "Apagar Todos Os Alunos";
+            button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
+            // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button3.BackColor = Color.Transparent;
+            button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button3.Location = new Point(549, 348);
+            button3.Name = "button3";
+            button3.Size = new Size(113, 46);
+            button3.TabIndex = 20;
+            button3.Text = "Ver Turmas";
+            button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
+            // 
+            // numFaltas
+            // 
+            numFaltas.Location = new Point(125, 177);
+            numFaltas.Name = "numFaltas";
+            numFaltas.Size = new Size(225, 23);
+            numFaltas.TabIndex = 22;
+            numFaltas.PreviewKeyDown += numFaltas_PreviewKeyDown_1;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(78, 179);
+            label7.Name = "label7";
+            label7.Size = new Size(37, 15);
+            label7.TabIndex = 23;
+            label7.Text = "Faltas";
+            // 
+            // button4
+            // 
+            button4.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button4.Location = new Point(549, 400);
+            button4.Name = "button4";
+            button4.Size = new Size(113, 42);
+            button4.TabIndex = 25;
+            button4.Text = "Importar";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // button5
+            // 
+            button5.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button5.Location = new Point(690, 400);
+            button5.Name = "button5";
+            button5.Size = new Size(113, 42);
+            button5.TabIndex = 26;
+            button5.Text = "Exportar";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // button6
+            // 
+            button6.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            button6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            button6.Location = new Point(834, 400);
+            button6.Name = "button6";
+            button6.Size = new Size(111, 42);
+            button6.TabIndex = 27;
+            button6.Text = "Enviar Email";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // lblUsuario
+            // 
+            lblUsuario.AutoSize = true;
+            lblUsuario.Location = new Point(131, 3);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(38, 15);
+            lblUsuario.TabIndex = 28;
+            lblUsuario.Text = "label8";
+            // 
+            // cmbTurmas
+            // 
+            cmbTurmas.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbTurmas.FormattingEnabled = true;
+            cmbTurmas.Location = new Point(229, 32);
+            cmbTurmas.Name = "cmbTurmas";
+            cmbTurmas.Size = new Size(121, 23);
+            cmbTurmas.TabIndex = 29;
+            cmbTurmas.SelectedIndexChanged += cmbTurmas_SelectedIndexChanged;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(131, 35);
+            label5.Name = "label5";
+            label5.Size = new Size(92, 15);
+            label5.TabIndex = 23;
+            label5.Text = "Trocar de Turma";
+            // 
+            // btnTerminarSessao
+            // 
+            btnTerminarSessao.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnTerminarSessao.Location = new Point(918, 9);
+            btnTerminarSessao.Name = "btnTerminarSessao";
+            btnTerminarSessao.Size = new Size(75, 47);
+            btnTerminarSessao.TabIndex = 30;
+            btnTerminarSessao.Text = "Terminar Sessão";
+            btnTerminarSessao.UseVisualStyleBackColor = true;
+            btnTerminarSessao.Click += btnTerminarSessao_Click;
+            // 
+            // panel1
+            // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(cmbTurmas);
+            panel1.Controls.Add(lblUsuario);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(numFaltas);
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(txtNotaTrabalho);
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(txtNotaParticipacao);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(txtNotaTeste);
+            panel1.Controls.Add(txtNome);
+            panel1.Location = new Point(511, 6);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(360, 207);
+            panel1.TabIndex = 31;
             // 
             // label6
             // 
@@ -176,7 +336,6 @@
             label6.Size = new Size(106, 15);
             label6.TabIndex = 22;
             label6.Text = "Filtrar por Situação";
-            label6.Click += label6_Click;
             // 
             // lblTotalRetidos
             // 
@@ -187,16 +346,6 @@
             lblTotalRetidos.TabIndex = 3;
             lblTotalRetidos.Text = "Recuperação/Reprovados: 0";
             // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Todos", "Aprovado", "Reprovado", "Recuperação" });
-            comboBox1.Location = new Point(323, 31);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(137, 23);
-            comboBox1.TabIndex = 21;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-            // 
             // lblTotalAprovados
             // 
             lblTotalAprovados.AutoSize = true;
@@ -205,7 +354,6 @@
             lblTotalAprovados.Size = new Size(76, 15);
             lblTotalAprovados.TabIndex = 2;
             lblTotalAprovados.Text = "Aprovados: 0";
-            lblTotalAprovados.Click += label5_Click;
             // 
             // lblMelhorAluno
             // 
@@ -225,152 +373,30 @@
             lblMediaTurma.TabIndex = 0;
             lblMediaTurma.Text = "Média da Turma: -";
             // 
-            // label3
+            // cb1
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(568, 99);
-            label3.Name = "label3";
-            label3.Size = new Size(62, 15);
-            label3.TabIndex = 11;
-            label3.Text = "Nota Teste";
-            label3.Click += label3_Click;
+            cb1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cb1.Controls.Add(comboBox1);
+            cb1.Controls.Add(label6);
+            cb1.Controls.Add(lblTotalRetidos);
+            cb1.Controls.Add(lblTotalAprovados);
+            cb1.Controls.Add(lblMelhorAluno);
+            cb1.Controls.Add(lblMediaTurma);
+            cb1.Location = new Point(511, 219);
+            cb1.Name = "cb1";
+            cb1.Size = new Size(471, 115);
+            cb1.TabIndex = 12;
+            cb1.TabStop = false;
+            cb1.Text = "Estatísticas da Turma";
             // 
-            // label4
+            // comboBox1
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(529, 157);
-            label4.Name = "label4";
-            label4.Size = new Size(101, 15);
-            label4.TabIndex = 12;
-            label4.Text = "Nota Participação";
-            label4.Click += label4_Click;
-            // 
-            // button1
-            // 
-            button1.BackColor = Color.Transparent;
-            button1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(703, 341);
-            button1.Name = "button1";
-            button1.Size = new Size(113, 46);
-            button1.TabIndex = 16;
-            button1.Text = "Apagar Aluno";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += button1_Click_1;
-            // 
-            // button2
-            // 
-            button2.BackColor = Color.Transparent;
-            button2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(836, 341);
-            button2.Name = "button2";
-            button2.Size = new Size(111, 46);
-            button2.TabIndex = 19;
-            button2.Text = "Apagar Todos Os Alunos";
-            button2.UseVisualStyleBackColor = false;
-            button2.Click += button2_Click;
-            // 
-            // button3
-            // 
-            button3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            button3.BackColor = Color.Transparent;
-            button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(571, 341);
-            button3.Name = "button3";
-            button3.Size = new Size(113, 46);
-            button3.TabIndex = 20;
-            button3.Text = "Ver Turmas";
-            button3.UseVisualStyleBackColor = false;
-            button3.Click += button3_Click;
-            // 
-            // numFaltas
-            // 
-            numFaltas.Location = new Point(636, 183);
-            numFaltas.Name = "numFaltas";
-            numFaltas.Size = new Size(225, 23);
-            numFaltas.TabIndex = 22;
-            numFaltas.PreviewKeyDown += numFaltas_PreviewKeyDown_1;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(589, 185);
-            label7.Name = "label7";
-            label7.Size = new Size(37, 15);
-            label7.TabIndex = 23;
-            label7.Text = "Faltas";
-            // 
-            // button4
-            // 
-            button4.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            button4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button4.Location = new Point(571, 396);
-            button4.Name = "button4";
-            button4.Size = new Size(113, 46);
-            button4.TabIndex = 25;
-            button4.Text = "Importar";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
-            // 
-            // button5
-            // 
-            button5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button5.Location = new Point(703, 396);
-            button5.Name = "button5";
-            button5.Size = new Size(113, 46);
-            button5.TabIndex = 26;
-            button5.Text = "Exportar";
-            button5.UseVisualStyleBackColor = true;
-            button5.Click += button5_Click;
-            // 
-            // button6
-            // 
-            button6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button6.Location = new Point(836, 396);
-            button6.Name = "button6";
-            button6.Size = new Size(111, 46);
-            button6.TabIndex = 27;
-            button6.Text = "Enviar Email";
-            button6.UseVisualStyleBackColor = true;
-            button6.Click += button6_Click;
-            // 
-            // lblUsuario
-            // 
-            lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(642, 9);
-            lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(38, 15);
-            lblUsuario.TabIndex = 28;
-            lblUsuario.Text = "label8";
-            // 
-            // cmbTurmas
-            // 
-            cmbTurmas.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbTurmas.FormattingEnabled = true;
-            cmbTurmas.Location = new Point(740, 38);
-            cmbTurmas.Name = "cmbTurmas";
-            cmbTurmas.Size = new Size(121, 23);
-            cmbTurmas.TabIndex = 29;
-            cmbTurmas.SelectedIndexChanged += cmbTurmas_SelectedIndexChanged;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(642, 41);
-            label5.Name = "label5";
-            label5.Size = new Size(92, 15);
-            label5.TabIndex = 23;
-            label5.Text = "Trocar de Turma";
-            // 
-            // btnTerminarSessao
-            // 
-            btnTerminarSessao.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnTerminarSessao.Location = new Point(918, 9);
-            btnTerminarSessao.Name = "btnTerminarSessao";
-            btnTerminarSessao.Size = new Size(75, 47);
-            btnTerminarSessao.TabIndex = 30;
-            btnTerminarSessao.Text = "Terminar Sessão";
-            btnTerminarSessao.UseVisualStyleBackColor = true;
-            btnTerminarSessao.Click += btnTerminarSessao_Click;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Todos", "Aprovados(as)", "Reprovados(as)", "Recuperação" });
+            comboBox1.Location = new Point(344, 38);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(121, 23);
+            comboBox1.TabIndex = 23;
             // 
             // Form1
             // 
@@ -378,38 +404,27 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(cb1);
+            Controls.Add(panel1);
             Controls.Add(btnTerminarSessao);
-            Controls.Add(label5);
-            Controls.Add(cmbTurmas);
-            Controls.Add(lblUsuario);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button4);
-            Controls.Add(label7);
-            Controls.Add(numFaltas);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(label4);
-            Controls.Add(groupBox1);
-            Controls.Add(txtNotaTrabalho);
-            Controls.Add(label2);
-            Controls.Add(txtNotaParticipacao);
             Controls.Add(dgvAlunos);
-            Controls.Add(label3);
-            Controls.Add(label1);
-            Controls.Add(txtNotaTeste);
-            Controls.Add(txtNome);
             Controls.Add(btnAdicionar);
             Name = "Form1";
             Text = "Sistema de Notas - Escolar";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).EndInit();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numFaltas).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            cb1.ResumeLayout(false);
+            cb1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -422,18 +437,11 @@
         private Label label1;
         private Label label2;
         private DataGridView dgvAlunos;
-        private GroupBox groupBox1;
-        private Label lblTotalRetidos;
-        private Label lblTotalAprovados;
-        private Label lblMelhorAluno;
-        private Label lblMediaTurma;
         private Label label3;
         private Label label4;
         private Button button1;
         private Button button2;
         private Button button3;
-        private ComboBox comboBox1;
-        private Label label6;
         private NumericUpDown numFaltas;
         private Label label7;
         private Button button4;
@@ -443,5 +451,13 @@
         private ComboBox cmbTurmas;
         private Label label5;
         private Button btnTerminarSessao;
+        private Panel panel1;
+        private Label label6;
+        private Label lblTotalRetidos;
+        private Label lblTotalAprovados;
+        private Label lblMelhorAluno;
+        private Label lblMediaTurma;
+        private GroupBox cb1;
+        private ComboBox comboBox1;
     }
 }
