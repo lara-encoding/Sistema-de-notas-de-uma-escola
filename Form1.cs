@@ -350,7 +350,7 @@ namespace WinFormsApp1
 
             string turma = "4" + (char)176 + "B";
 
-            string nomeInserido = txtNome.Text.Trim();
+            string nomeInserido = nomeFormatado.Trim();
 
             if (string.IsNullOrWhiteSpace(nomeInserido))
             {
@@ -894,6 +894,9 @@ namespace WinFormsApp1
                                     continue;
 
                                 string nome = linha[0].ToString().Trim();
+                                TextInfo textInfo = new CultureInfo("pt-PT", false).TextInfo;
+                                nome = textInfo.ToTitleCase(nome.ToLower());
+
                                 double.TryParse(linha[1]?.ToString(), out double teste);
                                 double.TryParse(linha[2]?.ToString(), out double trabalho);
                                 double.TryParse(linha[3]?.ToString(), out double participacao);
