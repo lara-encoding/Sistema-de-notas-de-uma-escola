@@ -16,12 +16,14 @@ namespace WinFormsApp1
         private string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
         private string professorLogado;
         private int idProfessorLogado;
+        private string disciplinaProfessor;
 
-        public EscolhaTurma(int idProfessorLogado, string professorLogado)
+        public EscolhaTurma(int idProfessorLogado, string professorLogado, string disciplinaProfessor)
         {
             InitializeComponent();
             this.idProfessorLogado = idProfessorLogado;
             this.professorLogado = professorLogado;
+            this.disciplinaProfessor = disciplinaProfessor;
         }
 
         public void EscolhaTurma_Load(object sender, EventArgs e)
@@ -107,7 +109,7 @@ namespace WinFormsApp1
 
             this.Hide();
 
-            Form1 principal = new Form1(idProfessorLogado, professorLogado, idTurmaSelecionada, nomeTurmaSelecionada);
+            Form1 principal = new Form1(idProfessorLogado, professorLogado, disciplinaProfessor, idTurmaSelecionada, nomeTurmaSelecionada);
             principal.ShowDialog();
 
             this.Close();

@@ -26,7 +26,12 @@ namespace WinFormsApp1
         private void btnEntrar_Click(object sender, EventArgs e)
         {
             string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
-            string query = "SELECT ID, NOME FROM PROFESSORES WHERE UTILIZADOR = @user AND SENHA = @pass";
+            string query = @"SELECT P.ID, P.NOME, D.NOME AS DISCIPLINA
+                             FROM PROFESSORES P 
+                             INNER JOIN DISCIPLINAS D
+                                ON P.ID_DISCIPLINA = D.ID_DISCIPLINA
+                             WHERE P.UTILIZADOR = @user
+                             AND P.SENHA = @pass";
 
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
@@ -45,11 +50,12 @@ namespace WinFormsApp1
                             {
                                 int idProfessor = Convert.ToInt32(leitor["ID"]);
                                 string nomeProfessor = leitor["NOME"].ToString();
+                                string disciplinaProfessor = leitor["DISCIPLINA"].ToString();
 
                                 MessageBox.Show($"Login efetuado com sucesso\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                 this.Hide();
 
-                                EscolhaTurma ecraTurma = new EscolhaTurma(idProfessor, nomeProfessor);
+                                EscolhaTurma ecraTurma = new EscolhaTurma(idProfessor, nomeProfessor, disciplinaProfessor);
                                 ecraTurma.ShowDialog();
 
                                 this.Close();

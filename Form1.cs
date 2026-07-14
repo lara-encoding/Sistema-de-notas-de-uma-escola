@@ -37,16 +37,18 @@ namespace WinFormsApp1
         private int idTurmaAtual;
         private string nomeTurmaAtual;
         private string turmaAtual = "1ºA";
+        private string disciplinaProfessor;
 
-        public Form1(int idProfessorLogado, string professorLogado, int idTurmaAtual, string nomeTurmaAtual)
+        public Form1(int idProfessorLogado, string professorLogado, string disciplinaProfessor, int idTurmaAtual, string nomeTurmaAtual)
         {
             InitializeComponent();
             this.idProfessorLogado = idProfessorLogado;
             this.professorLogado = professorLogado;
+            this.disciplinaProfessor = disciplinaProfessor;
             this.idTurmaAtual = idTurmaAtual;
             this.nomeTurmaAtual = nomeTurmaAtual;
 
-            this.Text = $"Gestão de Alunos - Turma: {nomeTurmaAtual} (Prof. {professorLogado})";
+            this.Text = "Gestão de Alunos";
 
             dgvAlunos.CellBeginEdit += dgvAlunos_CellBeginEdit;
             dgvAlunos.CellValueChanged += dgvAlunos_CellValueChanged;
@@ -183,7 +185,7 @@ namespace WinFormsApp1
             idTurmaAtual = turmaSelecionada.Id;
             nomeTurmaAtual = turmaSelecionada.Nome;
 
-            this.Text = $"Gestão de Alunos - Turma: {nomeTurmaAtual} (Prof. {professorLogado})";
+            this.Text = "Gestão de Alunos";
 
             CarregarHistoricoDaBaseDeDados();
         }
@@ -345,10 +347,16 @@ namespace WinFormsApp1
         {
 
             string nomeOriginal = txtNome.Text;
-            TextInfo textInfo = new CultureInfo("pt-PT", false).TextInfo;
+            TextInfo textInfo = new CultureInfo("pt-PT").TextInfo;
             string nomeFormatado = textInfo.ToTitleCase(nomeOriginal.ToLower());
 
-            string turma = "4" + (char)176 + "B";
+            nomeFormatado = nomeFormatado
+                .Replace(" Da ", " da ")
+                .Replace(" De ", " de ")
+                .Replace(" Do ", " do ")
+                .Replace(" Das ", " das ")
+                .Replace(" Dos ", " dos ")
+                .Replace(" E ", " e ");
 
             string nomeInserido = nomeFormatado.Trim();
 
@@ -737,7 +745,7 @@ namespace WinFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            lblUsuario.Text = $"Professor(a) ligado(a): {professorLogado}";
+            lblUsuario.Text = $"Professor(a): {professorLogado} | Disciplina: {disciplinaProfessor}";
 
             CarregarTurmas();
             CarregarHistoricoDaBaseDeDados();
@@ -894,8 +902,16 @@ namespace WinFormsApp1
                                     continue;
 
                                 string nome = linha[0].ToString().Trim();
-                                TextInfo textInfo = new CultureInfo("pt-PT", false).TextInfo;
+                                TextInfo textInfo = new CultureInfo("pt-PT").TextInfo;
                                 nome = textInfo.ToTitleCase(nome.ToLower());
+
+                                nome = nome
+                                .Replace(" Da ", " da ")
+                                .Replace(" De ", " de ")
+                                .Replace(" Do ", " do ")
+                                .Replace(" Das ", " das ")
+                                .Replace(" Dos ", " dos ")
+                                .Replace(" E ", " e ");
 
                                 double.TryParse(linha[1]?.ToString(), out double teste);
                                 double.TryParse(linha[2]?.ToString(), out double trabalho);
@@ -1070,6 +1086,11 @@ namespace WinFormsApp1
         private void btnTerminarSessao_Click(object sender, EventArgs e)
         {
             Utilidades.TerminarSessao(this);
+        }
+
+        private void lblUsuario_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
