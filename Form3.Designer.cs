@@ -40,6 +40,8 @@
             txtNovoUtilizador = new TextBox();
             txtNovaSenha = new TextBox();
             panelRegisto = new Panel();
+            cbDisciplinas = new ComboBox();
+            label6 = new Label();
             label5 = new Label();
             label4 = new Label();
             label3 = new Label();
@@ -135,7 +137,7 @@
             // 
             // txtNovoNome
             // 
-            txtNovoNome.Location = new Point(142, 61);
+            txtNovoNome.Location = new Point(142, 54);
             txtNovoNome.Name = "txtNovoNome";
             txtNovoNome.Size = new Size(141, 23);
             txtNovoNome.TabIndex = 2;
@@ -143,7 +145,7 @@
             // 
             // txtNovoUtilizador
             // 
-            txtNovoUtilizador.Location = new Point(142, 101);
+            txtNovoUtilizador.Location = new Point(142, 94);
             txtNovoUtilizador.Name = "txtNovoUtilizador";
             txtNovoUtilizador.Size = new Size(141, 23);
             txtNovoUtilizador.TabIndex = 3;
@@ -151,13 +153,15 @@
             // 
             // txtNovaSenha
             // 
-            txtNovaSenha.Location = new Point(142, 141);
+            txtNovaSenha.Location = new Point(142, 134);
             txtNovaSenha.Name = "txtNovaSenha";
             txtNovaSenha.Size = new Size(141, 23);
             txtNovaSenha.TabIndex = 4;
             // 
             // panelRegisto
             // 
+            panelRegisto.Controls.Add(cbDisciplinas);
+            panelRegisto.Controls.Add(label6);
             panelRegisto.Controls.Add(label5);
             panelRegisto.Controls.Add(label4);
             panelRegisto.Controls.Add(label3);
@@ -172,10 +176,28 @@
             panelRegisto.TabIndex = 7;
             panelRegisto.Visible = false;
             // 
+            // cbDisciplinas
+            // 
+            cbDisciplinas.FormattingEnabled = true;
+            cbDisciplinas.Location = new Point(142, 174);
+            cbDisciplinas.Name = "cbDisciplinas";
+            cbDisciplinas.Size = new Size(141, 23);
+            cbDisciplinas.TabIndex = 9;
+            cbDisciplinas.SelectedIndexChanged += cbDisciplinas_SelectedIndexChanged;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(76, 177);
+            label6.Name = "label6";
+            label6.Size = new Size(61, 15);
+            label6.TabIndex = 8;
+            label6.Text = "Disciplina:";
+            // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(54, 144);
+            label5.Location = new Point(54, 137);
             label5.Name = "label5";
             label5.Size = new Size(82, 15);
             label5.TabIndex = 7;
@@ -184,7 +206,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(76, 104);
+            label4.Location = new Point(76, 97);
             label4.Name = "label4";
             label4.Size = new Size(60, 15);
             label4.TabIndex = 6;
@@ -193,7 +215,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(37, 64);
+            label3.Location = new Point(37, 57);
             label3.Name = "label3";
             label3.Size = new Size(99, 15);
             label3.TabIndex = 5;
@@ -255,5 +277,7 @@
         private Label label4;
         private Label label3;
         private LinkLabel lnkCriarConta;
+        private ComboBox cbDisciplinas;
+        private Label label6;
     }
 }
