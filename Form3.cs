@@ -13,6 +13,8 @@ namespace WinFormsApp1
 {
     public partial class Form3 : Form
     {
+        private string stringConexao = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Charset=UTF8;";
+
         public Form3()
         {
             InitializeComponent();
@@ -139,13 +141,25 @@ namespace WinFormsApp1
                         proximoId = Convert.ToInt32(cmdId.ExecuteScalar());
                     }
 
+                    int idDisciplina = Convert.ToInt32(cbDisciplinas.SelectedValue);
+
+                    if (idDisciplina == -1)
+                    {
+                        idDisciplina = CriarNovaDisciplina();
+
+                        if (idDisciplina == -1)
+                        {
+                            return;
+                        }
+                    }
+
                     using (FbCommand cmdInsert = new FbCommand(queryInsert, conexao))
                     {
                         cmdInsert.Parameters.AddWithValue("@id", proximoId);
                         cmdInsert.Parameters.AddWithValue("@nome", txtNovoNome.Text);
                         cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
-                        cmdInsert.Parameters.AddWithValue("@pass", txtNovaSenha.Text);
-                        cmdInsert.Parameters.AddWithValue("@disciplina", cbDisciplinas.SelectedValue);
+                        cmdInsert.Parameters.AddWithValue("@pass", Seguranca.GerarHash(txtNovaSenha.Text));
+                        cmdInsert.Parameters.AddWithValue("@disciplina", idDisciplina);
 
                         cmdInsert.ExecuteNonQuery();
                     }
@@ -169,6 +183,48 @@ namespace WinFormsApp1
                     {
                         MessageBox.Show($"Erro ao registar na base de dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+            }
+        }
+
+        private int CriarNovaDisciplina()
+        {
+            string novaDisciplina = Microsoft.VisualBasic.Interaction.InputBox("Digite o nome da nova disciplina", "Nova Disciplina", "");
+
+            if(string.IsNullOrWhiteSpace(novaDisciplina))
+            {
+                MessageBox.Show("É necessário informar uma disciplina.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return -1;
+            }
+            
+            using (FbConnection conexao = new FbConnection(stringConexao))
+            {
+                conexao.Open();
+
+                string queryVerificar = "SELECT ID_DISCIPLINA FROM DISCIPLINAS WHERE UPPER(NOME) = UPPER(@nome)";
+
+                using (FbCommand cmdVerificar = new FbCommand(queryVerificar, conexao))
+                {
+                    cmdVerificar.Parameters.AddWithValue("@nome", novaDisciplina.Trim());
+                    object resultado = cmdVerificar.ExecuteScalar();
+                    if (resultado != null)
+                    {
+                        return Convert.ToInt32(resultado);
+                    }
+                }
+
+                string queryInserir = "INSERT INTO DISCIPLINAS (NOME) VALUES (@nome)";
+                
+                using (FbCommand cmdInserir = new FbCommand(queryInserir, conexao))
+                {
+                    cmdInserir.Parameters.AddWithValue("@nome", novaDisciplina.Trim());
+                    cmdInserir.ExecuteNonQuery();
+                }
+
+                using (FbCommand cmdBuscar = new FbCommand(queryVerificar, conexao))
+                {
+                    cmdBuscar.Parameters.AddWithValue("@nome", novaDisciplina.Trim());
+                    return Convert.ToInt32(cmdBuscar.ExecuteScalar());
                 }
             }
         }
@@ -228,46 +284,7 @@ namespace WinFormsApp1
 
         private void cbDisciplinas_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbDisciplinas.SelectedValue != null && Convert.ToInt32(cbDisciplinas.SelectedValue) == -1)
-            {
-                string novaDisciplina = Microsoft.VisualBasic.Interaction.InputBox("Digite o nome da nova disciplina:",
-                    "Nova Disciplina", "");
 
-
-                if (string.IsNullOrWhiteSpace(novaDisciplina)) 
-                {
-                    CarregarDisciplinas();
-                    return;
-
-                    string queryVerificar = "SELECT COUNT(*) FROM DISCIPLINAS WHERE UPPER(NOME) = UPPER(@nome)";
-                    string queryInserir = "INSERT INTO DISCIPLINAS (NOME) VALUES (@nome)";
-
-                    using (FbConnection conexao = new FbConnection(conexaoString))
-                    {
-                        conexao.Open();
-
-                        using (FbCommand cmdVerificar = new FbCommand(queryVerificar, conexao))
-                        {
-                            cmdVerificar.Parameters.AddWithValue("@nome", novaDisciplina.Trim());
-                            int quantidade = Convert.ToInt32(cmdVerificar.ExecuteScalar());
-
-                            if (quantidade > 0)
-                            {
-                                MessageBox.Show("Essa disciplina já existe!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                CarregarDisciplinas();
-                                return;
-                            }
-                        }
-
-                        using (FbCommand cmdInserir = new FbCommand(queryInserir, conexao))
-                        {
-                            cmdInserir.Parameters.AddWithValue("@nome", novaDisciplina.Trim());
-                            cmdInserir.ExecuteNonQuery();
-                        }
-                        CarregarDisciplinas();
-                    }
-                }
-            }
         }
     }
 }
