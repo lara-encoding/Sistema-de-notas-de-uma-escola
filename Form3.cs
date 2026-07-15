@@ -34,6 +34,7 @@ namespace WinFormsApp1
                                 ON P.ID_DISCIPLINA = D.ID_DISCIPLINA
                              WHERE P.UTILIZADOR = @user
                              AND P.SENHA = @pass";
+            string senhaHash = Seguranca.GerarHash(txtSenha.Text);
 
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
@@ -44,7 +45,7 @@ namespace WinFormsApp1
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
                         comando.Parameters.AddWithValue("@user", txtUtilizador.Text);
-                        comando.Parameters.AddWithValue("@pass", txtSenha.Text);
+                        comando.Parameters.AddWithValue("@pass", senhaHash);
 
                         using (FbDataReader leitor = comando.ExecuteReader())
                         {
@@ -125,21 +126,13 @@ namespace WinFormsApp1
             }
 
             string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
-            string queryId = "SELECT COALESCE(MAX(ID), 0) + 1 FROM PROFESSORES";
-            string queryInsert = @"INSERT INTO PROFESSORES (ID, NOME, UTILIZADOR, SENHA, ID_DISCIPLINA) VALUES (@id, @nome, @user, @pass, @disciplina)";
+            string queryInsert = @"INSERT INTO PROFESSORES (NOME, UTILIZADOR, SENHA, ID_DISCIPLINA) VALUES (@nome, @user, @pass, @disciplina)";
 
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
                 try
                 {
                     conexao.Open();
-
-                    int proximoId = 1;
-
-                    using (FbCommand cmdId = new FbCommand(queryId, conexao))
-                    {
-                        proximoId = Convert.ToInt32(cmdId.ExecuteScalar());
-                    }
 
                     int idDisciplina = Convert.ToInt32(cbDisciplinas.SelectedValue);
 
@@ -155,12 +148,18 @@ namespace WinFormsApp1
 
                     using (FbCommand cmdInsert = new FbCommand(queryInsert, conexao))
                     {
-                        cmdInsert.Parameters.AddWithValue("@id", proximoId);
                         cmdInsert.Parameters.AddWithValue("@nome", txtNovoNome.Text);
                         cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
-                        cmdInsert.Parameters.AddWithValue("@pass", Seguranca.GerarHash(txtNovaSenha.Text));
+                        cmdInsert.Parameters.AddWithValue("@pass", "1234");
                         cmdInsert.Parameters.AddWithValue("@disciplina", idDisciplina);
 
+                        MessageBox.Show(
+                            $"Nome: {txtNovoNome.Text}\n" +
+                            $"Utilizador: {txtNovoUtilizador.Text}\n" +
+                            $"Hash: {Seguranca.GerarHash(txtNovaSenha.Text)}\n" +
+                            $"Tamanho do hash: {Seguranca.GerarHash(txtNovaSenha.Text).Length}\n" +
+                            $"ID Disciplina: {idDisciplina}"
+);
                         cmdInsert.ExecuteNonQuery();
                     }
 
@@ -175,14 +174,13 @@ namespace WinFormsApp1
                 }
                 catch (Exception ex)
                 {
-                    if (ex.Message.Contains("Violates FOREING KEY or UNIQUE KEY"))
-                    {
-                        MessageBox.Show("Este utilizador já existe! Por favor, escolha outro nome de utilizador", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Erro ao registar na base de dados: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show(
+                        $"Mensagem:\n{ex.Message}\n\n" +
+                        $"InnerException:\n{ex.InnerException?.Message}\n\n" +
+                        $"StackTrace:\n{ex.StackTrace}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }

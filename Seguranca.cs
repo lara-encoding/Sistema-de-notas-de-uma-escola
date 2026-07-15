@@ -10,7 +10,7 @@ namespace WinFormsApp1
             using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] bytes = Encoding.UTF8.GetBytes(senha);
-                byte[] result = sha256.ComputeHash(bytes);
+                byte[] hash = sha256.ComputeHash(bytes);
 
                 StringBuilder resultado = new StringBuilder();
 
