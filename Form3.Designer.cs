@@ -158,6 +158,7 @@
             txtNovaSenha.Name = "txtNovaSenha";
             txtNovaSenha.Size = new Size(141, 23);
             txtNovaSenha.TabIndex = 4;
+            txtNovaSenha.TextChanged += txtNovaSenha_TextChanged;
             // 
             // label3
             // 
@@ -208,7 +209,7 @@
             // 
             lnkCriarConta.AutoSize = true;
             lnkCriarConta.LinkColor = Color.White;
-            lnkCriarConta.Location = new Point(83, 327);
+            lnkCriarConta.Location = new Point(309, 413);
             lnkCriarConta.Name = "lnkCriarConta";
             lnkCriarConta.Size = new Size(174, 15);
             lnkCriarConta.TabIndex = 8;
@@ -219,7 +220,6 @@
             // panelRegisto
             // 
             panelRegisto.Controls.Add(lblEstadoSenha);
-            panelRegisto.Controls.Add(lnkCriarConta);
             panelRegisto.Controls.Add(cbDisciplinas);
             panelRegisto.Controls.Add(label6);
             panelRegisto.Controls.Add(label5);
@@ -230,7 +230,7 @@
             panelRegisto.Controls.Add(txtNovoNome);
             panelRegisto.Controls.Add(btnCancelar);
             panelRegisto.Controls.Add(btnConfirmarRegisto);
-            panelRegisto.Location = new Point(226, 45);
+            panelRegisto.Location = new Point(226, 32);
             panelRegisto.Name = "panelRegisto";
             panelRegisto.Size = new Size(332, 360);
             panelRegisto.TabIndex = 7;
@@ -239,12 +239,13 @@
             // lblEstadoSenha
             // 
             lblEstadoSenha.AutoSize = true;
-            lblEstadoSenha.Location = new Point(157, 169);
+            lblEstadoSenha.Location = new Point(54, 170);
             lblEstadoSenha.Name = "lblEstadoSenha";
             lblEstadoSenha.Size = new Size(38, 15);
             lblEstadoSenha.TabIndex = 10;
             lblEstadoSenha.Text = "label7";
             lblEstadoSenha.Visible = false;
+            lblEstadoSenha.Click += lblEstadoSenha_Click;
             // 
             // Form3
             // 
@@ -253,6 +254,7 @@
             BackColor = Color.FromArgb(30, 30, 30);
             ClientSize = new Size(800, 450);
             Controls.Add(panelRegisto);
+            Controls.Add(lnkCriarConta);
             Controls.Add(label1);
             Controls.Add(btnEntrar);
             Controls.Add(chkMostrarSenha);

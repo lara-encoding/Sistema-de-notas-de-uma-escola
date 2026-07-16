@@ -284,5 +284,63 @@ namespace WinFormsApp1
         {
 
         }
+
+        private void AtualizarEstadoSenha()
+        {
+            string senha = txtNovaSenha.Text;
+
+            if (string.IsNullOrEmpty(senha))
+            {
+                lblEstadoSenha.Visible = false;
+                return;
+            }
+
+            lblEstadoSenha.Visible = true;
+
+            bool tem8Caracteres = senha.Length >= 8;
+            bool temMaiuscula = senha.Any(char.IsUpper);
+            bool temMinuscula = senha.Any(char.IsLower);
+            bool temNumero = senha.Any(char.IsDigit);
+            bool temSimbolo = senha.Any(c => !char.IsLetterOrDigit(c));
+
+            List<string> faltam = new List<string>();
+
+            if (!tem8Caracteres)
+                faltam.Add("8 caracteres\n");
+            if (!temMaiuscula)
+                faltam.Add("uma letra maiúscula");
+            if (!temMinuscula)
+                faltam.Add("uma letra minúscula");
+            if (!temNumero)
+                faltam.Add("um número");
+            if (!temSimbolo)
+                faltam.Add("um símbolo");
+
+            if (faltam.Count == 0)
+            {
+                lblEstadoSenha.ForeColor = Color.Green;
+                lblEstadoSenha.Text = "Excelente! Palavra-passe forte e segura.";
+            }
+            else if (faltam.Count <= 2)
+            {
+                lblEstadoSenha.ForeColor = Color.Orange;
+                lblEstadoSenha.Text = "Está quase! Falta apenas: " + string.Join(", ", faltam) + ".";
+            }
+            else
+            {
+                lblEstadoSenha.ForeColor = Color.Red;
+                lblEstadoSenha.Text = "Palavra-passe fraca. Adicione: " + string.Join(",", faltam) + ".";
+            }
+        }
+
+        private void lblEstadoSenha_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNovaSenha_TextChanged(object sender, EventArgs e)
+        {
+            AtualizarEstadoSenha();
+        }
     }
 }
