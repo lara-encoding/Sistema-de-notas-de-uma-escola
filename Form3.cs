@@ -150,7 +150,7 @@ namespace WinFormsApp1
                     {
                         cmdInsert.Parameters.AddWithValue("@nome", txtNovoNome.Text);
                         cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
-                        cmdInsert.Parameters.AddWithValue("@pass", "1234");
+                        cmdInsert.Parameters.AddWithValue("@pass", Seguranca.GerarHash(txtNovaSenha.Text));
                         cmdInsert.Parameters.AddWithValue("@disciplina", idDisciplina);
 
                         MessageBox.Show(
