@@ -189,12 +189,12 @@ namespace WinFormsApp1
         {
             string novaDisciplina = Microsoft.VisualBasic.Interaction.InputBox("Digite o nome da nova disciplina", "Nova Disciplina", "");
 
-            if(string.IsNullOrWhiteSpace(novaDisciplina))
+            if (string.IsNullOrWhiteSpace(novaDisciplina))
             {
                 MessageBox.Show("É necessário informar uma disciplina.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return -1;
             }
-            
+
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
                 conexao.Open();
@@ -212,7 +212,7 @@ namespace WinFormsApp1
                 }
 
                 string queryInserir = "INSERT INTO DISCIPLINAS (NOME) VALUES (@nome)";
-                
+
                 using (FbCommand cmdInserir = new FbCommand(queryInserir, conexao))
                 {
                     cmdInserir.Parameters.AddWithValue("@nome", novaDisciplina.Trim());

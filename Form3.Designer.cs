@@ -39,13 +39,14 @@
             txtNovoNome = new TextBox();
             txtNovoUtilizador = new TextBox();
             txtNovaSenha = new TextBox();
-            panelRegisto = new Panel();
-            cbDisciplinas = new ComboBox();
-            label6 = new Label();
-            label5 = new Label();
-            label4 = new Label();
             label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            cbDisciplinas = new ComboBox();
             lnkCriarConta = new LinkLabel();
+            panelRegisto = new Panel();
+            lblEstadoSenha = new Label();
             panelRegisto.SuspendLayout();
             SuspendLayout();
             // 
@@ -115,7 +116,7 @@
             // 
             btnConfirmarRegisto.BackColor = Color.DodgerBlue;
             btnConfirmarRegisto.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConfirmarRegisto.Location = new Point(37, 226);
+            btnConfirmarRegisto.Location = new Point(37, 264);
             btnConfirmarRegisto.Name = "btnConfirmarRegisto";
             btnConfirmarRegisto.Size = new Size(107, 48);
             btnConfirmarRegisto.TabIndex = 0;
@@ -127,7 +128,7 @@
             // 
             btnCancelar.BackColor = Color.DodgerBlue;
             btnCancelar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCancelar.Location = new Point(176, 226);
+            btnCancelar.Location = new Point(176, 264);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(107, 48);
             btnCancelar.TabIndex = 1;
@@ -158,8 +159,67 @@
             txtNovaSenha.Size = new Size(141, 23);
             txtNovaSenha.TabIndex = 4;
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(37, 57);
+            label3.Name = "label3";
+            label3.Size = new Size(99, 15);
+            label3.TabIndex = 5;
+            label3.Text = "Nome Completo:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(76, 97);
+            label4.Name = "label4";
+            label4.Size = new Size(60, 15);
+            label4.TabIndex = 6;
+            label4.Text = "Utilizador:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(54, 137);
+            label5.Name = "label5";
+            label5.Size = new Size(82, 15);
+            label5.TabIndex = 7;
+            label5.Text = "Palavra-passe:";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(76, 215);
+            label6.Name = "label6";
+            label6.Size = new Size(61, 15);
+            label6.TabIndex = 8;
+            label6.Text = "Disciplina:";
+            // 
+            // cbDisciplinas
+            // 
+            cbDisciplinas.FormattingEnabled = true;
+            cbDisciplinas.Location = new Point(143, 215);
+            cbDisciplinas.Name = "cbDisciplinas";
+            cbDisciplinas.Size = new Size(141, 23);
+            cbDisciplinas.TabIndex = 9;
+            cbDisciplinas.SelectedIndexChanged += cbDisciplinas_SelectedIndexChanged;
+            // 
+            // lnkCriarConta
+            // 
+            lnkCriarConta.AutoSize = true;
+            lnkCriarConta.LinkColor = Color.White;
+            lnkCriarConta.Location = new Point(83, 327);
+            lnkCriarConta.Name = "lnkCriarConta";
+            lnkCriarConta.Size = new Size(174, 15);
+            lnkCriarConta.TabIndex = 8;
+            lnkCriarConta.TabStop = true;
+            lnkCriarConta.Text = "Não tem conta? Registe-se aqui";
+            lnkCriarConta.LinkClicked += lnkCriarConta_LinkClicked;
+            // 
             // panelRegisto
             // 
+            panelRegisto.Controls.Add(lblEstadoSenha);
+            panelRegisto.Controls.Add(lnkCriarConta);
             panelRegisto.Controls.Add(cbDisciplinas);
             panelRegisto.Controls.Add(label6);
             panelRegisto.Controls.Add(label5);
@@ -176,62 +236,15 @@
             panelRegisto.TabIndex = 7;
             panelRegisto.Visible = false;
             // 
-            // cbDisciplinas
+            // lblEstadoSenha
             // 
-            cbDisciplinas.FormattingEnabled = true;
-            cbDisciplinas.Location = new Point(142, 174);
-            cbDisciplinas.Name = "cbDisciplinas";
-            cbDisciplinas.Size = new Size(141, 23);
-            cbDisciplinas.TabIndex = 9;
-            cbDisciplinas.SelectedIndexChanged += cbDisciplinas_SelectedIndexChanged;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(76, 177);
-            label6.Name = "label6";
-            label6.Size = new Size(61, 15);
-            label6.TabIndex = 8;
-            label6.Text = "Disciplina:";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(54, 137);
-            label5.Name = "label5";
-            label5.Size = new Size(82, 15);
-            label5.TabIndex = 7;
-            label5.Text = "Palavra-passe:";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(76, 97);
-            label4.Name = "label4";
-            label4.Size = new Size(60, 15);
-            label4.TabIndex = 6;
-            label4.Text = "Utilizador:";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(37, 57);
-            label3.Name = "label3";
-            label3.Size = new Size(99, 15);
-            label3.TabIndex = 5;
-            label3.Text = "Nome Completo:";
-            // 
-            // lnkCriarConta
-            // 
-            lnkCriarConta.AutoSize = true;
-            lnkCriarConta.LinkColor = Color.White;
-            lnkCriarConta.Location = new Point(309, 342);
-            lnkCriarConta.Name = "lnkCriarConta";
-            lnkCriarConta.Size = new Size(174, 15);
-            lnkCriarConta.TabIndex = 8;
-            lnkCriarConta.TabStop = true;
-            lnkCriarConta.Text = "Não tem conta? Registe-se aqui";
-            lnkCriarConta.LinkClicked += lnkCriarConta_LinkClicked;
+            lblEstadoSenha.AutoSize = true;
+            lblEstadoSenha.Location = new Point(157, 169);
+            lblEstadoSenha.Name = "lblEstadoSenha";
+            lblEstadoSenha.Size = new Size(38, 15);
+            lblEstadoSenha.TabIndex = 10;
+            lblEstadoSenha.Text = "label7";
+            lblEstadoSenha.Visible = false;
             // 
             // Form3
             // 
@@ -239,7 +252,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(30, 30, 30);
             ClientSize = new Size(800, 450);
-            Controls.Add(lnkCriarConta);
             Controls.Add(panelRegisto);
             Controls.Add(label1);
             Controls.Add(btnEntrar);
@@ -272,12 +284,13 @@
         private TextBox txtNovoNome;
         private TextBox txtNovoUtilizador;
         private TextBox txtNovaSenha;
-        private Panel panelRegisto;
-        private Label label5;
-        private Label label4;
         private Label label3;
-        private LinkLabel lnkCriarConta;
-        private ComboBox cbDisciplinas;
+        private Label label4;
+        private Label label5;
         private Label label6;
+        private ComboBox cbDisciplinas;
+        private LinkLabel lnkCriarConta;
+        private Panel panelRegisto;
+        private Label lblEstadoSenha;
     }
 }
