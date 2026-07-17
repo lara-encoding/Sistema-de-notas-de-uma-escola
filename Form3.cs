@@ -152,14 +152,6 @@ namespace WinFormsApp1
                         cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
                         cmdInsert.Parameters.AddWithValue("@pass", Seguranca.GerarHash(txtNovaSenha.Text));
                         cmdInsert.Parameters.AddWithValue("@disciplina", idDisciplina);
-
-                        MessageBox.Show(
-                            $"Nome: {txtNovoNome.Text}\n" +
-                            $"Utilizador: {txtNovoUtilizador.Text}\n" +
-                            $"Hash: {Seguranca.GerarHash(txtNovaSenha.Text)}\n" +
-                            $"Tamanho do hash: {Seguranca.GerarHash(txtNovaSenha.Text).Length}\n" +
-                            $"ID Disciplina: {idDisciplina}"
-);
                         cmdInsert.ExecuteNonQuery();
                     }
 
