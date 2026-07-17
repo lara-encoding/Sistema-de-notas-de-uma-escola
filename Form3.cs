@@ -125,6 +125,13 @@ namespace WinFormsApp1
                 return;
             }
 
+            if (txtNovaSenha.Text != txtConfirmarSenha.Text)
+            {
+                MessageBox.Show("As palavras.passe não coincidem.\n\nPor favor, confirme novamente a palavra-passe.", "Palavras-passe diferentes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtConfirmarSenha.Focus();
+            }
+
             string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
             string queryInsert = @"INSERT INTO PROFESSORES (NOME, UTILIZADOR, SENHA, ID_DISCIPLINA) VALUES (@nome, @user, @pass, @disciplina)";
 
@@ -142,6 +149,20 @@ namespace WinFormsApp1
 
                         if (idDisciplina == -1)
                         {
+                            return;
+                        }
+                    }
+
+                    string queryVerificarUtilizador = @"SELECT COUNT(*) FROM PROFESSORES WHERE LOWER(UTILIZADOR) = LOWER(@utilizador)";
+
+                    using (FbCommand cmdVerificar = new FbCommand(queryVerificarUtilizador, conexao))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@utilizador", txtNovoUtilizador.Text.Trim());
+                        int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("Este nome de utilizador já está a ser utilizado.\n\nPor favor, escolha outro.", "Utilizador existente", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
                     }
@@ -333,6 +354,44 @@ namespace WinFormsApp1
         private void txtNovaSenha_TextChanged(object sender, EventArgs e)
         {
             AtualizarEstadoSenha();
+            VerificarSenhas();
         }
+
+        private void panelRegisto_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void VerificarSenhas()
+        {
+            if (string.IsNullOrWhiteSpace(txtNovaSenha.Text) && string.IsNullOrWhiteSpace(txtConfirmarSenha.Text))
+            {
+                lblConfirmarSenha.Visible = false;
+                return;
+            }
+
+            lblConfirmarSenha.Visible = true;
+
+            if (txtNovaSenha.Text == txtConfirmarSenha.Text)
+            {
+                lblConfirmarSenha.ForeColor = Color.Green;
+                lblConfirmarSenha.Text = "As palavras-passe coincidem.";
+            }
+            else
+            {
+                lblConfirmarSenha.ForeColor = Color.Red;
+                lblConfirmarSenha.Text = "As palavras-passe não coincidem.";
+            }
+        }
+
+        private void txtConfirmarSenha_TextChanged(object sender, EventArgs e)
+        {
+            VerificarSenhas();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            txtNovaSenha.UseSystemPasswordChar = !checkBox1.Checked;
+            txtConfirmarSenha.UseSystemPasswordChar = !checkBox1.Checked;
     }
 }

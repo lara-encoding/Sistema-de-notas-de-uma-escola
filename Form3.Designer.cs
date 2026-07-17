@@ -46,7 +46,11 @@
             cbDisciplinas = new ComboBox();
             lnkCriarConta = new LinkLabel();
             panelRegisto = new Panel();
+            lblConfirmarSenha = new Label();
+            label7 = new Label();
+            txtConfirmarSenha = new TextBox();
             lblEstadoSenha = new Label();
+            checkBox1 = new CheckBox();
             panelRegisto.SuspendLayout();
             SuspendLayout();
             // 
@@ -116,7 +120,7 @@
             // 
             btnConfirmarRegisto.BackColor = Color.DodgerBlue;
             btnConfirmarRegisto.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            btnConfirmarRegisto.Location = new Point(37, 264);
+            btnConfirmarRegisto.Location = new Point(41, 293);
             btnConfirmarRegisto.Name = "btnConfirmarRegisto";
             btnConfirmarRegisto.Size = new Size(107, 48);
             btnConfirmarRegisto.TabIndex = 0;
@@ -128,7 +132,7 @@
             // 
             btnCancelar.BackColor = Color.DodgerBlue;
             btnCancelar.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            btnCancelar.Location = new Point(176, 264);
+            btnCancelar.Location = new Point(180, 293);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.Size = new Size(107, 48);
             btnCancelar.TabIndex = 1;
@@ -138,7 +142,7 @@
             // 
             // txtNovoNome
             // 
-            txtNovoNome.Location = new Point(142, 54);
+            txtNovoNome.Location = new Point(157, 20);
             txtNovoNome.Name = "txtNovoNome";
             txtNovoNome.Size = new Size(141, 23);
             txtNovoNome.TabIndex = 2;
@@ -146,7 +150,7 @@
             // 
             // txtNovoUtilizador
             // 
-            txtNovoUtilizador.Location = new Point(142, 94);
+            txtNovoUtilizador.Location = new Point(157, 60);
             txtNovoUtilizador.Name = "txtNovoUtilizador";
             txtNovoUtilizador.Size = new Size(141, 23);
             txtNovoUtilizador.TabIndex = 3;
@@ -154,7 +158,7 @@
             // 
             // txtNovaSenha
             // 
-            txtNovaSenha.Location = new Point(142, 134);
+            txtNovaSenha.Location = new Point(157, 100);
             txtNovaSenha.Name = "txtNovaSenha";
             txtNovaSenha.Size = new Size(141, 23);
             txtNovaSenha.TabIndex = 4;
@@ -163,7 +167,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(37, 57);
+            label3.Location = new Point(52, 23);
             label3.Name = "label3";
             label3.Size = new Size(99, 15);
             label3.TabIndex = 5;
@@ -172,7 +176,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(76, 97);
+            label4.Location = new Point(91, 63);
             label4.Name = "label4";
             label4.Size = new Size(60, 15);
             label4.TabIndex = 6;
@@ -181,7 +185,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(54, 137);
+            label5.Location = new Point(69, 103);
             label5.Name = "label5";
             label5.Size = new Size(82, 15);
             label5.TabIndex = 7;
@@ -190,7 +194,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(76, 215);
+            label6.Location = new Point(74, 242);
             label6.Name = "label6";
             label6.Size = new Size(61, 15);
             label6.TabIndex = 8;
@@ -199,7 +203,7 @@
             // cbDisciplinas
             // 
             cbDisciplinas.FormattingEnabled = true;
-            cbDisciplinas.Location = new Point(143, 215);
+            cbDisciplinas.Location = new Point(155, 245);
             cbDisciplinas.Name = "cbDisciplinas";
             cbDisciplinas.Size = new Size(141, 23);
             cbDisciplinas.TabIndex = 9;
@@ -219,6 +223,10 @@
             // 
             // panelRegisto
             // 
+            panelRegisto.Controls.Add(checkBox1);
+            panelRegisto.Controls.Add(lblConfirmarSenha);
+            panelRegisto.Controls.Add(label7);
+            panelRegisto.Controls.Add(txtConfirmarSenha);
             panelRegisto.Controls.Add(lblEstadoSenha);
             panelRegisto.Controls.Add(cbDisciplinas);
             panelRegisto.Controls.Add(label6);
@@ -236,16 +244,54 @@
             panelRegisto.TabIndex = 7;
             panelRegisto.Visible = false;
             // 
+            // lblConfirmarSenha
+            // 
+            lblConfirmarSenha.AutoSize = true;
+            lblConfirmarSenha.Location = new Point(75, 178);
+            lblConfirmarSenha.Name = "lblConfirmarSenha";
+            lblConfirmarSenha.Size = new Size(38, 15);
+            lblConfirmarSenha.TabIndex = 13;
+            lblConfirmarSenha.Text = "label8";
+            lblConfirmarSenha.Visible = false;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(11, 151);
+            label7.Name = "label7";
+            label7.Size = new Size(139, 15);
+            label7.TabIndex = 12;
+            label7.Text = "Confirmar palavra-passe:";
+            // 
+            // txtConfirmarSenha
+            // 
+            txtConfirmarSenha.Location = new Point(156, 151);
+            txtConfirmarSenha.Name = "txtConfirmarSenha";
+            txtConfirmarSenha.Size = new Size(141, 23);
+            txtConfirmarSenha.TabIndex = 11;
+            txtConfirmarSenha.TextChanged += txtConfirmarSenha_TextChanged;
+            // 
             // lblEstadoSenha
             // 
             lblEstadoSenha.AutoSize = true;
-            lblEstadoSenha.Location = new Point(54, 170);
+            lblEstadoSenha.Location = new Point(75, 131);
             lblEstadoSenha.Name = "lblEstadoSenha";
             lblEstadoSenha.Size = new Size(38, 15);
             lblEstadoSenha.TabIndex = 10;
             lblEstadoSenha.Text = "label7";
             lblEstadoSenha.Visible = false;
             lblEstadoSenha.Click += lblEstadoSenha_Click;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(150, 202);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(147, 19);
+            checkBox1.TabIndex = 14;
+            checkBox1.Text = "Mostrar palavras-passe";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // Form3
             // 
@@ -294,5 +340,9 @@
         private LinkLabel lnkCriarConta;
         private Panel panelRegisto;
         private Label lblEstadoSenha;
+        private Label label7;
+        private TextBox txtConfirmarSenha;
+        private Label lblConfirmarSenha;
+        private CheckBox checkBox1;
     }
 }
