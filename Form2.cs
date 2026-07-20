@@ -55,11 +55,30 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
+                    string novoNome = txtNomeTurma.Text.Trim();
+
+                    string queryVerificar = @"SELECT COUNT(*) FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome) AND ID_PROFESSOR = @idProfessor AND ID_TURMA <> @idTurma";
+
+                    using (FbCommand cmdVerificar = new FbCommand(stringConexao))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@nome", novoNome);
+                        cmdVerificar.Parameters.AddWithValue("idProfessorLogado", idProfessorLogado);
+                        cmdVerificar.Parameters.AddWithValue("@idTurma", turma.Id);
+
+                        int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+                        
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("Essa turma já existe!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
                     string query = @"UPDATE TURMAS SET NOME = @novoNome WHERE ID_TURMA = @idTurma";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
-                        comando.Parameters.AddWithValue("@novoNome", txtNomeTurma.Text);
+                        comando.Parameters.AddWithValue("@novoNome", novoNome);
                         comando.Parameters.AddWithValue("@idTurma", turma.Id);
 
                         comando.ExecuteNonQuery();
