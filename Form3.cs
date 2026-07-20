@@ -23,6 +23,9 @@ namespace WinFormsApp1
         private void Form3_Load(object sender, EventArgs e)
         {
             CarregarDisciplinas();
+
+            txtNovaSenha.UseSystemPasswordChar = true;
+            txtConfirmarSenha.UseSystemPasswordChar = true;
         }
 
         private void btnEntrar_Click(object sender, EventArgs e)
@@ -393,5 +396,6 @@ namespace WinFormsApp1
         {
             txtNovaSenha.UseSystemPasswordChar = !checkBox1.Checked;
             txtConfirmarSenha.UseSystemPasswordChar = !checkBox1.Checked;
+        }
     }
 }
