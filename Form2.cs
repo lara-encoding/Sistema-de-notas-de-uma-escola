@@ -154,12 +154,11 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string queryVerificar = "SELECT COUNT(*) FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome) AND ID_PROFESSOR = @idProfessor";
+                    string queryVerificar = "SELECT COUNT(*) FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome)";
 
                     using (FbCommand cmdVerificar = new FbCommand(queryVerificar, conexao))
                     {
                         cmdVerificar.Parameters.AddWithValue("@nome", nomeTurma);
-                        cmdVerificar.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
 
                         int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
 
