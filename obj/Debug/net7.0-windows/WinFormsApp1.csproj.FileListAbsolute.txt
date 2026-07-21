@@ -30,3 +30,5 @@ C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataRea
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\bin\Debug\net7.0-windows\ExcelDataReader.DataSet.dll
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.Form3.resources
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.EscolhaTurma.resources
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.FormAluno.resources
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.FormRegisto.resources

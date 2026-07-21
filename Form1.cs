@@ -441,7 +441,12 @@ namespace WinFormsApp1
 
             comboBox1_SelectedIndexChanged(cb1, EventArgs.Empty);
 
-            MessageBox.Show("Aluno adicionado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Aluno adicionado com sucesso!\n\n" +
+                "Utilizador: {utilizador}\n" + 
+                $"Palavra-passe inicial: Aluno123@",
+                "Conta criada",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
 
             txtNome.Focus();
         }
@@ -533,12 +538,20 @@ namespace WinFormsApp1
 
                     if (linhasAfetadas == 0)
                     {
-                        string queryInsert = "INSERT INTO ALUNOS (NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS, MEDIA_FINAL, SITUACAO, ID_TURMA) " +
-                                             "VALUES (@nome, @teste, @trabalho, @participacao, @injustificadas, @justificadas, @recuperadas, @media, @situacao, @idTurma)";
+                        string utilizador = nomeLimpo
+                            .ToLower()
+                            .Replace(" ", ".");
+
+                        string senhaHash = Seguranca.GerarHash("Aluno123@");
+
+                        string queryInsert = "INSERT INTO ALUNOS (NOME, UTILIZADOR, SENHA, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS, MEDIA_FINAL, SITUACAO, ID_TURMA) " +
+                                             "VALUES (@nome, @utilizador, @senha, @teste, @trabalho, @participacao, @injustificadas, @justificadas, @recuperadas, @media, @situacao, @idTurma)";
 
                         using (FbCommand comandoInsert = new FbCommand(queryInsert, conexao))
                         {
                             comandoInsert.Parameters.AddWithValue("@nome", nomeLimpo);
+                            comandoInsert.Parameters.AddWithValue("@utilizador", utilizador);
+                            comandoInsert.Parameters.AddWithValue("@senha", senhaHash);
                             comandoInsert.Parameters.AddWithValue("@teste", teste);
                             comandoInsert.Parameters.AddWithValue("@trabalho", trabalho);
                             comandoInsert.Parameters.AddWithValue("@participacao", participacao);
