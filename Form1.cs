@@ -38,6 +38,7 @@ namespace WinFormsApp1
         private string nomeTurmaAtual;
         private string turmaAtual = "1ºA";
         private string disciplinaProfessor;
+        private object utilizador;
 
         public Form1(int idProfessorLogado, string professorLogado, string disciplinaProfessor, int idTurmaAtual, string nomeTurmaAtual)
         {
@@ -442,7 +443,7 @@ namespace WinFormsApp1
             comboBox1_SelectedIndexChanged(cb1, EventArgs.Empty);
 
             MessageBox.Show($"Aluno adicionado com sucesso!\n\n" +
-                "Utilizador: {utilizador}\n" + 
+                $"Utilizador: Aluno\n" + 
                 $"Palavra-passe inicial: Aluno123@",
                 "Conta criada",
                 MessageBoxButtons.OK,

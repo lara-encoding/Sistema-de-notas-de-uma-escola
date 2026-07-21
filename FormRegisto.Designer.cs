@@ -258,7 +258,7 @@
             Controls.Add(rbProfessor);
             Controls.Add(panelRegisto);
             Name = "FormRegisto";
-            Text = "FormRegisto";
+            Text = "Criar Conta";
             Load += FormRegisto_Load;
             panelRegisto.ResumeLayout(false);
             panelRegisto.PerformLayout();
