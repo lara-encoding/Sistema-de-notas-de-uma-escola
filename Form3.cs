@@ -14,6 +14,7 @@ namespace WinFormsApp1
     public partial class Form3 : Form
     {
         private object nomeAluno;
+        private string conexaoString;
 
         public Form3()
         {
@@ -79,7 +80,57 @@ namespace WinFormsApp1
 
         private void VerificarLoginAluno()
         {
-            MessageBox.Show("Login de aluno ainda não implementado.");
+            string query = @"SELECT ID, NOME, ID_TURMA
+                            FROM ALUNOS
+                            WHERE UTILIZADOR = @user
+                            AND SENHA = @pass";
+
+            string senhaHash = Seguranca.GerarHash(txtSenha.Text);
+
+            using (FbConnection conexao = new FbConnection(conexaoString))
+            {
+                try
+                {
+                    conexao.Open();
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@user", txtUtilizador.Text.Trim());
+                        comando.Parameters.AddWithValue("@pass", senhaHash);
+
+                        using (FbDataReader leitor = comando.ExecuteReader())
+                        {
+                            if (leitor.Read())
+                            {
+                                int idAluno = Convert.ToInt32(leitor["ID"]);
+                                string nomeAluno = leitor["NOME"].ToString();
+                                int idTurma = Convert.ToInt32(leitor["ID_TURMA"]);
+
+                                MessageBox.Show($"Bem vindo(a), {nomeAluno}!",
+                                    "Login efetuado",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
+                                this.Hide();
+
+                                FormAluno aluno = new FormAluno(idAluno, nomeAluno, idTurma);
+                                aluno.ShowDialog();
+
+                                this.Close();
+                            } else
+                            {
+                                MessageBox.Show("Utilizador ou palavra-passe incorretos.",
+                                    "Erro!",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                } catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
         private void chkMostrarSenha_CheckedChanged(object sender, EventArgs e)

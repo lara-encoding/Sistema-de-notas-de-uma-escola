@@ -346,7 +346,6 @@ namespace WinFormsApp1
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             string nomeOriginal = txtNome.Text;
             TextInfo textInfo = new CultureInfo("pt-PT").TextInfo;
             string nomeFormatado = textInfo.ToTitleCase(nomeOriginal.ToLower());

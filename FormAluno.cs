@@ -15,6 +15,7 @@ namespace WinFormsApp1
         private int idAluno;
         private string nomeAluno;
         private int idTurma;
+
         public FormAluno(int idAluno, string nomeAluno, int idTurma)
         {
             InitializeComponent();
