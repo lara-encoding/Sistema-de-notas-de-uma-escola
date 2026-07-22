@@ -296,5 +296,43 @@ namespace WinFormsApp1
                 txtNovaSenha.Focus();
             }
         }
+
+        private void MostrarCamposProfessor()
+        {
+            lblDisciplina.Visible = true;
+            cbDisciplinas.Visible = true;
+
+            lblUtilizador.Visible = true;
+            txtNovoUtilizador.Visible = true;
+
+            lblNovaSenha.Visible = true;
+            txtNovaSenha.Visible = true;
+
+            lblConfirmarSenhaTexto.Visible = true;
+            txtConfirmarSenha.Visible = true;
+
+            checkBox1.Visible = true;
+            lblEstadoSenha.Visible = true;
+            lblConfirmarSenha.Visible = true;
+        }
+
+        private void MostrarCamposAluno()
+        {
+            lblDisciplina.Visible = false;
+            cbDisciplinas.Visible = false;
+
+            lblUtilizador.Visible = false;
+            txtNovoUtilizador.Visible = false;
+
+            lblNovaSenha.Visible = false;
+            txtNovaSenha.Visible = false;
+
+            lblConfirmarSenhaTexto.Visible = false;
+            txtConfirmarSenha.Visible = false;
+
+            checkBox1.Visible = false;
+            lblEstadoSenha.Visible = false;
+            lblConfirmarSenha.Visible = false;
+        }
     }
 }

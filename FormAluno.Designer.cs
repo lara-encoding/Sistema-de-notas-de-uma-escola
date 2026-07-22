@@ -29,22 +29,34 @@
         private void InitializeComponent()
         {
             lblBemVindo = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // lblBemVindo
             // 
             lblBemVindo.AutoSize = true;
-            lblBemVindo.Location = new Point(337, 60);
+            lblBemVindo.Location = new Point(359, 9);
             lblBemVindo.Name = "lblBemVindo";
             lblBemVindo.Size = new Size(38, 15);
             lblBemVindo.TabIndex = 0;
             lblBemVindo.Text = "label1";
+            // 
+            // button1
+            // 
+            button1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            button1.Location = new Point(685, 12);
+            button1.Name = "button1";
+            button1.Size = new Size(103, 65);
+            button1.TabIndex = 1;
+            button1.Text = "Justificar Falta(s)";
+            button1.UseVisualStyleBackColor = true;
             // 
             // FormAluno
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(lblBemVindo);
             Name = "FormAluno";
             Text = "FormAluno";
@@ -56,5 +68,6 @@
         #endregion
 
         private Label lblBemVindo;
+        private Button button1;
     }
 }

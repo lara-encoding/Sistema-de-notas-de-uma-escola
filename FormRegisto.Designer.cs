@@ -68,7 +68,7 @@
             panelRegisto.Controls.Add(txtNovoNome);
             panelRegisto.Controls.Add(btnCancelar);
             panelRegisto.Controls.Add(btnConfirmarRegisto);
-            panelRegisto.Location = new Point(252, 78);
+            panelRegisto.Location = new Point(229, 78);
             panelRegisto.Name = "panelRegisto";
             panelRegisto.Size = new Size(332, 360);
             panelRegisto.TabIndex = 8;
@@ -209,7 +209,7 @@
             // rbProfessor
             // 
             rbProfessor.AutoSize = true;
-            rbProfessor.Location = new Point(393, 53);
+            rbProfessor.Location = new Point(370, 53);
             rbProfessor.Name = "rbProfessor";
             rbProfessor.Size = new Size(74, 19);
             rbProfessor.TabIndex = 9;
@@ -220,7 +220,7 @@
             // rbAluno
             // 
             rbAluno.AutoSize = true;
-            rbAluno.Location = new Point(484, 53);
+            rbAluno.Location = new Point(461, 53);
             rbAluno.Name = "rbAluno";
             rbAluno.Size = new Size(57, 19);
             rbAluno.TabIndex = 10;
@@ -231,7 +231,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(292, 55);
+            label1.Location = new Point(269, 55);
             label1.Name = "label1";
             label1.Size = new Size(86, 15);
             label1.TabIndex = 11;
@@ -241,11 +241,11 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(355, 9);
+            label2.Location = new Point(316, 9);
             label2.Name = "label2";
-            label2.Size = new Size(128, 25);
+            label2.Size = new Size(171, 25);
             label2.TabIndex = 12;
-            label2.Text = "CRIAR CONTA";
+            label2.Text = "CRIAR UTILIZADOR";
             // 
             // FormRegisto
             // 
