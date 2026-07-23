@@ -346,7 +346,17 @@ namespace WinFormsApp1
                     txtNovoNome.Clear();
                     txtNovoUtilizador.Clear();
                     txtNovaSenha.Clear();
+                    txtConfirmarSenha.Clear();
+
                     cbDisciplinas.SelectedIndex = -1;
+
+                    lblEstadoSenha.Visible = false;
+                    lblConfirmarSenha.Visible = false;
+
+                    checkBox1.Checked = false;
+
+                    rbProfessor.Checked = true;
+                    txtNovoNome.Focus();
 
                 }
                 catch (Exception ex)
