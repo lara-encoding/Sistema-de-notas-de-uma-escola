@@ -76,7 +76,7 @@
             // checkBox1
             // 
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(150, 202);
+            checkBox1.Location = new Point(152, 210);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(147, 19);
             checkBox1.TabIndex = 14;
@@ -87,7 +87,7 @@
             // lblConfirmarSenha
             // 
             lblConfirmarSenha.AutoSize = true;
-            lblConfirmarSenha.Location = new Point(75, 178);
+            lblConfirmarSenha.Location = new Point(76, 190);
             lblConfirmarSenha.Name = "lblConfirmarSenha";
             lblConfirmarSenha.Size = new Size(38, 15);
             lblConfirmarSenha.TabIndex = 13;
@@ -98,7 +98,7 @@
             // lblConfirmarSenhaTexto
             // 
             lblConfirmarSenhaTexto.AutoSize = true;
-            lblConfirmarSenhaTexto.Location = new Point(11, 154);
+            lblConfirmarSenhaTexto.Location = new Point(12, 166);
             lblConfirmarSenhaTexto.Name = "lblConfirmarSenhaTexto";
             lblConfirmarSenhaTexto.Size = new Size(139, 15);
             lblConfirmarSenhaTexto.TabIndex = 12;
@@ -106,7 +106,7 @@
             // 
             // txtConfirmarSenha
             // 
-            txtConfirmarSenha.Location = new Point(156, 151);
+            txtConfirmarSenha.Location = new Point(157, 163);
             txtConfirmarSenha.Name = "txtConfirmarSenha";
             txtConfirmarSenha.Size = new Size(141, 23);
             txtConfirmarSenha.TabIndex = 11;
