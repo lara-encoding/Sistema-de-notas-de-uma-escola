@@ -31,13 +31,13 @@
             panelRegisto = new Panel();
             checkBox1 = new CheckBox();
             lblConfirmarSenha = new Label();
-            label7 = new Label();
+            lblConfirmarSenhaTexto = new Label();
             txtConfirmarSenha = new TextBox();
             lblEstadoSenha = new Label();
             cbDisciplinas = new ComboBox();
-            label6 = new Label();
-            label5 = new Label();
-            label4 = new Label();
+            lblDisciplina = new Label();
+            lblNovaSenha = new Label();
+            lblUtilizador = new Label();
             label3 = new Label();
             txtNovaSenha = new TextBox();
             txtNovoUtilizador = new TextBox();
@@ -55,13 +55,13 @@
             // 
             panelRegisto.Controls.Add(checkBox1);
             panelRegisto.Controls.Add(lblConfirmarSenha);
-            panelRegisto.Controls.Add(label7);
+            panelRegisto.Controls.Add(lblConfirmarSenhaTexto);
             panelRegisto.Controls.Add(txtConfirmarSenha);
             panelRegisto.Controls.Add(lblEstadoSenha);
             panelRegisto.Controls.Add(cbDisciplinas);
-            panelRegisto.Controls.Add(label6);
-            panelRegisto.Controls.Add(label5);
-            panelRegisto.Controls.Add(label4);
+            panelRegisto.Controls.Add(lblDisciplina);
+            panelRegisto.Controls.Add(lblNovaSenha);
+            panelRegisto.Controls.Add(lblUtilizador);
             panelRegisto.Controls.Add(label3);
             panelRegisto.Controls.Add(txtNovaSenha);
             panelRegisto.Controls.Add(txtNovoUtilizador);
@@ -93,14 +93,14 @@
             lblConfirmarSenha.Text = "label8";
             lblConfirmarSenha.Visible = false;
             // 
-            // label7
+            // lblConfirmarSenhaTexto
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(11, 154);
-            label7.Name = "label7";
-            label7.Size = new Size(139, 15);
-            label7.TabIndex = 12;
-            label7.Text = "Confirmar palavra-passe:";
+            lblConfirmarSenhaTexto.AutoSize = true;
+            lblConfirmarSenhaTexto.Location = new Point(11, 154);
+            lblConfirmarSenhaTexto.Name = "lblConfirmarSenhaTexto";
+            lblConfirmarSenhaTexto.Size = new Size(139, 15);
+            lblConfirmarSenhaTexto.TabIndex = 12;
+            lblConfirmarSenhaTexto.Text = "Confirmar palavra-passe:";
             // 
             // txtConfirmarSenha
             // 
@@ -127,32 +127,32 @@
             cbDisciplinas.Size = new Size(141, 23);
             cbDisciplinas.TabIndex = 9;
             // 
-            // label6
+            // lblDisciplina
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(87, 248);
-            label6.Name = "label6";
-            label6.Size = new Size(61, 15);
-            label6.TabIndex = 8;
-            label6.Text = "Disciplina:";
+            lblDisciplina.AutoSize = true;
+            lblDisciplina.Location = new Point(87, 248);
+            lblDisciplina.Name = "lblDisciplina";
+            lblDisciplina.Size = new Size(61, 15);
+            lblDisciplina.TabIndex = 8;
+            lblDisciplina.Text = "Disciplina:";
             // 
-            // label5
+            // lblNovaSenha
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(69, 103);
-            label5.Name = "label5";
-            label5.Size = new Size(82, 15);
-            label5.TabIndex = 7;
-            label5.Text = "Palavra-passe:";
+            lblNovaSenha.AutoSize = true;
+            lblNovaSenha.Location = new Point(69, 103);
+            lblNovaSenha.Name = "lblNovaSenha";
+            lblNovaSenha.Size = new Size(82, 15);
+            lblNovaSenha.TabIndex = 7;
+            lblNovaSenha.Text = "Palavra-passe:";
             // 
-            // label4
+            // lblUtilizador
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(91, 63);
-            label4.Name = "label4";
-            label4.Size = new Size(60, 15);
-            label4.TabIndex = 6;
-            label4.Text = "Utilizador:";
+            lblUtilizador.AutoSize = true;
+            lblUtilizador.Location = new Point(91, 63);
+            lblUtilizador.Name = "lblUtilizador";
+            lblUtilizador.Size = new Size(60, 15);
+            lblUtilizador.TabIndex = 6;
+            lblUtilizador.Text = "Utilizador:";
             // 
             // label3
             // 
@@ -216,6 +216,7 @@
             rbProfessor.TabStop = true;
             rbProfessor.Text = "Professor";
             rbProfessor.UseVisualStyleBackColor = true;
+            rbProfessor.CheckedChanged += rbProfessor_CheckedChanged;
             // 
             // rbAluno
             // 
@@ -227,6 +228,7 @@
             rbAluno.TabStop = true;
             rbAluno.Text = "Aluno";
             rbAluno.UseVisualStyleBackColor = true;
+            rbAluno.CheckedChanged += rbAluno_CheckedChanged;
             // 
             // label1
             // 
@@ -270,13 +272,13 @@
 
         private Panel panelRegisto;
         private Label lblConfirmarSenha;
-        private Label label7;
+        private Label lblConfirmarSenhaTexto;
         private TextBox txtConfirmarSenha;
         private Label lblEstadoSenha;
         private ComboBox cbDisciplinas;
-        private Label label6;
-        private Label label5;
-        private Label label4;
+        private Label lblDisciplina;
+        private Label lblNovaSenha;
+        private Label lblUtilizador;
         private Label label3;
         private TextBox txtNovoNome;
         private Button btnCancelar;

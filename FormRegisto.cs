@@ -26,6 +26,8 @@ namespace WinFormsApp1
 
             txtNovaSenha.UseSystemPasswordChar = true;
             txtConfirmarSenha.UseSystemPasswordChar = true;
+            rbProfessor.Checked = true;
+            MostrarCamposProfessor();
         }
 
         private void CarregarDisciplinas()
@@ -177,10 +179,27 @@ namespace WinFormsApp1
 
         private void btnConfirmarRegisto_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNovoNome.Text) || string.IsNullOrWhiteSpace(txtNovoUtilizador.Text) || string.IsNullOrWhiteSpace(txtNovaSenha.Text) || cbDisciplinas.SelectedIndex == -1)
+            if (string.IsNullOrWhiteSpace(txtNovoNome.Text))
             {
-                MessageBox.Show("Por favor, preencha todos os campos do resgito!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Informe o nome.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            if (!rbProfessor.Checked && !rbAluno.Checked)
+            {
+                MessageBox.Show("Selecione se pretende registar um professor ou um aluno.",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            if (rbProfessor.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(txtNovoUtilizador.Text) ||
+                    string.IsNullOrWhiteSpace(txtNovaSenha.Text) ||
+                    cbDisciplinas.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Preencha todos os campos do professor.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
             }
 
             if (txtNovaSenha.Text != txtConfirmarSenha.Text)
@@ -188,34 +207,71 @@ namespace WinFormsApp1
                 MessageBox.Show("As palavras.passe não coincidem.\n\nPor favor, confirme novamente a palavra-passe.", "Palavras-passe diferentes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 txtConfirmarSenha.Focus();
+                return;
             }
 
             string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
-            string queryInsert = @"INSERT INTO PROFESSORES (NOME, UTILIZADOR, SENHA, ID_DISCIPLINA) VALUES (@nome, @user, @pass, @disciplina)";
-
+            string queryInsert = "";
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
                 try
                 {
                     conexao.Open();
 
-                    int idDisciplina = Convert.ToInt32(cbDisciplinas.SelectedValue);
+                    string utilizadorAluno = txtNovoNome.Text.Trim()
+                        .ToLower()
+                        .Replace(" ", ".");
 
-                    if (idDisciplina == -1)
+                    string senhaAluno = Seguranca.GerarHash("Aluno123@");
+
+                    if (rbProfessor.Checked)
                     {
-                        idDisciplina = CriarNovaDisciplina();
+                        queryInsert = @"INSERT INTO PROFESSORES
+                        (NOME, UTILIZADOR, SENHA, ID_DISCIPLINA)
+                        VALUES (@nome, @user, @pass, @disciplina)";
+                    }
+                    else if (rbAluno.Checked)
+                    {
+                        queryInsert = @"INSERT INTO ALUNOS
+                        (NOME, UTILIZADOR, SENHA)
+                        VALUES (@nome, @user, @pass)";
+                    }
+
+                    int idDisciplina = -1;
+
+                    if (rbProfessor.Checked)
+                    {
+                        idDisciplina = Convert.ToInt32(cbDisciplinas.SelectedValue);
 
                         if (idDisciplina == -1)
                         {
-                            return;
+                            idDisciplina = CriarNovaDisciplina();
+
+                            if (idDisciplina == -1)
+                            {
+                                return;
+                            }
                         }
                     }
 
-                    string queryVerificarUtilizador = @"SELECT COUNT(*) FROM PROFESSORES WHERE LOWER(UTILIZADOR) = LOWER(@utilizador)";
+                    string queryVerificarUtilizador;
+
+                    string utilizador = rbProfessor.Checked
+                        ? txtNovoUtilizador.Text.Trim()
+                        : utilizadorAluno;
+
+                    if (rbProfessor.Checked)
+                    {
+                        queryVerificarUtilizador = "SELECT COUNT(*) FROM PROFESSORES WHERE LOWER(UTILIZADOR) = LOWER(@utilizador)";
+                    }
+                    else
+                    {
+                        queryVerificarUtilizador = "SELECT COUNT(*) FROM ALUNOS WHERE LOWER(UTILIZADOR) = LOWER(@utilizador)";
+                    }
 
                     using (FbCommand cmdVerificar = new FbCommand(queryVerificarUtilizador, conexao))
                     {
-                        cmdVerificar.Parameters.AddWithValue("@utilizador", txtNovoUtilizador.Text.Trim());
+                        cmdVerificar.Parameters.AddWithValue("@utilizador", utilizador);
                         int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
 
                         if (existe > 0)
@@ -228,9 +284,18 @@ namespace WinFormsApp1
                     using (FbCommand cmdInsert = new FbCommand(queryInsert, conexao))
                     {
                         cmdInsert.Parameters.AddWithValue("@nome", txtNovoNome.Text);
-                        cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
-                        cmdInsert.Parameters.AddWithValue("@pass", Seguranca.GerarHash(txtNovaSenha.Text));
-                        cmdInsert.Parameters.AddWithValue("@disciplina", idDisciplina);
+
+                        if (rbProfessor.Checked)
+                        {
+                            cmdInsert.Parameters.AddWithValue("@user", txtNovoUtilizador.Text);
+                            cmdInsert.Parameters.AddWithValue("@pass", Seguranca.GerarHash(txtNovaSenha.Text));
+                            cmdInsert.Parameters.AddWithValue("@disciplina", idDisciplina);
+                        }
+                        else
+                        {
+                            cmdInsert.Parameters.AddWithValue("@user", utilizadorAluno);
+                            cmdInsert.Parameters.AddWithValue("@pass", senhaAluno);
+                        }
                         cmdInsert.ExecuteNonQuery();
                     }
 
@@ -333,6 +398,22 @@ namespace WinFormsApp1
             checkBox1.Visible = false;
             lblEstadoSenha.Visible = false;
             lblConfirmarSenha.Visible = false;
+        }
+
+        private void rbProfessor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbProfessor.Checked)
+            {
+                MostrarCamposProfessor();
+            }
+        }
+
+        private void rbAluno_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbAluno.Checked)
+            {
+                MostrarCamposAluno();
+            }
         }
     }
 }

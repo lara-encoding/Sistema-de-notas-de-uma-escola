@@ -14,7 +14,8 @@ namespace WinFormsApp1
     public partial class Form3 : Form
     {
         private object nomeAluno;
-        private string conexaoString;
+        string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
+
 
         public Form3()
         {
