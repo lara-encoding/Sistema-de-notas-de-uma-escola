@@ -107,6 +107,32 @@ namespace WinFormsApp1
             }
         }
 
+        private string GerarUtilizadorAluno(FbConnection conexao, string nome)
+        {
+            string utilizadorBase = nome.Trim().ToLower().Replace(" ", ".");
+            string utilizador = utilizadorBase;
+            int contador = 1;
+
+            while (true)
+            {
+                string sql = "SELECT COUNT(*) FROM ALUNOS WHERE LOWER(UTILIZADOR) = LOWER(@utilizador)";
+
+                using (FbCommand cmd = new FbCommand(sql, conexao))
+                {
+                    cmd.Parameters.AddWithValue("@utilizador", utilizador);
+                    int existe = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (existe == 0)
+                    {
+                        return utilizador;
+                    }
+                }
+
+                utilizador = utilizadorBase + contador;
+                contador++;
+            }
+        }
+
         private void AtualizarEstadoSenha()
         {
             string senha = txtNovaSenha.Text;
@@ -218,11 +244,10 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string utilizadorAluno = txtNovoNome.Text.Trim()
-                        .ToLower()
-                        .Replace(" ", ".");
+                    string utilizadorAluno = GerarUtilizadorAluno(conexao, txtNovoNome.Text);
+                    string senhaTemporaria = "Aluno123@";
 
-                    string senhaAluno = Seguranca.GerarHash("Aluno123@");
+                    string senhaAluno = Seguranca.GerarHash(senhaTemporaria);
 
                     if (rbProfessor.Checked)
                     {
@@ -299,9 +324,25 @@ namespace WinFormsApp1
                         cmdInsert.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Conta criada com sucesso! Já pode fazer o login.", "Sucesso!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (rbAluno.Checked)
+                    {
+                        MessageBox.Show(
+                            $"Aluno registado com sucesso!\n\n" +
+                            $"Utilizador: {utilizadorAluno}\n" +
+                            $"Palavra-passe temporária: {senhaTemporaria}\n\n" +
+                            $"Entregue estes dados ao aluno.",
+                            "Sucesso!",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Conta criada com sucesso! Já pode fazer login.",
+                            "Sucesso!",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
 
-                    panelRegisto.Visible = false;
                     txtNovoNome.Clear();
                     txtNovoUtilizador.Clear();
                     txtNovaSenha.Clear();

@@ -82,6 +82,7 @@
             checkBox1.TabIndex = 14;
             checkBox1.Text = "Mostrar palavras-passe";
             checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // lblConfirmarSenha
             // 
@@ -92,6 +93,7 @@
             lblConfirmarSenha.TabIndex = 13;
             lblConfirmarSenha.Text = "label8";
             lblConfirmarSenha.Visible = false;
+            lblConfirmarSenha.VisibleChanged += txtConfirmarSenha_TextChanged;
             // 
             // lblConfirmarSenhaTexto
             // 
@@ -108,6 +110,7 @@
             txtConfirmarSenha.Name = "txtConfirmarSenha";
             txtConfirmarSenha.Size = new Size(141, 23);
             txtConfirmarSenha.TabIndex = 11;
+            txtConfirmarSenha.TextChanged += txtConfirmarSenha_TextChanged;
             // 
             // lblEstadoSenha
             // 
@@ -118,6 +121,7 @@
             lblEstadoSenha.TabIndex = 10;
             lblEstadoSenha.Text = "label7";
             lblEstadoSenha.Visible = false;
+            lblEstadoSenha.VisibleChanged += txtNovaSenha_TextChanged;
             // 
             // cbDisciplinas
             // 
@@ -169,6 +173,7 @@
             txtNovaSenha.Name = "txtNovaSenha";
             txtNovaSenha.Size = new Size(141, 23);
             txtNovaSenha.TabIndex = 4;
+            txtNovaSenha.TextChanged += txtNovaSenha_TextChanged;
             // 
             // txtNovoUtilizador
             // 
@@ -205,6 +210,7 @@
             btnConfirmarRegisto.TabIndex = 0;
             btnConfirmarRegisto.Text = "Registar";
             btnConfirmarRegisto.UseVisualStyleBackColor = false;
+            btnConfirmarRegisto.Click += btnConfirmarRegisto_Click;
             // 
             // rbProfessor
             // 
