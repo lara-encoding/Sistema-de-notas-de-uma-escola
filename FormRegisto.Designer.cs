@@ -48,12 +48,16 @@
             rbAluno = new RadioButton();
             label1 = new Label();
             label2 = new Label();
+            cbTurmas = new ComboBox();
+            lblTurma = new Label();
             panelRegisto.SuspendLayout();
             SuspendLayout();
             // 
             // panelRegisto
             // 
+            panelRegisto.Controls.Add(lblTurma);
             panelRegisto.Controls.Add(checkBox1);
+            panelRegisto.Controls.Add(cbTurmas);
             panelRegisto.Controls.Add(lblConfirmarSenha);
             panelRegisto.Controls.Add(lblConfirmarSenhaTexto);
             panelRegisto.Controls.Add(txtConfirmarSenha);
@@ -255,6 +259,23 @@
             label2.TabIndex = 12;
             label2.Text = "CRIAR UTILIZADOR";
             // 
+            // cbTurmas
+            // 
+            cbTurmas.FormattingEnabled = true;
+            cbTurmas.Location = new Point(157, 60);
+            cbTurmas.Name = "cbTurmas";
+            cbTurmas.Size = new Size(141, 23);
+            cbTurmas.TabIndex = 13;
+            // 
+            // lblTurma
+            // 
+            lblTurma.AutoSize = true;
+            lblTurma.Location = new Point(104, 63);
+            lblTurma.Name = "lblTurma";
+            lblTurma.Size = new Size(44, 15);
+            lblTurma.TabIndex = 14;
+            lblTurma.Text = "Turma:";
+            // 
             // FormRegisto
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -296,5 +317,7 @@
         private RadioButton rbAluno;
         private Label label1;
         private Label label2;
+        private ComboBox cbTurmas;
+        private Label lblTurma;
     }
 }

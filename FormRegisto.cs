@@ -23,6 +23,7 @@ namespace WinFormsApp1
         private void FormRegisto_Load(object sender, EventArgs e)
         {
             CarregarDisciplinas();
+            CarregarTurmas();
 
             txtNovaSenha.UseSystemPasswordChar = true;
             txtConfirmarSenha.UseSystemPasswordChar = true;
@@ -61,6 +62,28 @@ namespace WinFormsApp1
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Erro ao carregar disciplinas: {ex.Message}");
+                }
+            }
+        }
+
+        private void CarregarTurmas()
+        {
+            string query = "SELECT ID_TURMA, NOME FROM TURMAS ORDER BY NOME";
+
+            using (FbConnection conexao = new FbConnection(stringConexao))
+            {
+                conexao.Open();
+
+                using (FbCommand cmd = new FbCommand(query, conexao))
+                {
+                    FbDataAdapter adapter = new FbDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    cbTurmas.DataSource = dt;
+                    cbTurmas.DisplayMember = "NOME";
+                    cbTurmas.ValueMember = "ID_TURMA";
+                    cbTurmas.SelectedIndex = -1;
                 }
             }
         }
@@ -258,11 +281,12 @@ namespace WinFormsApp1
                     else if (rbAluno.Checked)
                     {
                         queryInsert = @"INSERT INTO ALUNOS
-                        (NOME, UTILIZADOR, SENHA)
-                        VALUES (@nome, @user, @pass)";
+                        (NOME, UTILIZADOR, SENHA, ID_TURMA)
+                        VALUES (@nome, @user, @pass, @turma)";
                     }
 
                     int idDisciplina = -1;
+                    int idTurma = -1;
 
                     if (rbProfessor.Checked)
                     {
@@ -277,6 +301,11 @@ namespace WinFormsApp1
                                 return;
                             }
                         }
+                    }
+
+                    if (rbAluno.Checked)
+                    {
+                        idTurma = Convert.ToInt32(cbTurmas.SelectedValue);
                     }
 
                     string queryVerificarUtilizador;
@@ -320,6 +349,7 @@ namespace WinFormsApp1
                         {
                             cmdInsert.Parameters.AddWithValue("@user", utilizadorAluno);
                             cmdInsert.Parameters.AddWithValue("@pass", senhaAluno);
+                            cmdInsert.Parameters.AddWithValue("@turma", idTurma);
                         }
                         cmdInsert.ExecuteNonQuery();
                     }
@@ -427,6 +457,9 @@ namespace WinFormsApp1
             lblConfirmarSenhaTexto.Visible = true;
             txtConfirmarSenha.Visible = true;
 
+            lblTurma.Visible = false;
+            cbTurmas.Visible = false;
+
             checkBox1.Visible = true;
             lblEstadoSenha.Visible = true;
             lblConfirmarSenha.Visible = true;
@@ -445,6 +478,9 @@ namespace WinFormsApp1
 
             lblConfirmarSenhaTexto.Visible = false;
             txtConfirmarSenha.Visible = false;
+
+            lblTurma.Visible = true;
+            cbTurmas.Visible = true;
 
             checkBox1.Visible = false;
             lblEstadoSenha.Visible = false;

@@ -126,6 +126,7 @@
             rbProfessor.TabStop = true;
             rbProfessor.Text = "Professor";
             rbProfessor.UseVisualStyleBackColor = true;
+            rbProfessor.CheckedChanged += rbProfessor_CheckedChanged;
             // 
             // rbAluno
             // 

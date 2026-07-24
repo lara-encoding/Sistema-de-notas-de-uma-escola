@@ -442,7 +442,7 @@ namespace WinFormsApp1
             comboBox1_SelectedIndexChanged(cb1, EventArgs.Empty);
 
             MessageBox.Show($"Aluno adicionado com sucesso!\n\n" +
-                $"Utilizador: Aluno\n" + 
+                $"Utilizador: Aluno\n" +
                 $"Palavra-passe inicial: Aluno123@",
                 "Conta criada",
                 MessageBoxButtons.OK,

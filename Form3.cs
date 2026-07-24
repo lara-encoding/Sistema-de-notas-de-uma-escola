@@ -29,7 +29,23 @@ namespace WinFormsApp1
 
         private void btnEntrar_Click(object sender, EventArgs e)
         {
+            if (rbAluno.Checked)
+            {
+                VerificarLoginAluno();
+                return;
+            }
+
+            if (!rbProfessor.Checked)
+            {
+                MessageBox.Show("Selecione se pretende entrar como Professor ou Aluno.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             string conexaoString = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
+
             string query = @"SELECT P.ID, P.NOME, D.NOME AS DISCIPLINA
                              FROM PROFESSORES P 
                              INNER JOIN DISCIPLINAS D
@@ -51,23 +67,26 @@ namespace WinFormsApp1
 
                         using (FbDataReader leitor = comando.ExecuteReader())
                         {
-                            if (leitor.Read())
+                            if (rbProfessor.Checked)
                             {
-                                int idProfessor = Convert.ToInt32(leitor["ID"]);
-                                string nomeProfessor = leitor["NOME"].ToString();
-                                string disciplinaProfessor = leitor["DISCIPLINA"].ToString();
+                                if (leitor.Read())
+                                {
+                                    int idProfessor = Convert.ToInt32(leitor["ID"]);
+                                    string nomeProfessor = leitor["NOME"].ToString();
+                                    string disciplinaProfessor = leitor["DISCIPLINA"].ToString();
 
-                                MessageBox.Show($"Login efetuado com sucesso\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                this.Hide();
+                                    MessageBox.Show($"Login efetuado com sucesso\nBem vindo(a), {nomeProfessor}!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    this.Hide();
 
-                                EscolhaTurma ecraTurma = new EscolhaTurma(idProfessor, nomeProfessor, disciplinaProfessor);
-                                ecraTurma.ShowDialog();
+                                    EscolhaTurma ecraTurma = new EscolhaTurma(idProfessor, nomeProfessor, disciplinaProfessor);
+                                    ecraTurma.ShowDialog();
 
-                                this.Close();
-                            }
-                            else
-                            {
-                                VerificarLoginAluno();
+                                    this.Close();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Utilizador ou palavra-passe incorretos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
                             }
                         }
                     }
@@ -118,7 +137,8 @@ namespace WinFormsApp1
                                 aluno.ShowDialog();
 
                                 this.Close();
-                            } else
+                            }
+                            else
                             {
                                 MessageBox.Show("Utilizador ou palavra-passe incorretos.",
                                     "Erro!",
@@ -127,7 +147,8 @@ namespace WinFormsApp1
                             }
                         }
                     }
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
@@ -183,6 +204,11 @@ namespace WinFormsApp1
         }
 
         private void panelRegisto_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void rbProfessor_CheckedChanged(object sender, EventArgs e)
         {
 
         }

@@ -211,7 +211,7 @@
             button3.Name = "button3";
             button3.Size = new Size(113, 46);
             button3.TabIndex = 20;
-            button3.Text = "Ver Turmas";
+            button3.Text = "Gerir Turmas";
             button3.UseVisualStyleBackColor = false;
             button3.Click += button3_Click;
             // 
