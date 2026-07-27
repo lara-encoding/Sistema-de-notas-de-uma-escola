@@ -114,12 +114,12 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string query = @"SELECT T.ID_TURMA, T.NOME 
-                    FROM TURMAS T
-                    INNER JOIN PROFESSORES_TURMA PT
-                        ON PT.ID_TURMA = T.ID_TURMA
-                    WHERE PT.ID_PROFESSOR = @idProfessor
-                    ORDER BY T.NOME";
+                    string query = @"SELECT t.ID_TURMA, t.NOME 
+                    FROM TURMAS t
+                    INNER JOIN PROFESSORES_TURMAS pt
+                        ON t.ID_TURMA = pt.ID_TURMA
+                    WHERE pt.ID_PROFESSOR = @idProfessor
+                    ORDER BY t.NOME";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
@@ -221,7 +221,7 @@ namespace WinFormsApp1
                         }
                     }
 
-                    string queryAssociar = @"INSERT INTO PROFESSORES_TURMA
+                    string queryAssociar = @"INSERT INTO PROFESSORES_TURMAS
                                             (ID_PROFESSOR, ID_TURMA)
                                             VALUES (@idProfessor, @idTurma)";
 
