@@ -33,10 +33,12 @@ namespace WinFormsApp1
 
         private void carregarTurmas()
         {
-            string query = @"SELECT t.ID_TURMA, t.NOME FROM TURMAS t " +
-                "INNER JOIN PROFESSORES p ON t.ID_PROFESSOR = p.ID " +
-                "WHERE p.NOME LIKE @professor " +
-                "ORDER BY t.NOME";
+            string query = @"SELECT DISTINCT t.ID_TURMA, t.NOME 
+                FROM TURMAS t
+                INNER JOIN PROFESSORES_TURMA pt
+                    ON t.ID_TURMA = pt.ID_TURMA
+                WHERE pt.ID_PROFESSOR = @idProfessor
+                ORDER BY t.NOME";
 
             using (FbConnection conexao = new FbConnection(conexaoString))
             {
@@ -46,7 +48,7 @@ namespace WinFormsApp1
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
-                        comando.Parameters.AddWithValue("@professor", "%" + this.professorLogado + "%");
+                        comando.Parameters.AddWithValue("@professor", this.idProfessorLogado);
 
                         FbDataAdapter adapter = new FbDataAdapter(comando);
                         DataTable dt = new DataTable();
@@ -54,7 +56,7 @@ namespace WinFormsApp1
 
                         if (dt.Rows.Count == 0)
                         {
-                            DialogResult resposta = MessageBox.Show("Ainda não existem turmas registradas para este professor.\n\nPrentende criar a primeira turma?", "Sem Turmas", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            DialogResult resposta = MessageBox.Show("Ainda não existem turmas registradas para este professor.\n\nPrentende criar ou registar a primeira turma?", "Sem Turmas", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                             if (resposta == DialogResult.Yes)
                             {

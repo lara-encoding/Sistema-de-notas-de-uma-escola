@@ -13,6 +13,7 @@ namespace WinFormsApp1
         private string professorLogado;
 
         private string stringConexao = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Dialect=3;";
+        private int idTurma;
 
         public Form2(int idProfessorLogado, string professorLogado)
         {
@@ -57,12 +58,14 @@ namespace WinFormsApp1
 
                     string novoNome = txtNomeTurma.Text.Trim();
 
-                    string queryVerificar = @"SELECT COUNT(*) FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome) AND ID_PROFESSOR = @idProfessor AND ID_TURMA <> @idTurma";
+                    string queryVerificar = @"SELECT COUNT(*)
+                                            FROM TURMAS
+                                            WHERE LOWER(NOME) = LOWER(@nome)
+                                            AND ID_TURMA <> @idTurma";
 
                     using (FbCommand cmdVerificar = new FbCommand(stringConexao))
                     {
                         cmdVerificar.Parameters.AddWithValue("@nome", novoNome);
-                        cmdVerificar.Parameters.AddWithValue("idProfessorLogado", idProfessorLogado);
                         cmdVerificar.Parameters.AddWithValue("@idTurma", turma.Id);
 
                         int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
@@ -111,7 +114,12 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string query = "SELECT ID_TURMA, NOME FROM TURMAS WHERE ID_PROFESSOR = @idProfessor ORDER BY NOME";
+                    string query = @"SELECT T.ID_TURMA, T.NOME 
+                    FROM TURMAS T
+                    INNER JOIN PROFESSORES_TURMA PT
+                        ON PT.ID_TURMA = T.ID_TURMA
+                    WHERE PT.ID_PROFESSOR = @idProfessor
+                    ORDER BY T.NOME";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
@@ -154,28 +162,75 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string queryVerificar = "SELECT COUNT(*) FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome)";
+                    string queryVerificar = "SELECT ID_TURMA FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome)";
 
                     using (FbCommand cmdVerificar = new FbCommand(queryVerificar, conexao))
                     {
                         cmdVerificar.Parameters.AddWithValue("@nome", nomeTurma);
 
-                        int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+                        object resultado = cmdVerificar.ExecuteScalar();
+                        int idTurma;
 
-                        if (existe > 0)
+                        if (resultado == null)
                         {
-                            MessageBox.Show("Essa turma já existe!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            idTurma = -1;
+                        } else
+                        {
+                            idTurma = Convert.ToInt32(resultado);
+                        }
+                    }
+
+                    if (idTurma == -1)
+                    {
+                        string queryInsert = "INSERT INTO TURMAS (NOME) VALUES (@nome)";
+
+                        using (FbCommand cmdInsert = new FbCommand(queryInsert, conexao))
+                        {
+                            cmdInsert.Parameters.AddWithValue("@nome", nomeTurma);
+                            cmdInsert.ExecuteNonQuery();
+                        }
+
+                        string queryBuscarId = "SELECT ID_TURMA FROM TURMAS WHERE LOWER(NOME) = LOWER(@nome)";
+
+                        using (FbCommand cmdBuscar = new FbCommand(queryBuscarId, conexao))
+                        {
+                            cmdBuscar.Parameters.AddWithValue("@nome", nomeTurma);
+                            idTurma = Convert.ToInt32(cmdBuscar.ExecuteScalar());
+                        }
+                    }
+
+                    string queryVerificarAssociacao = @"SELECT COUNT(*)
+                                                       FROM PROFESSORES_TURMAS
+                                                       WHERE ID_PROFESSOR = @idProfessor
+                                                       AND ID_TURMA = @idTurma";
+
+                    using (FbCommand cmdVerificar = new FbCommand(queryVerificarAssociacao, conexao))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+                        cmdVerificar.Parameters.AddWithValue("@idTurma", idTurma);
+
+                        int existeAssociacao = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                        if (existeAssociacao > 0)
+                        {
+                            MessageBox.Show("Já está associado a esta turma.",
+                                "Aviso",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
                             return;
                         }
                     }
-                    string queryInsert = "INSERT INTO TURMAS (NOME, ID_PROFESSOR) VALUES (@nome, @idProfessor)";
 
-                    using (FbCommand cmdInsert = new FbCommand(queryInsert, conexao))
+                    string queryAssociar = @"INSERT INTO PROFESSORES_TURMA
+                                            (ID_PROFESSOR, ID_TURMA)
+                                            VALUES (@idProfessor, @idTurma)";
+
+                    using (FbCommand cmdAssociar = new FbCommand(queryAssociar, conexao))
                     {
-                        cmdInsert.Parameters.AddWithValue("@nome", nomeTurma);
-                        cmdInsert.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+                        cmdAssociar.Parameters.AddWithValue("@idPorfessor", idProfessorLogado);
+                        cmdAssociar.Parameters.AddWithValue("@idTurma", idTurma);
 
-                        cmdInsert.ExecuteNonQuery();
+                        cmdAssociar.ExecuteNonQuery();
                     }
 
                     carregarTurmas();
@@ -237,12 +292,38 @@ namespace WinFormsApp1
                         }
                     }
 
-                    string queryEliminar = "DELETE FROM TURMAS WHERE ID_TURMA = @idTurma";
+                    string queryEliminarAssociacao = @"DELETE FROM PROFESSORES_TURMAS
+                                                        WHERE ID_PROFESSOR = @idProfessor
+                                                        AND ID_TURMA = @idTurma";
 
-                    using (FbCommand comando = new FbCommand(queryEliminar, conexao))
+                    using (FbCommand cmd = new FbCommand(queryEliminarAssociacao, conexao))
                     {
-                        comando.Parameters.AddWithValue("@idTurma", turma.Id);
-                        comando.ExecuteNonQuery();
+                        cmd.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+                        cmd.Parameters.AddWithValue("@idTurma", turma.Id);
+
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    string queryVerificarProfessores = @"SELECT COUNT(*)
+                                                        FROM PROFESSORES_TURMAS
+                                                        WHERE ID_TURMA = @idTurma";
+
+                    using (FbCommand cmdVerificar = new FbCommand(queryVerificarProfessores, conexao))
+                    {
+                        cmdVerificar.Parameters.AddWithValue("@idTurma", turma.Id);
+
+                        int quantidadeProfessores = Convert.ToInt32(cmdVerificar.ExecuteScalar());
+
+                        if (quantidadeProfessores == 0)
+                        {
+                            string queryEliminar = "DELETE FROM TURMAS WHERE ID_TURMA = @idTurma";
+
+                            using (FbCommand comando = new FbCommand(queryEliminar, conexao))
+                            {
+                                comando.Parameters.AddWithValue("@idTurma", turma.Id);
+                                comando.ExecuteNonQuery();
+                            }
+                        }
                     }
                 }
 
