@@ -91,7 +91,6 @@ namespace WinFormsApp1
                 carregarTurmas();
 
                 MessageBox.Show("Turma editada com sucesso!");
-
             }
             catch (Exception ex)
             {

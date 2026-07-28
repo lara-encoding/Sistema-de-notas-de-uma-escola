@@ -1053,8 +1053,13 @@ namespace WinFormsApp1
         {
             cmbTurmas.Items.Clear();
 
-            string query = "SELECT ID_TURMA, NOME FROM TURMAS WHERE ID_PROFESSOR = @idProfessor ORDER BY NOME";
-
+            string query = @"
+                SELECT DISTINCT t.ID_TURMA, t.NOME
+                FROM TURMAS t
+                INNER JOIN PROFESSORES_TURMAS pt
+                    ON t.ID_TURMA = pt.ID_TURMA
+                WHERE pt.ID_PROFESSOR = @idProfessor
+                ORDER BY t.NOME";
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
                 try
