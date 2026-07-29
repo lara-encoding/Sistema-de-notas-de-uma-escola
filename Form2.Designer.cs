@@ -39,7 +39,7 @@
             label1 = new Label();
             txtTurmaExistente = new Label();
             cmbTurmasExistentes = new ComboBox();
-            button1 = new Button();
+            btnAssociarTurma = new Button();
             SuspendLayout();
             // 
             // lblTitulo
@@ -110,7 +110,7 @@
             // 
             // btnFechar
             // 
-            btnFechar.Location = new Point(505, 423);
+            btnFechar.Location = new Point(505, 429);
             btnFechar.Name = "btnFechar";
             btnFechar.Size = new Size(83, 23);
             btnFechar.TabIndex = 11;
@@ -146,21 +146,22 @@
             cmbTurmasExistentes.Size = new Size(323, 23);
             cmbTurmasExistentes.TabIndex = 14;
             // 
-            // button1
+            // btnAssociarTurma
             // 
-            button1.Location = new Point(195, 245);
-            button1.Name = "button1";
-            button1.Size = new Size(97, 40);
-            button1.TabIndex = 15;
-            button1.Text = "Associar Turma";
-            button1.UseVisualStyleBackColor = true;
+            btnAssociarTurma.Location = new Point(195, 245);
+            btnAssociarTurma.Name = "btnAssociarTurma";
+            btnAssociarTurma.Size = new Size(97, 40);
+            btnAssociarTurma.TabIndex = 15;
+            btnAssociarTurma.Text = "Associar Turma";
+            btnAssociarTurma.UseVisualStyleBackColor = true;
+            btnAssociarTurma.Click += btnAssociarTurma_Click;
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(719, 490);
-            Controls.Add(button1);
+            Controls.Add(btnAssociarTurma);
             Controls.Add(cmbTurmasExistentes);
             Controls.Add(txtTurmaExistente);
             Controls.Add(label1);
@@ -194,6 +195,6 @@
         private Label label1;
         private Label txtTurmaExistente;
         private ComboBox cmbTurmasExistentes;
-        private Button button1;
+        private Button btnAssociarTurma;
     }
 }

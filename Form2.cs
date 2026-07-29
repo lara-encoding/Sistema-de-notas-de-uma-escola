@@ -174,7 +174,8 @@ namespace WinFormsApp1
                         }
                     }
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Erro ao carregar todas as turmas: " + ex.Message);
             }
@@ -377,6 +378,67 @@ namespace WinFormsApp1
         private void btnFechar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnAssociarTurma_Click(object sender, EventArgs e)
+        {
+            if (cmbTurmasExistentes.SelectedItem == null)
+            {
+                MessageBox.Show("Selecione uma turma para associar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Turma turma = (Turma)cmbTurmasExistentes.SelectedItem;
+
+            using (FbConnection conexao = new FbConnection(stringConexao))
+            {
+                try
+                {
+                    conexao.Open();
+
+                    string queryVerificar = @"SELECT COUNT(*)
+                                            FROM PROFESSORES_TURMAS
+                                            WHERE ID_PROFESSOR = @idProfessor
+                                            AND ID_TURMA = @idTurma";
+
+                    using (FbCommand comando = new FbCommand(queryVerificar, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+                        comando.Parameters.AddWithValue("@idTurma", turma.Id);
+
+                        int existe = Convert.ToInt32(comando.ExecuteScalar());
+
+                        if (existe > 0)
+                        {
+                            MessageBox.Show("Este professor já está associado a esta turma.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                    }
+
+                    string queryAssociar = @"INSERT INTO PROFESSORES_TURMAS
+                                            (ID_PROFESSOR, ID_TURMA)
+                                            VALUES (@idProfessor, @idTurma)";
+
+                    using (FbCommand comando = new FbCommand(queryAssociar, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
+                        comando.Parameters.AddWithValue("@idTurma", turma.Id);
+
+                        comando.ExecuteNonQuery();
+                    }
+
+                    carregarTurmas();
+
+                    MessageBox.Show("Turma associada com sucesso!",
+                        "Sucesso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                } catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao associar a turma: {ex.Message}");
+                }
+            }
         }
     }
 }
