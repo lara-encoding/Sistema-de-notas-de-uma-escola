@@ -31,19 +31,22 @@
             lblTitulo = new Label();
             lblNome = new Label();
             lstTurmas = new ListBox();
-            txtNomeTurma = new TextBox();
+            txtNovaTurma = new TextBox();
             btnAdicionar = new Button();
             btnEditar = new Button();
             btnEliminar = new Button();
             btnFechar = new Button();
             label1 = new Label();
+            txtTurmaExistente = new Label();
+            cmbTurmasExistentes = new ComboBox();
+            button1 = new Button();
             SuspendLayout();
             // 
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
             lblTitulo.Font = new Font("Segoe UI", 15F, FontStyle.Bold, GraphicsUnit.Point);
-            lblTitulo.Location = new Point(178, 9);
+            lblTitulo.Location = new Point(295, 20);
             lblTitulo.Name = "lblTitulo";
             lblTitulo.Size = new Size(134, 28);
             lblTitulo.TabIndex = 4;
@@ -52,44 +55,44 @@
             // lblNome
             // 
             lblNome.AutoSize = true;
-            lblNome.Location = new Point(78, 252);
+            lblNome.Location = new Point(195, 303);
             lblNome.Name = "lblNome";
-            lblNome.Size = new Size(93, 15);
+            lblNome.Size = new Size(72, 15);
             lblNome.TabIndex = 5;
-            lblNome.Text = "Nome da Turma";
+            lblNome.Text = "Nova Turma";
             // 
             // lstTurmas
             // 
             lstTurmas.FormattingEnabled = true;
             lstTurmas.ItemHeight = 15;
-            lstTurmas.Location = new Point(78, 96);
+            lstTurmas.Location = new Point(195, 87);
             lstTurmas.Name = "lstTurmas";
-            lstTurmas.Size = new Size(323, 139);
+            lstTurmas.Size = new Size(323, 79);
             lstTurmas.TabIndex = 6;
             lstTurmas.SelectedIndexChanged += lstTurmas_SelectedIndexChanged;
             // 
-            // txtNomeTurma
+            // txtNovaTurma
             // 
-            txtNomeTurma.Location = new Point(78, 270);
-            txtNomeTurma.Name = "txtNomeTurma";
-            txtNomeTurma.Size = new Size(323, 23);
-            txtNomeTurma.TabIndex = 7;
+            txtNovaTurma.Location = new Point(195, 321);
+            txtNovaTurma.Name = "txtNovaTurma";
+            txtNovaTurma.Size = new Size(323, 23);
+            txtNovaTurma.TabIndex = 7;
             // 
             // btnAdicionar
             // 
-            btnAdicionar.Location = new Point(78, 325);
+            btnAdicionar.Location = new Point(194, 372);
             btnAdicionar.Name = "btnAdicionar";
-            btnAdicionar.Size = new Size(83, 34);
+            btnAdicionar.Size = new Size(83, 42);
             btnAdicionar.TabIndex = 8;
-            btnAdicionar.Text = "Adicionar";
+            btnAdicionar.Text = "Criar Nova Turma";
             btnAdicionar.UseVisualStyleBackColor = true;
             btnAdicionar.Click += btnAdicionar_Click;
             // 
             // btnEditar
             // 
-            btnEditar.Location = new Point(202, 325);
+            btnEditar.Location = new Point(313, 372);
             btnEditar.Name = "btnEditar";
-            btnEditar.Size = new Size(83, 34);
+            btnEditar.Size = new Size(83, 42);
             btnEditar.TabIndex = 9;
             btnEditar.Text = "Renomear";
             btnEditar.UseVisualStyleBackColor = true;
@@ -97,9 +100,9 @@
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(318, 325);
+            btnEliminar.Location = new Point(434, 372);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(83, 34);
+            btnEliminar.Size = new Size(83, 42);
             btnEliminar.TabIndex = 10;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
@@ -107,7 +110,7 @@
             // 
             // btnFechar
             // 
-            btnFechar.Location = new Point(389, 376);
+            btnFechar.Location = new Point(505, 423);
             btnFechar.Name = "btnFechar";
             btnFechar.Size = new Size(83, 23);
             btnFechar.TabIndex = 11;
@@ -118,24 +121,54 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(211, 63);
+            label1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(195, 65);
             label1.Name = "label1";
-            label1.Size = new Size(62, 21);
+            label1.Size = new Size(135, 19);
             label1.TabIndex = 12;
-            label1.Text = "Turmas";
+            label1.Text = "Turmas do Professor";
+            // 
+            // txtTurmaExistente
+            // 
+            txtTurmaExistente.AutoSize = true;
+            txtTurmaExistente.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            txtTurmaExistente.Location = new Point(195, 181);
+            txtTurmaExistente.Name = "txtTurmaExistente";
+            txtTurmaExistente.Size = new Size(118, 19);
+            txtTurmaExistente.TabIndex = 13;
+            txtTurmaExistente.Text = "Turmas Existentes";
+            // 
+            // cmbTurmasExistentes
+            // 
+            cmbTurmasExistentes.FormattingEnabled = true;
+            cmbTurmasExistentes.Location = new Point(195, 203);
+            cmbTurmasExistentes.Name = "cmbTurmasExistentes";
+            cmbTurmasExistentes.Size = new Size(323, 23);
+            cmbTurmasExistentes.TabIndex = 14;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(195, 245);
+            button1.Name = "button1";
+            button1.Size = new Size(97, 40);
+            button1.TabIndex = 15;
+            button1.Text = "Associar Turma";
+            button1.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(484, 411);
+            ClientSize = new Size(719, 490);
+            Controls.Add(button1);
+            Controls.Add(cmbTurmasExistentes);
+            Controls.Add(txtTurmaExistente);
             Controls.Add(label1);
             Controls.Add(btnFechar);
             Controls.Add(btnEliminar);
             Controls.Add(btnEditar);
             Controls.Add(btnAdicionar);
-            Controls.Add(txtNomeTurma);
+            Controls.Add(txtNovaTurma);
             Controls.Add(lstTurmas);
             Controls.Add(lblNome);
             Controls.Add(lblTitulo);
@@ -153,11 +186,14 @@
         private Label lblTitulo;
         private Label lblNome;
         private ListBox lstTurmas;
-        private TextBox txtNomeTurma;
+        private TextBox txtNovaTurma;
         private Button btnAdicionar;
         private Button btnEditar;
         private Button btnEliminar;
         private Button btnFechar;
         private Label label1;
+        private Label txtTurmaExistente;
+        private ComboBox cmbTurmasExistentes;
+        private Button button1;
     }
 }

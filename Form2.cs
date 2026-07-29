@@ -27,6 +27,7 @@ namespace WinFormsApp1
         private void Form2_Load(object sender, EventArgs e)
         {
             carregarTurmas();
+            CarregarTodasTurmas();
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -42,7 +43,7 @@ namespace WinFormsApp1
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNomeTurma.Text))
+            if (string.IsNullOrWhiteSpace(txtNovaTurma.Text))
             {
                 MessageBox.Show("Introduza o novo nome da turma.");
                 return;
@@ -56,20 +57,20 @@ namespace WinFormsApp1
                 {
                     conexao.Open();
 
-                    string novoNome = txtNomeTurma.Text.Trim();
+                    string novoNome = txtNovaTurma.Text.Trim();
 
                     string queryVerificar = @"SELECT COUNT(*)
                                             FROM TURMAS
                                             WHERE LOWER(NOME) = LOWER(@nome)
                                             AND ID_TURMA <> @idTurma";
 
-                    using (FbCommand cmdVerificar = new FbCommand(stringConexao))
+                    using (FbCommand cmdVerificar = new FbCommand(queryVerificar, conexao))
                     {
                         cmdVerificar.Parameters.AddWithValue("@nome", novoNome);
                         cmdVerificar.Parameters.AddWithValue("@idTurma", turma.Id);
 
                         int existe = Convert.ToInt32(cmdVerificar.ExecuteScalar());
-                        
+
                         if (existe > 0)
                         {
                             MessageBox.Show("Essa turma já existe!", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -145,9 +146,43 @@ namespace WinFormsApp1
             }
         }
 
+        private void CarregarTodasTurmas()
+        {
+            cmbTurmasExistentes.Items.Clear();
+
+            try
+            {
+                using (FbConnection conexao = new FbConnection(stringConexao))
+                {
+                    conexao.Open();
+
+                    string query = @"SELECT ID_TURMA, NOME
+                                    FROM TURMAS
+                                    ORDER BY NOME";
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    using (FbDataReader leitor = comando.ExecuteReader())
+                    {
+                        while (leitor.Read())
+                        {
+                            Turma turma = new Turma();
+
+                            turma.Id = Convert.ToInt32(leitor["ID_TURMA"]);
+                            turma.Nome = leitor["NOME"].ToString();
+
+                            cmbTurmasExistentes.Items.Add(turma);
+                        }
+                    }
+                }
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar todas as turmas: " + ex.Message);
+            }
+        }
+
         private void btnAdicionar_Click(object sender, EventArgs e)
         {
-            string nomeTurma = txtNomeTurma.Text.Trim();
+            string nomeTurma = txtNovaTurma.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(nomeTurma))
             {
@@ -168,12 +203,12 @@ namespace WinFormsApp1
                         cmdVerificar.Parameters.AddWithValue("@nome", nomeTurma);
 
                         object resultado = cmdVerificar.ExecuteScalar();
-                        int idTurma;
 
                         if (resultado == null)
                         {
                             idTurma = -1;
-                        } else
+                        }
+                        else
                         {
                             idTurma = Convert.ToInt32(resultado);
                         }
@@ -226,14 +261,14 @@ namespace WinFormsApp1
 
                     using (FbCommand cmdAssociar = new FbCommand(queryAssociar, conexao))
                     {
-                        cmdAssociar.Parameters.AddWithValue("@idPorfessor", idProfessorLogado);
+                        cmdAssociar.Parameters.AddWithValue("@idProfessor", idProfessorLogado);
                         cmdAssociar.Parameters.AddWithValue("@idTurma", idTurma);
 
                         cmdAssociar.ExecuteNonQuery();
                     }
 
                     carregarTurmas();
-                    txtNomeTurma.Clear();
+                    txtNovaTurma.Clear();
 
                     MessageBox.Show("Turma adicionada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -254,7 +289,7 @@ namespace WinFormsApp1
 
             Turma turma = (Turma)lstTurmas.SelectedItem;
 
-            txtNomeTurma.Text = lstTurmas.SelectedItem.ToString();
+            txtNovaTurma.Text = lstTurmas.SelectedItem.ToString();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -328,7 +363,7 @@ namespace WinFormsApp1
 
                 carregarTurmas();
                 lstTurmas.ClearSelected();
-                txtNomeTurma.Clear();
+                txtNovaTurma.Clear();
 
                 MessageBox.Show("Turma eliminada com sucesso!");
 
