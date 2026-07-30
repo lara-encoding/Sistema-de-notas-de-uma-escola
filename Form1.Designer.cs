@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             btnAdicionar = new Button();
             txtNotaTrabalho = new TextBox();
             txtNome = new TextBox();
@@ -60,6 +60,7 @@
             lblMediaTurma = new Label();
             cb1 = new GroupBox();
             comboBox1 = new ComboBox();
+            button7 = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
             panel1.SuspendLayout();
@@ -134,19 +135,19 @@
             // 
             // dgvAlunos
             // 
-            dataGridViewCellStyle1.BackColor = Color.LightGray;
-            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = Color.LightGray;
+            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             dgvAlunos.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle4;
             dgvAlunos.Location = new Point(0, 0);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
@@ -181,9 +182,9 @@
             button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button1.BackColor = Color.Transparent;
             button1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(690, 348);
+            button1.Location = new Point(538, 349);
             button1.Name = "button1";
-            button1.Size = new Size(113, 46);
+            button1.Size = new Size(98, 46);
             button1.TabIndex = 16;
             button1.Text = "Apagar Aluno";
             button1.UseVisualStyleBackColor = false;
@@ -194,9 +195,9 @@
             button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button2.BackColor = Color.Transparent;
             button2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(834, 348);
+            button2.Location = new Point(762, 349);
             button2.Name = "button2";
-            button2.Size = new Size(111, 46);
+            button2.Size = new Size(98, 46);
             button2.TabIndex = 19;
             button2.Text = "Apagar Todos Os Alunos";
             button2.UseVisualStyleBackColor = false;
@@ -207,9 +208,9 @@
             button3.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button3.BackColor = Color.Transparent;
             button3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button3.Location = new Point(549, 348);
+            button3.Location = new Point(651, 349);
             button3.Name = "button3";
-            button3.Size = new Size(113, 46);
+            button3.Size = new Size(98, 46);
             button3.TabIndex = 20;
             button3.Text = "Gerir Turmas";
             button3.UseVisualStyleBackColor = false;
@@ -236,9 +237,9 @@
             // 
             button4.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button4.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button4.Location = new Point(549, 400);
+            button4.Location = new Point(538, 401);
             button4.Name = "button4";
-            button4.Size = new Size(113, 42);
+            button4.Size = new Size(98, 42);
             button4.TabIndex = 25;
             button4.Text = "Importar";
             button4.UseVisualStyleBackColor = true;
@@ -248,9 +249,9 @@
             // 
             button5.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button5.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button5.Location = new Point(690, 400);
+            button5.Location = new Point(651, 401);
             button5.Name = "button5";
-            button5.Size = new Size(113, 42);
+            button5.Size = new Size(98, 42);
             button5.TabIndex = 26;
             button5.Text = "Exportar";
             button5.UseVisualStyleBackColor = true;
@@ -260,9 +261,9 @@
             // 
             button6.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             button6.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            button6.Location = new Point(834, 400);
+            button6.Location = new Point(762, 401);
             button6.Name = "button6";
-            button6.Size = new Size(111, 42);
+            button6.Size = new Size(98, 42);
             button6.TabIndex = 27;
             button6.Text = "Enviar Email";
             button6.UseVisualStyleBackColor = true;
@@ -399,12 +400,22 @@
             comboBox1.Size = new Size(121, 23);
             comboBox1.TabIndex = 23;
             // 
+            // button7
+            // 
+            button7.Location = new Point(866, 378);
+            button7.Name = "button7";
+            button7.Size = new Size(98, 46);
+            button7.TabIndex = 32;
+            button7.Text = "button7";
+            button7.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
+            Controls.Add(button7);
             Controls.Add(cb1);
             Controls.Add(panel1);
             Controls.Add(btnTerminarSessao);
@@ -460,5 +471,6 @@
         private Label lblMediaTurma;
         private GroupBox cb1;
         private ComboBox comboBox1;
+        private Button button7;
     }
 }
