@@ -1110,5 +1110,19 @@ namespace WinFormsApp1
         {
 
         }
+
+        private void btnGerirFaltas_Click(object sender, EventArgs e)
+        {
+            if (dgvAlunos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecione um aluno.");
+                return;
+            }
+
+            Aluno aluno = (Aluno)dgvAlunos.SelectedRows[0].DataBoundItem;
+
+            FormFaltas frm = new FormFaltas(aluno.Id, aluno.Nome, idProfessorLogado);
+            frm.ShowDialog();
+        }
     }
 }

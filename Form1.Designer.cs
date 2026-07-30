@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             btnAdicionar = new Button();
             txtNotaTrabalho = new TextBox();
             txtNome = new TextBox();
@@ -60,7 +60,7 @@
             lblMediaTurma = new Label();
             cb1 = new GroupBox();
             comboBox1 = new ComboBox();
-            button7 = new Button();
+            btnGerirFaltas = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvAlunos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numFaltas).BeginInit();
             panel1.SuspendLayout();
@@ -135,19 +135,19 @@
             // 
             // dgvAlunos
             // 
-            dataGridViewCellStyle3.BackColor = Color.LightGray;
-            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle5.BackColor = Color.LightGray;
+            dgvAlunos.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
             dgvAlunos.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dgvAlunos.BackgroundColor = Color.White;
             dgvAlunos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.White;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = Color.White;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
+            dgvAlunos.DefaultCellStyle = dataGridViewCellStyle6;
             dgvAlunos.Location = new Point(0, 0);
             dgvAlunos.Name = "dgvAlunos";
             dgvAlunos.RowTemplate.Height = 25;
@@ -400,14 +400,16 @@
             comboBox1.Size = new Size(121, 23);
             comboBox1.TabIndex = 23;
             // 
-            // button7
+            // btnGerirFaltas
             // 
-            button7.Location = new Point(866, 378);
-            button7.Name = "button7";
-            button7.Size = new Size(98, 46);
-            button7.TabIndex = 32;
-            button7.Text = "button7";
-            button7.UseVisualStyleBackColor = true;
+            btnGerirFaltas.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            btnGerirFaltas.Location = new Point(866, 378);
+            btnGerirFaltas.Name = "btnGerirFaltas";
+            btnGerirFaltas.Size = new Size(98, 46);
+            btnGerirFaltas.TabIndex = 32;
+            btnGerirFaltas.Text = "Gerir Faltas";
+            btnGerirFaltas.UseVisualStyleBackColor = true;
+            btnGerirFaltas.Click += btnGerirFaltas_Click;
             // 
             // Form1
             // 
@@ -415,7 +417,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonFace;
             ClientSize = new Size(1004, 450);
-            Controls.Add(button7);
+            Controls.Add(btnGerirFaltas);
             Controls.Add(cb1);
             Controls.Add(panel1);
             Controls.Add(btnTerminarSessao);
@@ -471,6 +473,6 @@
         private Label lblMediaTurma;
         private GroupBox cb1;
         private ComboBox comboBox1;
-        private Button button7;
+        private Button btnGerirFaltas;
     }
 }

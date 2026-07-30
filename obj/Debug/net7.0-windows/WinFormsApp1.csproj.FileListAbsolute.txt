@@ -32,3 +32,4 @@ C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.EscolhaTurma.resources
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.FormAluno.resources
 C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.FormRegisto.resources
+C:\Users\user\Desktop\AnaLara\WinFormsApp1\obj\Debug\net7.0-windows\WinFormsApp1.FormFaltas.resources
