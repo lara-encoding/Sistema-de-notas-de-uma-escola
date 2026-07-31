@@ -114,7 +114,7 @@ namespace WinFormsApp1
                     break;
 
                 default:
-                    corpoTexto = $"Olá {aluno.Nome}," +
+                    corpoTexto = $"Olá {aluno.Nome},\n\n" +
             $"Informo que a tua situação final é de Reprovado(a) por insuficiência de nota.\n" +
             $"\nA tua média final foi de {aluno.MediaFinal} valores, ficando abaixo do mínimo de 10 valores necessário para transitar." +
             $"\nPara esclarecimentos adicionais sobre a avaliação ou sobre os próximos passos, entra em contacto comigo ou consulta a secretaria da escola." +

@@ -36,6 +36,10 @@
             nudQuantidade = new NumericUpDown();
             btnRegistrarFalta = new Button();
             dgvFaltas = new DataGridView();
+            colData = new DataGridViewTextBoxColumn();
+            colQuantidade = new DataGridViewTextBoxColumn();
+            colJustificada = new DataGridViewTextBoxColumn();
+            colRecuperada = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)nudQuantidade).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvFaltas).BeginInit();
             SuspendLayout();
@@ -108,11 +112,32 @@
             // dgvFaltas
             // 
             dgvFaltas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvFaltas.Columns.AddRange(new DataGridViewColumn[] { colData, colQuantidade, colJustificada, colRecuperada });
             dgvFaltas.Location = new Point(12, 233);
             dgvFaltas.Name = "dgvFaltas";
             dgvFaltas.RowTemplate.Height = 25;
             dgvFaltas.Size = new Size(647, 205);
             dgvFaltas.TabIndex = 7;
+            // 
+            // colData
+            // 
+            colData.HeaderText = "Data";
+            colData.Name = "colData";
+            // 
+            // colQuantidade
+            // 
+            colQuantidade.HeaderText = "Quantidade";
+            colQuantidade.Name = "colQuantidade";
+            // 
+            // colJustificada
+            // 
+            colJustificada.HeaderText = "Justificada";
+            colJustificada.Name = "colJustificada";
+            // 
+            // colRecuperada
+            // 
+            colRecuperada.HeaderText = "Recuperada";
+            colRecuperada.Name = "colRecuperada";
             // 
             // FormFaltas
             // 
@@ -146,5 +171,9 @@
         private NumericUpDown nudQuantidade;
         private Button btnRegistrarFalta;
         private DataGridView dgvFaltas;
+        private DataGridViewTextBoxColumn colData;
+        private DataGridViewTextBoxColumn colQuantidade;
+        private DataGridViewTextBoxColumn colJustificada;
+        private DataGridViewTextBoxColumn colRecuperada;
     }
 }
