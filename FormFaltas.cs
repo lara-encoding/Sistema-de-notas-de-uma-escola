@@ -45,17 +45,17 @@ namespace WinFormsApp1
                     conexao.Open();
 
                     string query = @"SELECT ID_FALTA,
-                                        DATA_FALTA,
-                                        QUANTIDADE,
-                                        ESTADO,
-                                        JUSTIFICACAO,
-                                        DOCUMENTO,
-                                        DATA_JUSTIFICACAO,
-                                        METODO_RECUPERACAO,
-                                        METODO_RECUPERACAO
-                                    FROM FALTAS
-                                    WHERE ID_ALUNO = @idAluno
-                                    ORDER BY DATA_FALTA DESC";
+                                    DATA_FALTA,
+                                    QUANTIDADE,
+                                    ESTADO,
+                                    JUSTIFICACAO,
+                                    DOCUMENTO,
+                                    DATA_JUSTIFICACAO,
+                                    METODO_RECUPERACAO,
+                                    DATA_RECUPERACAO
+                             FROM FALTAS
+                             WHERE ID_ALUNO = @idAluno
+                             ORDER BY DATA_FALTA DESC";
 
                     using (FbCommand comando = new FbCommand(query, conexao))
                     {
@@ -65,18 +65,23 @@ namespace WinFormsApp1
                         {
                             while (leitor.Read())
                             {
-
                                 Falta falta = new Falta();
 
                                 falta.Id = Convert.ToInt32(leitor["ID_FALTA"]);
-                                falta.DataFalta = Convert.ToDateTime(leitor["DATA_FALTA"]);
-                                falta.Quantidade = Convert.ToInt32(leitor["QUANTIDADE"]);
-                                falta.Justificada = Convert.ToBoolean(leitor["JUSTIFICADA"]);
-                                falta.Recuperada = Convert.ToBoolean(leitor["RECUPERADA"]);
 
-                                falta.Justificativa = leitor["JUSTIFICATIVA"] == DBNull.Value
+                                falta.DataFalta = Convert.ToDateTime(
+                                    leitor["DATA_FALTA"]);
+
+                                falta.Quantidade = Convert.ToInt32(
+                                    leitor["QUANTIDADE"]);
+
+                                falta.Estado = leitor["ESTADO"] == DBNull.Value
                                     ? null
-                                    : leitor["JUSTIFICATIVA"].ToString();
+                                    : leitor["ESTADO"].ToString();
+
+                                falta.Justificacao = leitor["JUSTIFICACAO"] == DBNull.Value
+                                    ? null
+                                    : leitor["JUSTIFICACAO"].ToString();
 
                                 falta.Documento = leitor["DOCUMENTO"] == DBNull.Value
                                     ? null
@@ -93,10 +98,72 @@ namespace WinFormsApp1
 
                     dgvFaltas.DataSource = null;
                     dgvFaltas.DataSource = listaFaltas;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Erro ao carregar as faltas: {ex.Message}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+        }
 
+        private void btnRegistrarFalta_Click(object sender, EventArgs e)
+        {
+            int quantidade = (int)nudQuantidade.Value;
+            DateTime data = dtpData.Value;
+
+            if (quantidade <= 0)
+            {
+                MessageBox.Show("A quantidade de faltas deve ser maior que zero.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (FbConnection conexao = new FbConnection(stringConexao))
+            {
+                try
+                {
+                    conexao.Open();
+
+                    string query = @"
+                        INSERT INTO FALTAS
+                        (
+                            ID_ALUNO,
+                            ID_PROFESSOR,
+                            DATA_FALTA,
+                            QUANTIDADE,
+                            ESTADO
+                        )
+                        VALUES
+                        (
+                            @idAluno,
+                            @idProfessor,
+                            @dataFalta,
+                            @quantidade,
+                            'INJUSTIFICADA'
+                        )";
+
+                    using (FbCommand comando = new FbCommand(query, conexao))
+                    {
+                        comando.Parameters.AddWithValue("@idAluno", idAluno);
+                        comando.Parameters.AddWithValue("@idProfessor", idProfessor);
+                        comando.Parameters.AddWithValue("@dataFalta", data);
+                        comando.Parameters.AddWithValue("@quantidade", quantidade);
+
+                        comando.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("Falta registada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    CarregarFaltas();
+
+                    nudQuantidade.Value = 1;
+                    dtpData.Value = DateTime.Now;
                 } catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao carregar as faltas: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Erro ao registar a falta: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

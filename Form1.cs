@@ -193,15 +193,32 @@ namespace WinFormsApp1
 
         private void CarregarHistoricoDaBaseDeDados()
         {
-            if (listaAlunos == null) listaAlunos = new List<Aluno>();
+            if (listaAlunos == null)
+                listaAlunos = new List<Aluno>();
+
             listaAlunos.Clear();
 
-            string querySelect = "SELECT ID, NOME, NOTA_TESTE, NOTA_TRABALHO, NOTA_PARTICIPACAO, MEDIA_FINAL, SITUACAO, FALTAS_INJUSTIFICADAS, FALTAS_JUSTIFICADAS, FALTAS_RECUPERADAS FROM ALUNOS WHERE ID_TURMA = @idTurma";
+            string querySelect = @"
+        SELECT 
+            ID,
+            NOME,
+            NOTA_TESTE,
+            NOTA_TRABALHO,
+            NOTA_PARTICIPACAO,
+            MEDIA_FINAL,
+            SITUACAO,
+            FALTAS_INJUSTIFICADAS,
+            FALTAS_JUSTIFICADAS,
+            FALTAS_RECUPERADAS
+        FROM ALUNOS
+        WHERE ID_TURMA = @idTurma";
+
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
                 try
                 {
                     conexao.Open();
+
                     using (FbCommand comando = new FbCommand(querySelect, conexao))
                     {
                         comando.Parameters.AddWithValue("@idTurma", this.idTurmaAtual);
@@ -211,22 +228,53 @@ namespace WinFormsApp1
                             while (leitor.Read())
                             {
                                 int id = Convert.ToInt32(leitor["ID"]);
-                                string nome = leitor["NOME"].ToString();
+
+                                string nome = leitor["NOME"] == DBNull.Value
+                                    ? ""
+                                    : leitor["NOME"].ToString();
 
                                 nome = nome.Replace("Ã©", "é")
                                            .Replace("Ã§", "ç")
                                            .Replace("Âº", "º");
 
                                 string turma = this.nomeTurmaAtual;
-                                double notaTeste = Convert.ToDouble(leitor["NOTA_TESTE"]);
-                                double notaTrabalho = Convert.ToDouble(leitor["NOTA_TRABALHO"]);
-                                double notaParticipacao = Convert.ToDouble(leitor["NOTA_PARTICIPACAO"]);
 
-                                int faltasInjustificadas = leitor["FALTAS_INJUSTIFICADAS"] != DBNull.Value ? Convert.ToInt32(leitor["FALTAS_INJUSTIFICADAS"]) : 0;
-                                int faltasJustificadas = leitor["FALTAS_JUSTIFICADAS"] != DBNull.Value ? Convert.ToInt32(leitor["FALTAS_JUSTIFICADAS"]) : 0;
-                                int faltasRecuperadas = leitor["FALTAS_RECUPERADAS"] != DBNull.Value ? Convert.ToInt32(leitor["FALTAS_RECUPERADAS"]) : 0;
+                                double notaTeste = leitor["NOTA_TESTE"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDouble(leitor["NOTA_TESTE"]);
 
-                                Aluno aluno = new Aluno(id, nome, turma, notaTeste, notaTrabalho, notaParticipacao, faltasInjustificadas, faltasJustificadas, faltasRecuperadas);
+                                double notaTrabalho = leitor["NOTA_TRABALHO"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDouble(leitor["NOTA_TRABALHO"]);
+
+                                double notaParticipacao = leitor["NOTA_PARTICIPACAO"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToDouble(leitor["NOTA_PARTICIPACAO"]);
+
+                                int faltasInjustificadas = leitor["FALTAS_INJUSTIFICADAS"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToInt32(leitor["FALTAS_INJUSTIFICADAS"]);
+
+                                int faltasJustificadas = leitor["FALTAS_JUSTIFICADAS"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToInt32(leitor["FALTAS_JUSTIFICADAS"]);
+
+                                int faltasRecuperadas = leitor["FALTAS_RECUPERADAS"] == DBNull.Value
+                                    ? 0
+                                    : Convert.ToInt32(leitor["FALTAS_RECUPERADAS"]);
+
+                                Aluno aluno = new Aluno(
+                                    id,
+                                    nome,
+                                    turma,
+                                    notaTeste,
+                                    notaTrabalho,
+                                    notaParticipacao,
+                                    faltasInjustificadas,
+                                    faltasJustificadas,
+                                    faltasRecuperadas
+                                );
+
                                 listaAlunos.Add(aluno);
                             }
                         }
@@ -235,13 +283,19 @@ namespace WinFormsApp1
                     dgvAlunos.DataSource = null;
                     dgvAlunos.DataSource = listaAlunos;
 
-                    if (dgvAlunos.Columns["ID"] != null) dgvAlunos.Columns["ID"].Visible = false;
+                    if (dgvAlunos.Columns["ID"] != null)
+                        dgvAlunos.Columns["ID"].Visible = false;
 
                     CalcularEstatisticas(listaAlunos);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Erro ao carregar o histórico: {ex.Message}");
+                    MessageBox.Show(
+                        $"Erro ao carregar o histórico: {ex.Message}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                 }
             }
         }

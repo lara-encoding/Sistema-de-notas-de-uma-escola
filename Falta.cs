@@ -13,12 +13,13 @@ namespace WinFormsApp1
         public int Quantidade { get; set; }
         public bool Justificada { get; set; }
         public bool Recuperada { get; set; }
-        public string? Justificativa { get; set; }
+        public string? Justificacao { get; set; }
         public string? Documento { get; set; }
         public string? MetodoRecuperacao { get; set; }
         public string JustificadaTexto => Justificada ? "Sim" : "Não";
         public string RecuperadaTexto => Recuperada ? "Sim" : "Não";
         public string InjustificadaTexto => Justificada ? "Não" : "Sim";
 
+        public string? Estado { get; set; }
     }
 }

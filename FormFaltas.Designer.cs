@@ -22,10 +22,6 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             label1 = new Label();
@@ -38,11 +34,12 @@
             dgvFaltas = new DataGridView();
             colData = new DataGridViewTextBoxColumn();
             colQuantidade = new DataGridViewTextBoxColumn();
-            colJustificada = new DataGridViewTextBoxColumn();
-            colRecuperada = new DataGridViewTextBoxColumn();
+            colEstado = new DataGridViewTextBoxColumn();
+
             ((System.ComponentModel.ISupportInitialize)nudQuantidade).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvFaltas).BeginInit();
             SuspendLayout();
+
             // 
             // label1
             // 
@@ -53,6 +50,7 @@
             label1.Size = new Size(54, 21);
             label1.TabIndex = 0;
             label1.Text = "Aluno:";
+
             // 
             // lblAluno
             // 
@@ -63,6 +61,7 @@
             lblAluno.Size = new Size(115, 21);
             lblAluno.TabIndex = 1;
             lblAluno.Text = "nome do aluno";
+
             // 
             // label3
             // 
@@ -73,6 +72,7 @@
             label3.Size = new Size(102, 21);
             label3.TabIndex = 2;
             label3.Text = "Data da Falta:";
+
             // 
             // label4
             // 
@@ -83,6 +83,7 @@
             label4.Size = new Size(94, 21);
             label4.TabIndex = 3;
             label4.Text = "Quantidade:";
+
             // 
             // dtpData
             // 
@@ -90,6 +91,7 @@
             dtpData.Name = "dtpData";
             dtpData.Size = new Size(200, 23);
             dtpData.TabIndex = 4;
+
             // 
             // nudQuantidade
             // 
@@ -98,6 +100,7 @@
             nudQuantidade.Size = new Size(120, 23);
             nudQuantidade.TabIndex = 5;
             nudQuantidade.Value = new decimal(new int[] { 1, 0, 0, 0 });
+
             // 
             // btnRegistrarFalta
             // 
@@ -108,40 +111,52 @@
             btnRegistrarFalta.TabIndex = 6;
             btnRegistrarFalta.Text = "Registar Falta";
             btnRegistrarFalta.UseVisualStyleBackColor = true;
+            btnRegistrarFalta.Click += btnRegistrarFalta_Click;
+
             // 
             // dgvFaltas
             // 
+            dgvFaltas.AutoGenerateColumns = false;
             dgvFaltas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvFaltas.Columns.AddRange(new DataGridViewColumn[] { colData, colQuantidade, colJustificada, colRecuperada });
+            dgvFaltas.Columns.AddRange(new DataGridViewColumn[]
+            {
+                colData,
+                colQuantidade,
+                colEstado
+            });
             dgvFaltas.Location = new Point(12, 233);
             dgvFaltas.Name = "dgvFaltas";
             dgvFaltas.RowTemplate.Height = 25;
             dgvFaltas.Size = new Size(647, 205);
             dgvFaltas.TabIndex = 7;
+
             // 
             // colData
             // 
             colData.DataPropertyName = "DataFalta";
             colData.HeaderText = "Data";
             colData.Name = "colData";
+            colData.ReadOnly = true;
+            colData.Width = 150;
+
             // 
             // colQuantidade
             // 
             colQuantidade.DataPropertyName = "Quantidade";
             colQuantidade.HeaderText = "Quantidade";
             colQuantidade.Name = "colQuantidade";
+            colQuantidade.ReadOnly = true;
+            colQuantidade.Width = 100;
+
             // 
-            // colJustificada
+            // colEstado
             // 
-            colJustificada.DataPropertyName = "Justificada";
-            colJustificada.HeaderText = "Justificada";
-            colJustificada.Name = "colJustificada";
-            // 
-            // colRecuperada
-            // 
-            colRecuperada.DataPropertyName = "Recuperada";
-            colRecuperada.HeaderText = "Recuperada";
-            colRecuperada.Name = "colRecuperada";
+            colEstado.DataPropertyName = "Estado";
+            colEstado.HeaderText = "Estado";
+            colEstado.Name = "colEstado";
+            colEstado.ReadOnly = false;
+            colEstado.Width = 150;
+
             // 
             // FormFaltas
             // 
@@ -159,6 +174,7 @@
             Name = "FormFaltas";
             Text = "FormFaltas";
             Load += FormFaltas_Load;
+
             ((System.ComponentModel.ISupportInitialize)nudQuantidade).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvFaltas).EndInit();
             ResumeLayout(false);
@@ -177,7 +193,6 @@
         private DataGridView dgvFaltas;
         private DataGridViewTextBoxColumn colData;
         private DataGridViewTextBoxColumn colQuantidade;
-        private DataGridViewTextBoxColumn colJustificada;
-        private DataGridViewTextBoxColumn colRecuperada;
+        private DataGridViewTextBoxColumn colEstado;
     }
 }
