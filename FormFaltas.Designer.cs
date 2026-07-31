@@ -121,21 +121,25 @@
             // 
             // colData
             // 
+            colData.DataPropertyName = "DataFalta";
             colData.HeaderText = "Data";
             colData.Name = "colData";
             // 
             // colQuantidade
             // 
+            colQuantidade.DataPropertyName = "Quantidade";
             colQuantidade.HeaderText = "Quantidade";
             colQuantidade.Name = "colQuantidade";
             // 
             // colJustificada
             // 
+            colJustificada.DataPropertyName = "Justificada";
             colJustificada.HeaderText = "Justificada";
             colJustificada.Name = "colJustificada";
             // 
             // colRecuperada
             // 
+            colRecuperada.DataPropertyName = "Recuperada";
             colRecuperada.HeaderText = "Recuperada";
             colRecuperada.Name = "colRecuperada";
             // 

@@ -13,9 +13,11 @@ namespace WinFormsApp1
 {
     public partial class FormFaltas : Form
     {
+        private string stringConexao = @"User=SYSDBA;Password=2t6rXhgX;Database=C:\Users\user\Desktop\AnaLara\WinFormsApp1\escola.fdb;DataSource=localhost;Port=3050;Charset=UTF8;";
+
         private int idAluno;
         private int idProfessor;
-        private string stringConexao;
+        private List<Falta> listaFaltas = new List<Falta>();
 
         public FormFaltas(int idAluno, string nomeAluno, int idProfessor)
         {
@@ -24,6 +26,7 @@ namespace WinFormsApp1
             this.idProfessor = idProfessor;
 
             lblAluno.Text = "Aluno: " + nomeAluno;
+            CarregarFaltas();
         }
 
         private void FormFaltas_Load(object sender, EventArgs e)
@@ -33,37 +36,67 @@ namespace WinFormsApp1
 
         private void CarregarFaltas()
         {
-            dgvFaltas.Rows.Clear();
+            listaFaltas.Clear();
 
             using (FbConnection conexao = new FbConnection(stringConexao))
             {
-                conexao.Open();
+                try
+                {
+                    conexao.Open();
 
-                string query = @"SELECT ID_FALTA
+                    string query = @"SELECT ID_FALTA,
                                         DATA_FALTA,
                                         QUANTIDADE,
-                                        JUSTIFICADA,
-                                        RECUPERADA
+                                        ESTADO,
+                                        JUSTIFICACAO,
+                                        DOCUMENTO,
+                                        DATA_JUSTIFICACAO,
+                                        METODO_RECUPERACAO,
+                                        METODO_RECUPERACAO
                                     FROM FALTAS
                                     WHERE ID_ALUNO = @idAluno
                                     ORDER BY DATA_FALTA DESC";
 
-                using (FbCommand comando = new FbCommand(query, conexao))
-                {
-                    comando.Parameters.AddWithValue("@idAluno", idAluno);
-
-                    using (FbDataReader leitor = comando.ExecuteReader())
+                    using (FbCommand comando = new FbCommand(query, conexao))
                     {
-                        while (leitor.Read())
+                        comando.Parameters.AddWithValue("@idAluno", idAluno);
+
+                        using (FbDataReader leitor = comando.ExecuteReader())
                         {
-                            dgvFaltas.Rows.Add(
-                                leitor["ID_FALTA"],
-                                Convert.ToDateTime(leitor["DATA_FALTA"]).ToShortDateString(),
-                                leitor["QUANTIDADE"],
-                                Convert.ToBoolean(leitor["JUSTIFICADA"]) ? "Sim" : "Não",
-                                Convert.ToBoolean(leitor["RECUPERADA"]) ? "Sim" : "Não");
+                            while (leitor.Read())
+                            {
+
+                                Falta falta = new Falta();
+
+                                falta.Id = Convert.ToInt32(leitor["ID_FALTA"]);
+                                falta.DataFalta = Convert.ToDateTime(leitor["DATA_FALTA"]);
+                                falta.Quantidade = Convert.ToInt32(leitor["QUANTIDADE"]);
+                                falta.Justificada = Convert.ToBoolean(leitor["JUSTIFICADA"]);
+                                falta.Recuperada = Convert.ToBoolean(leitor["RECUPERADA"]);
+
+                                falta.Justificativa = leitor["JUSTIFICATIVA"] == DBNull.Value
+                                    ? null
+                                    : leitor["JUSTIFICATIVA"].ToString();
+
+                                falta.Documento = leitor["DOCUMENTO"] == DBNull.Value
+                                    ? null
+                                    : leitor["DOCUMENTO"].ToString();
+
+                                falta.MetodoRecuperacao = leitor["METODO_RECUPERACAO"] == DBNull.Value
+                                    ? null
+                                    : leitor["METODO_RECUPERACAO"].ToString();
+
+                                listaFaltas.Add(falta);
+                            }
                         }
                     }
+
+                    dgvFaltas.DataSource = null;
+                    dgvFaltas.DataSource = listaFaltas;
+
+                } catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao carregar as faltas: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
